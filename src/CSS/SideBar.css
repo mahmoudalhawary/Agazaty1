@@ -9,7 +9,7 @@
 
 .Agazaty{
     font-size: 32px;
-    font-weight: 900;
+    font-weight: bold;
     line-height: 1.2;
     text-decoration: none;
     justify-content: center;
@@ -19,3 +19,5 @@
     width: 22px;
     height: 22px;
 }
+
+ 

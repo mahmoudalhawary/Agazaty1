@@ -8,10 +8,14 @@ function Profile(){
     ];
 
     return(
-        <div className="p-3">
+        <div>
             <div className="d-flex mb-4 justify-content-between">
-                <h2 className="m-0">الملف الشخصي</h2>
-                <BtnLink name='تعديل المعلومات الشخصية' link='/editprofile' class='btn-primary' />
+                <div className="zzz d-inline-block p-3 ps-5">
+                    <h2 className="m-0">الملف الشخصي</h2>
+                </div>
+                <div className="p-3">
+                    <BtnLink name='تعديل المعلومات الشخصية' link='/editprofile' class='btn-primary' />
+                </div>
             </div>
             <div className="row">
                 <div className="col-sm-12 col-md-6 col-lg-5 col-xl-4 col-xxl-3 mt-4">

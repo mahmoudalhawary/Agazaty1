@@ -5,6 +5,7 @@ import Abdohamdy from '../Images/Abdohamdy.jpg';
 import ElHawary from '../Images/ElHawary.jpg';
 import AbdElQadir from '../Images/AbdElQadir.jpg';
 import Ashraf from '../Images/Ashraf.jpg';
+import Hesham from '../Images/Hesham.jpg';
 import user from '../Images/download.jpeg';
 
 function About(){
@@ -13,10 +14,10 @@ function About(){
         { id: 1, image: Abdohamdy, type: 'BacktEnd', department: 'علوم الحاسب', firstName: 'عبدالرحمن', secondName: 'حمدي', thirdName: 'توفيق', fourthName:'شعبان', socialMedia: {linkedIn: 'yahyasaad1', gitHub: 'yahyasaad1', whatsapp: '01015652527', email: 'yahyasaad2024@gmail.com'} },
         { id: 1, image: ElHawary, type: 'FrontEnd', department: 'علوم الحاسب', firstName: 'محمود', secondName: 'نصر الدين', thirdName: 'حافظ', fourthName:'محمود', socialMedia: {linkedIn: 'yahyasaad1', gitHub: 'yahyasaad1', whatsapp: '010027471188', email: 'yahyasaad2024@gmail.com'} },
         { id: 1, image: Ashraf, type: 'BacktEnd', department: 'علوم الحاسب', firstName: 'أشرف', secondName: 'أبوالري', thirdName: 'عطية', fourthName:'محمود', socialMedia: {linkedIn: 'yahyasaad1', gitHub: 'yahyasaad1', whatsapp: '010027471188', email: 'yahyasaad2024@gmail.com'} },
-        { id: 1, image: AbdElQadir, type: 'UI&UX', department: 'تكنولوجيا المعلومات', firstName: 'عبدالرحمن', secondName: 'احمد', thirdName: 'علي', fourthName:'عبدالقادر', socialMedia: {linkedIn: 'yahyasaad1', gitHub: 'yahyasaad1', whatsapp: '01030492160', email: 'yahyasaad2024@gmail.com'} },
-        { id: 1, image: user, type: 'BacktEnd', department: 'علوم الحاسب', firstName: 'هشام', secondName: 'مسعد', thirdName: 'احمد', fourthName:'حسين', socialMedia: {linkedIn: 'yahyasaad1', gitHub: 'yahyasaad1', whatsapp: '010027471188', email: 'yahyasaad2024@gmail.com'} },
-        { id: 1, image: user, type: 'FrontEnd', department: 'علوم الحاسب', firstName: 'احمد', secondName: 'يس', thirdName: 'خضري', fourthName:'محمود', socialMedia: {linkedIn: 'yahyasaad1', gitHub: 'yahyasaad1', whatsapp: '010027471188', email: 'yahyasaad2024@gmail.com'} },
         { id: 1, image: user, type: 'BacktEnd', department: 'علوم الحاسب', firstName: 'عمر', secondName: 'حمدي', thirdName: 'سيد', fourthName:'عبدالقادر', socialMedia: {linkedIn: 'yahyasaad1', gitHub: 'yahyasaad1', whatsapp: '01021514586', email: 'yahyasaad2024@gmail.com'} },
+        { id: 1, image: AbdElQadir, type: 'UI&UX', department: 'تكنولوجيا المعلومات', firstName: 'عبدالرحمن', secondName: 'احمد', thirdName: 'علي', fourthName:'عبدالقادر', socialMedia: {linkedIn: 'yahyasaad1', gitHub: 'yahyasaad1', whatsapp: '01030492160', email: 'yahyasaad2024@gmail.com'} },
+        { id: 1, image: Hesham, type: 'BacktEnd', department: 'علوم الحاسب', firstName: 'هشام', secondName: 'مسعد', thirdName: 'احمد', fourthName:'حسين', socialMedia: {linkedIn: 'yahyasaad1', gitHub: 'yahyasaad1', whatsapp: '010027471188', email: 'yahyasaad2024@gmail.com'} },
+        { id: 1, image: user, type: 'FrontEnd', department: 'علوم الحاسب', firstName: 'احمد', secondName: 'يس', thirdName: 'خضري', fourthName:'محمود', socialMedia: {linkedIn: 'yahyasaad1', gitHub: 'yahyasaad1', whatsapp: '010027471188', email: 'yahyasaad2024@gmail.com'} },
     ];
 
     const thanks = [

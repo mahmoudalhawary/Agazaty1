@@ -7,8 +7,6 @@ function EmergencyLeave(){
     const [numberOfDays, SetNumberOfDays] = useState('لم يتم التحديد');
     const [notes, setNotes] = useState('لا يوجد');
 
-    console.log(notes)
-
     const swal = () => {
         Swal.fire({
             title:`<span style='color:#0d6efd;'>هل أنت متأكد من إرسال الاجازة ؟</span>`,

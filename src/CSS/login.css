@@ -66,13 +66,13 @@
 .otp-container {
     display: flex;
     justify-content: center;
-    gap: 10px; /* المسافة بين المربعات */
+    gap: 7px; /* المسافة بين المربعات */
     margin: 20px 0; /* مسافة حول المربعات */
 }
 
 .otp-input {
-    width: 50px; /* العرض */
-    height: 50px; /* الارتفاع لجعلها مربعة */
+    width: 45px; /* العرض */
+    height: 45px; /* الارتفاع لجعلها مربعة */
     text-align: center; /* محاذاة النص إلى المنتصف */
     font-size: 1.5rem; /* حجم الخط */
     border: 1px solid #ccc; /* حدود */

@@ -1,192 +1,3 @@
-// import { Route, Routes } from 'react-router-dom';
-// import './App.css';
-// import NavBar from './components/NavBar';
-// import SideBar from './components/SideBar';
-// import Home from './Pages/Home';
-// import About from './Pages/About';
-
-// function App() {
-//   return (
-//     <div className='App' dir='rtl'>
-//       <div>
-//         {/* <NavBar/> */}
-//       <div className='row'>
-//         <div className='SideBar col-2'>
-//           <SideBar/>
-//         </div>
-//         <div className='col-10'>
-//           <Routes>
-//             <Route path='/' element={<Home/>} />
-//             <Route path='/about' element={<About/>} />
-//           </Routes>
-//         </div>
-//       </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-
-
-
-
-
-
-// import { Route, Routes } from 'react-router-dom';
-// import './App.css';
-// import Hhome from './Pages/Hhome';
-// import About from './Pages/About';
-// import Login from './Pages/Login';
-// import LoginCom from './components/LoginCom';
-// import ForgetPassword from './components/ForgetPassword';
-// import OTPCode from './components/OTPCode';
-// import ResetPassword from './components/ResetPassword';
-// import LeaveRequest from './Pages/LeaveRequest';
-// import SideBar from './components/SideBar';
-// import Home from './Pages/Home';
-
-// function App() {
-//   return (
-//     <div className="App" dir="rtl">
-//       <Routes>
-//         <Route path="/login" element={<Login/>}>
-//           <Route index element={<LoginCom />} />
-//           <Route path="forgetpassword" element={<ForgetPassword />} />
-//           <Route path="otpcode" element={<OTPCode />} />
-//           <Route path="resetpassword" element={<ResetPassword />} />
-//         </Route>
-
-//         <Route path="/home" element={<Home />} />
-//         <Route path="/about" element={<About />} />
-//       </Routes>
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import { Route, Routes } from 'react-router-dom';
-// import './App.css';
-// import About from './Pages/About';
-// import Login from './Pages/Login';
-// import LoginCom from './components/LoginCom';
-// import ForgetPassword from './components/ForgetPassword';
-// import OTPCode from './components/OTPCode';
-// import ResetPassword from './components/ResetPassword';
-// import LeaveRequest from './Pages/LeaveRequest';
-// import SideBar from './components/SideBar';
-// import Home from './Pages/Home';
-// import NavBar from './components/NavBar';
-// import Messages from './Pages/Messages';
-
-// function App() {
-//   return (
-//     <div className="App" dir="rtl">
-//       <div>
-//         <Routes>
-//           <Route path="/login" element={<Login/>}>
-//             <Route index element={<LoginCom/>} />
-//             <Route path="forgetpassword" element={<ForgetPassword/>} />
-//             <Route path="otpcode" element={<OTPCode/>} />
-//             <Route path="resetpassword" element={<ResetPassword/>} />
-//           </Route>
-//         </Routes>
-//       </div>
-
-//       <div className="row d-flex">
-//         <div className="col-2 p-0">
-//           <SideBar/>
-//         </div>
-//         <div className="col p-0">
-//           <NavBar/>
-//           <Routes>
-//             <Route path="/" element={<Home/>} />
-//             <Route path="/Leaverequest" element={<LeaveRequest/>} />
-//             <Route path="/messages" element={<Messages/>} />
-//             <Route path="/about" element={<About/>} />
-//           </Routes>
-//         </div>    
-//       </div>     
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-
-// import { Route, Routes } from 'react-router-dom';
-// import './App.css';
-// import About from './Pages/About';
-// import Login from './Pages/Login'; // صفحة تسجيل الدخول الأساسية
-// import LoginCom from './components/LoginCom'; // المكون الأساسي داخل تسجيل الدخول
-// import ForgetPassword from './components/ForgetPassword';
-// import OTPCode from './components/OTPCode';
-// import ResetPassword from './components/ResetPassword';
-// import LeaveRequest from './Pages/LeaveRequest';
-// import SideBar from './components/SideBar';
-// import Home from './Pages/Home';
-// import NavBar from './components/NavBar';
-// import Messages from './Pages/Messages';
-
-// function App() {
-//   return (
-//     <div className="App" dir="rtl">
-//       <Routes>
-//         <Route path="/login" element={<Login />}>
-//           <Route index element={<LoginCom />} />
-//           <Route path="forgetpassword" element={<ForgetPassword />} />
-//           <Route path="otpcode" element={<OTPCode />} />
-//           <Route path="resetpassword" element={<ResetPassword />} />
-//         </Route>
-
-//         <Route
-//           path="/"
-//           element={
-//             <div className="row d-flex">
-//               <div className="col-2 p-0">
-//                 <SideBar/>
-//               </div>
-//               <div className="col p-0">
-//                 <NavBar/>
-//                 <Routes>
-//                   <Route path="/" element={<Home/>} />
-//                   <Route path="/leaverequest" element={<LeaveRequest/>} />
-//                   <Route path="/messages" element={<Messages/>} />
-//                   <Route path="/about" element={<About/>} />
-//                 </Routes>
-//               </div>    
-//           </div>   
-//           }
-//         />
-//       </Routes>
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-
-
-
-
-
 import { Outlet, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Login from './Pages/Login';
@@ -196,7 +7,6 @@ import OTPCode from './components/OTPCode';
 import ResetPassword from './components/ResetPassword';
 import About from './Pages/About';
 import Messages from './Pages/Messages';
-import LeaveRequest from './Pages/LeaveRequest';
 import NavBar from './components/NavBar';
 import SideBar from './components/SideBar';
 import Home from './Pages/Home';
@@ -213,9 +23,15 @@ import AddLeave from './Pages/AddLeave';
 import React from 'react';
 import LeaveRecord from './Pages/LeaveRecord';
 import Leaves from './Pages/Leaves';
+import EditEmployee from './Pages/EditEmployee';
+import EditDepartment from './Pages/EditDepartment';
+import Leavee from './components/leavee';
+import Inquiries from './Pages/Inquiries';
+import Des from './Pages/Des';
+import Test from './Pages/Test';
 
 function App() {
-  const userRole = 'موظف';
+  const userRole = 'hr';
 
   return (
     <div className="App" dir="rtl">
@@ -231,9 +47,9 @@ function App() {
           path="/"
           element={
             <div className="row d-flex" style={{ height: "100vh" }}>
-              <div className="col-2 p-0" style={{height: "100%", overflowY: "auto"}}>
+              <div className="col-2 sidebar p-0" style={{height: "100%", overflowY: "auto"}}>
                 <SideBar userRole={userRole} />
-              </div>
+              </div>        
 
               <div className="col p-0" style={{height: "100%", overflowY: "auto"}}>
                 <React.Fragment style={{position:'fixed'}}>
@@ -245,7 +61,8 @@ function App() {
           }
         >
           <Route index element={<Home userRole={userRole} />} />
-          <Route path="leave-request" element={<LeaveRequest />} />
+          {/* <Route path="leave-request" element={<LeaveRequest />} /> */}
+          <Route path="leave-request" element={<Leavee />} />
           <Route path="messages" element={<Messages />} />
           <Route path="about" element={<About />} />
           <Route path="profile" element={<Profile />} />
@@ -254,12 +71,17 @@ function App() {
           <Route path="agazaty" element={<Agazaty />} />
           <Route path="departments" element={<Departments />} />
           <Route path="add-department" element={<AddDepartment />} />
+          <Route path="department/:id/edit" element={<EditDepartment />} />
           <Route path="employees" element={<Employees />} />
           <Route path="add-Employee" element={<AddEmployee />} />
+          <Route path="employee/:id/edit" element={<EditEmployee />} />
           <Route path="leave-record" element={<LeaveRecord />} />
-          <Route path="leave-requests" element={<LeaveRequests />} />
+          <Route path="des-requests" element={<Des />} />
+          <Route path="leave-requests/:id" element={<LeaveRequests />} />
           <Route path="add-leave" element={<AddLeave />} />
           <Route path="leaves/:id" element={<Leaves />} />
+          <Route path="inquiries" element={<Inquiries />} />
+          <Route path="test" element={<Test />} />
         </Route>
       </Routes>
     </div>

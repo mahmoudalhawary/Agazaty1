@@ -1,48 +1,102 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState, useEffect } from 'react';
 import BtnLink from "../components/BtnLink";
-import { faUpDown } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarDays, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
 
-function Employees(){
-    
-    const employees = [
-        { id: 1, nationalID: '30304218800000', phoneNumber: '01127471188', firstName: 'عبدالرحمن', secondName: 'احمد', thirdName: 'عبداله', fourthName:'محمود', jobTitle: 'موظف', department: 'علوم الحاسب', dateAppointment: '19/9/2024', address: 'قنا' },
-        { id: 2, nationalID: '30304218800000', phoneNumber: '01127471188', firstName: 'إبراهبم', secondName: 'محمد', thirdName: 'عبداله', fourthName:'محمود', jobTitle: 'موظف', department: 'تكنولوجيا المعلومات', dateAppointment: '19/9/2024', address: 'قنا' },
-        { id: 3, nationalID: '30304218800000', phoneNumber: '01127471188', firstName: 'منى', secondName: 'محمود', thirdName: 'عبداله', fourthName:'محمود', jobTitle: 'موظف', department: 'علوم الحاسب', dateAppointment: '19/9/2024', address: 'قنا' },
-        { id: 4, nationalID: '30304218800000', phoneNumber: '01127471188', firstName: 'عمرو', secondName: 'مصطفى', thirdName: 'عبداله', fourthName:'محمود', jobTitle: 'موظف', department: 'تكنولوجيا المعلومات', dateAppointment: '19/9/2024', address: 'قنا' },
-        { id: 1, nationalID: '30304218800000', phoneNumber: '01127471188', firstName: 'عبدالرحمن', secondName: 'احمد', thirdName: 'عبداله', fourthName:'محمود', jobTitle: 'موظف', department: 'علوم الحاسب', dateAppointment: '19/9/2024', address: 'قنا' },
-        { id: 2, nationalID: '30304218800000', phoneNumber: '01127471188', firstName: 'إبراهبم', secondName: 'محمد', thirdName: 'عبداله', fourthName:'محمود', jobTitle: 'موظف', department: 'تكنولوجيا المعلومات', dateAppointment: '19/9/2024', address: 'قنا' },
-        { id: 3, nationalID: '30304218800000', phoneNumber: '01127471188', firstName: 'منى', secondName: 'محمود', thirdName: 'عبداله', fourthName:'محمود', jobTitle: 'موظف', department: 'علوم الحاسب', dateAppointment: '19/9/2024', address: 'قنا' },
-        { id: 4, nationalID: '30304218800000', phoneNumber: '01127471188', firstName: 'عمرو', secondName: 'مصطفى', thirdName: 'عبداله', fourthName:'محمود', jobTitle: 'موظف', department: 'تكنولوجيا المعلومات', dateAppointment: '19/9/2024', address: 'قنا' },
-        { id: 1, nationalID: '30304218800000', phoneNumber: '01127471188', firstName: 'عبدالرحمن', secondName: 'احمد', thirdName: 'عبداله', fourthName:'محمود', jobTitle: 'موظف', department: 'علوم الحاسب', dateAppointment: '19/9/2024', address: 'قنا' },
-        { id: 2, nationalID: '30304218800000', phoneNumber: '01127471188', firstName: 'إبراهبم', secondName: 'محمد', thirdName: 'عبداله', fourthName:'محمود', jobTitle: 'موظف', department: 'تكنولوجيا المعلومات', dateAppointment: '19/9/2024', address: 'قنا' },
-        { id: 3, nationalID: '30304218800000', phoneNumber: '01127471188', firstName: 'منى', secondName: 'محمود', thirdName: 'عبداله', fourthName:'محمود', jobTitle: 'موظف', department: 'علوم الحاسب', dateAppointment: '19/9/2024', address: 'قنا' },
-        { id: 4, nationalID: '30304218800000', phoneNumber: '01127471188', firstName: 'عمرو', secondName: 'مصطفى', thirdName: 'عبداله', fourthName:'محمود', jobTitle: 'موظف', department: 'تكنولوجيا المعلومات', dateAppointment: '19/9/2024', address: 'قنا' },
-    ];
+function Employees() {
+    const [employees, setEmployees] = useState([]);
 
-    return(
-        <div className="p-3">
+    useEffect(() => {
+        fetchEmployees();
+    }, []);
+
+    const fetchEmployees = () => {
+        fetch('http://localhost:9000/employees')
+            .then((res) => res.json())
+            .then((data) => setEmployees(data));
+    };
+
+    const handleDelete = (id) => {
+        Swal.fire({
+            title: "هل أنت متأكد؟",
+            text: "لن تتمكن من استعادة بيانات هذا الموظف!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "نعم، احذفه!",
+            cancelButtonText: "إلغاء",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`http://localhost:9000/employees/${id}`, {
+                    method: "DELETE",
+                }).then(() => {
+                    setEmployees(employees.filter((employee) => employee.id !== id));
+
+                    Swal.fire({
+                        title: "تم الحذف!",
+                        text: "تم حذف الموظف بنجاح.",
+                        icon: "success",
+                        confirmButtonText: "موافق",
+                    });
+                }).catch((error) => {
+                    Swal.fire({
+                        title: "خطأ!",
+                        text: "حدث خطأ أثناء حذف الموظف.",
+                        icon: "error",
+                        confirmButtonText: "حسناً",
+                    });
+                });
+            }
+        });
+    };
+
+    return (
+        <div>
             <div className="d-flex mb-4 justify-content-between">
-                <h2 className="m-0">الموظفين</h2>
-                <BtnLink name='إضافة موظف' link='/add-employee' class="btn btn-primary m-0"/>
+                <div className="zzz d-inline-block p-3 ps-5">
+                    <h2 className="m-0">الموظفين</h2>
+                </div>
+                <div className="p-3">
+                    <BtnLink name='إضافة موظف' link='/add-employee' class="btn btn-primary m-0"/>
+                </div>
             </div>
             <div className="row">
                 <div>
                     <table className="m-0 table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>الاسم</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>القسم</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ التعيين</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>رقم الهاتف</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>الاسم</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>القسم</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>تاريخ التعيين</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>رقم الهاتف</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>المزيد</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {employees.map((employee ,index)=>(
-                                <tr key={index}>
-                                    <th style={{height:'50px'}}>{employee.firstName} {employee.secondName}</th>
-                                    <th style={{height:'50px'}}>{employee.department}</th>
-                                    <th style={{height:'50px'}}>{employee.dateAppointment}</th>
-                                    <th style={{height:'50px'}}>{employee.phoneNumber}</th>
+                            {employees.map((employee) => (
+                                <tr key={employee.id}>
+                                    <td style={{ height: '50px' }}>{employee.firstName} {employee.secondName}</td>
+                                    <td style={{ height: '50px' }}>{employee.department}</td>
+                                    <td style={{ height: '50px' }}>{employee.dateAppointment}</td>
+                                    <td style={{ height: '50px' }}>{employee.phoneNumber}</td>
+                                    <td style={{ height: '50px' }}>
+                                        <Link to={`/employee/${employee.id}/edit`}>
+                                            <FontAwesomeIcon icon={faPenToSquare} color="blue" className="fontt" />
+                                        </Link>
+                                        <FontAwesomeIcon 
+                                            icon={faTrash} 
+                                            color="red" 
+                                            className="fontt" 
+                                            style={{ cursor: "pointer", marginLeft: "10px" }} 
+                                            onClick={() => handleDelete(employee.id)} 
+                                        />
+                                        <Link to={`/employees`}>
+                                            <FontAwesomeIcon icon={faCalendarDays} color="green" className="fontt" />
+                                        </Link>
+                                    </td>
                                 </tr>  
                             ))}
                         </tbody>
@@ -50,7 +104,7 @@ function Employees(){
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Employees;

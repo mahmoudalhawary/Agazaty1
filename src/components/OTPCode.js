@@ -11,6 +11,8 @@ function OTPCode(){
                 <label htmlFor="exampleInputText1" className="form-label"> كود التحقق</label>
                 <div className="otp-container">
                     <input type="text" id="exampleInputText1" className="otp-input" placeholder="8" maxLength="1" />
+                    <input type="text" id="exampleInputText1" className="otp-input" placeholder="1" maxLength="1" />
+                    <input type="text" id="exampleInputText1" className="otp-input" placeholder="5" maxLength="1" />
                     <input type="text" id="exampleInputText2" className="otp-input" placeholder="2" maxLength="1" />
                     <input type="text" id="exampleInputText3" className="otp-input" placeholder="7" maxLength="1" />
                     <input type="text" id="exampleInputText4" className="otp-input" placeholder="9" maxLength="1" />
