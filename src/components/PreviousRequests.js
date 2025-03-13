@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../CSS/PreviousRequests.css';
 import { faPlus, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import BtnLink from './BtnLink';
 
 function PreviousRequests() {
     const [selectedPeriod, setSelectedPeriod] = useState('اليوم');
+    const [leaves, setLeaves] = useState([]);
 
-    const requests = [
-        { id: 1334, type: 'عارضة', date: '19/9/2024', status: 'معتمد', notes: 'بدون' },
-        { id: 1276, type: 'مرضية', date: '16/9/2024', status: 'معتمد', notes: 'بدون' },
-        { id: 1202, type: 'مرضية', date: '13/9/2024', status: 'معتمد', notes: 'بدون' },
-        { id: 1121, type: 'اعتيادية', date: '6/9/2024', status: 'معتمد', notes: 'بدون' },
-    ];
+    useEffect(() => {
+        fetch(`http://localhost:9000/employees/1`)
+        .then((res)=> (res.json()))
+        .then((data)=> (setLeaves(data.leavess)))
+    }, []);
 
     return (
         <div>
@@ -45,19 +46,25 @@ function PreviousRequests() {
                         <tr>
                             <th scope="col">المعرف</th>
                             <th scope="col">النوع</th>
-                            <th scope="col">التاريخ</th>
+                            <th scope="col">تاريخ البدء</th>
                             <th scope="col">حالة الطلب</th>
                             <th scope="col">الملاحظات</th>
+                            <th scope="col">الأرشيف</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {requests.map((request, index) => (
+                        {leaves
+                        .filter((leave) => leave.id <= 5)
+                        .map((leave, index) => (
                             <tr key={index}>
-                                <th>#{request.id}</th>
-                                <td>{request.type}</td>
-                                <td>{request.date}</td>
-                                <td>{request.status}</td>
-                                <td>{request.notes}</td>
+                                <th>#{leave.id}</th>
+                                <td>{leave.type}</td>
+                                <td>{leave.endDate}</td>
+                                <td>{leave.status}</td>
+                                <td>{leave.notes}</td>
+                                <td>
+                                    <BtnLink id={leave.id} name='عرض الاجازة' link={`/leave-requests`} class="btn btn-outline-primary" />
+                                </td>
                             </tr>
                         ))}
                     </tbody>

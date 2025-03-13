@@ -1,8 +1,15 @@
 import YahyaSaad from '../Images/YahyaSaad.jpg';
 import '../CSS/ProfileCom.css';
+import { useEffect, useState } from 'react';
 
-function ProfileCom(props){
-    const employee = props.employee[0]
+function ProfileCom(){
+    const [employee, setEmployee] = useState([]);
+
+    useEffect(()=>{
+        fetch(`http://localhost:9000/employees/1`)
+        .then((res)=> res.json())
+        .then((data)=> setEmployee(data))
+    }, [])
 
     return(
         <div className="rounded profileCom">

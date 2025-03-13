@@ -3,9 +3,9 @@ import SittingCom from "../components/SittingCom";
 function Sitting(){
 
     return(
-        <div className="p-3">
-            <div>
-                <h2 className="mb-4">اعدادات النظام</h2>
+        <div>
+            <div className="zzz d-inline-block p-3 ps-5">
+                <h2 className="m-0">اعدادات النظام</h2>
             </div>
             <div>
                 <SittingCom/>

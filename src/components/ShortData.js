@@ -37,7 +37,7 @@ function ShortData(){
             </div>
             <div className="d-flex row gap-3 mt-3">
                 {Object.values(leaves).map((leave, index) => (
-                <div className="box LeaveBalance col-sm-6 col-md-5 col-lg-3 rounded-3 p-3" key={index}>
+                <div className="box LeaveBalance col-md-5 col-lg-3 rounded-3 p-3" key={index}>
                     <div className="d-flex justify-content-between align-items-center">
                         <h5>{leave.type}</h5>
                         <h4>{leave.num}</h4>

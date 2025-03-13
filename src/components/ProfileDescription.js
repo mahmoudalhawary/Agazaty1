@@ -1,6 +1,14 @@
-function ProfileDescription(props){
-    const employee = props.employee[0];
-    const leaves = employee.leaves[0];
+import { useState } from "react";
+import { useEffect } from "react";
+
+function ProfileDescription(){
+    const [employee, setEmployee] = useState([]);
+
+    useEffect(()=>{
+        fetch(`http://localhost:9000/employees/1`)
+        .then((res)=> res.json())
+        .then((data)=> setEmployee(data))
+    }, [])
 
     return(
         <div>
@@ -27,6 +35,7 @@ function ProfileDescription(props){
                         <th>تاريخ التعيين</th>
                         <th className="text-start">{employee.dateAppointment}</th>
                     </tr>
+                    
                 </tbody>
             </table>
 
@@ -39,7 +48,7 @@ function ProfileDescription(props){
                 <tbody>
                     <tr>
                         <th>عدد الاجازات المتبقية هذه السنه</th>
-                        <th className="text-start">{Number(leaves.normal.totalBalance) - Number(leaves.normal.takenBalance)}</th>
+                        <th className="text-start">{42 - 9}</th>
                     </tr>
                     <tr>
                         <th>اجازات معتمدة هذا الشهر</th>

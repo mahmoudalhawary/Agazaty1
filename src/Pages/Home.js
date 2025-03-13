@@ -8,8 +8,8 @@ import ShortData from "../components/ShortData";
 
 function Home({userRole}){
 
-    const hintShow = false;
-    
+    const hintShow = true;
+
     return(
         <div>
             <div className="d-flex">

@@ -1,10 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import Btn from '../components/Btn';
 import '../CSS/EditProfile.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import YahyaSaad from '../Images/YahyaSaad.jpg';
+import Swal from 'sweetalert2';
 
 function EditProfile(){
+    const navigate = useNavigate();
+
+    const [employee, setEmployee]= useState('1');
     const [id, setId]= useState('1');
     const [userName, setUserName]= useState('yahyasaad');
     const [email, setEmail]= useState('yahyasaad2024@gmail.com');
@@ -18,8 +22,80 @@ function EditProfile(){
     const [department, setDepartment]= useState('علوم الحاسب');
     const [dateAppointment, setDateAppointment]= useState('19/9/2024');
     const [address, setAddress]= useState('قنا');
-    
-    const navigate = useNavigate();
+    const [updatedFields, setUpdatedFields] = useState({});
+
+    useEffect(()=>{
+        fetch(`http://localhost:9000/employees/${id}`)
+        .then((res)=> res.json())
+        .then((data)=> setEmployee(data))
+    }, [])
+
+    const handleChange = (e) => {
+        setUpdatedFields({ ...updatedFields, [e.target.name]: e.target.value });
+    };
+
+    const updateDepartment = async (e) => {
+        e.preventDefault();
+
+        if (Object.keys(updatedFields).length === 0) {
+            Swal.fire({
+                title: "لم تقم بتعديل أي بيانات!",
+                icon: "info",
+                confirmButtonText: "حسنًا",
+                confirmButtonColor: "#0d6efd",
+            });
+            return;
+        }
+
+        Swal.fire({
+            title: `<span style='color:#0d6efd;'>هل أنت متأكد من تحديث بيانات قسم  ؟</span>`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "نعم، تحديث",
+            cancelButtonText: "إلغاء",
+            confirmButtonColor: "#0d6efd",
+            cancelButtonColor: "#d33",
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    const response = await fetch(`http://localhost:9000/departments/${id}`, {
+                        method: "PATCH",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(updatedFields),
+                    });
+
+                    if (response.ok) {
+                        Swal.fire({
+                            title: `<span style='color:#0d6efd;'>تم تحديث بيانات القسم بنجاح.</span>`,
+                            icon: "success",
+                            confirmButtonText: "مشاهدة الأقسام",
+                            confirmButtonColor: "#0d6efd",
+                        }).then(() => {
+                            navigate("/departments");
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "حدث خطأ!",
+                            text: "لم يتم تحديث البيانات، حاول مرة أخرى.",
+                            icon: "error",
+                        });
+                    }
+                } catch (error) {
+                    console.error("خطأ أثناء تحديث البيانات:", error);
+                    Swal.fire({
+                        title: "خطأ في الاتصال!",
+                        text: "تأكد من تشغيل السيرفر وحاول مجدداً.",
+                        icon: "error",
+                    });
+                }
+            }
+        });
+    };
+
+
+
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -28,9 +104,11 @@ function EditProfile(){
     };
 
     return(
-        <div className='p-3'>
+        <div>
             <div className="d-flex mb-4">
-                <h2>تعديل الملف الشخصي</h2>
+                <div className="zzz d-inline-block p-3 ps-5">
+                    <h2 className="m-0">تعديل الملف الشخصي</h2>
+                </div>
             </div>
             <div>
                 <form onSubmit={handleSubmit}>
@@ -49,28 +127,19 @@ function EditProfile(){
                             <div className='row'>
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
                                     <label htmlFor="exampleInputUserName" className="form-label">اسم المستخدم</label>
-                                    <input type="text" className="form-control" onChange={(e)=> setUserName(e.target.value)} id="exampleInputUserName" aria-describedby="userNameHelp" value={userName} />
+                                    <input type="text" className="form-control" onChange={handleChange} id="exampleInputUserName" aria-describedby="userNameHelp" defaultValue={employee.firstName} />
                                 </div>
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
                                     <label htmlFor="exampleInputEmail1" className="form-label">البريد الإلكتروني</label>
-                                    <input type="email" className="form-control" onChange={(e)=> setEmail(e.target.value)} id="exampleInputEmail1" aria-describedby="emailHelp" value={email} />
+                                    <input type="email" className="form-control" onChange={handleChange} id="exampleInputEmail1" aria-describedby="emailHelp" defaultValue={employee.email} />
                                 </div>
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
                                     <label htmlFor="exampleInputAddress" className="form-label">العنوان</label>
-                                    <input type="text" className="form-control" onChange={(e)=> setAddress(e.target.value)} id="exampleInputAddress" aria-describedby="addressHelp" value={address} />
+                                    <input type="text" className="form-control" onChange={handleChange} id="exampleInputAddress" aria-describedby="addressHelp" defaultValue={employee.address} />
                                 </div>
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
                                     <label htmlFor="exampleInputPhoneNumber" className="form-label">رقم الهاتف</label>
-                                    <input type="tel" className="form-control" onChange={(e)=> setPhoneNumber(e.target.value)} id="exampleInputPhoneNumber" aria-describedby="phoneNumberHelp" dir='rtl' value={phoneNumber} />
-                                </div>
-                                
-                                <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
-                                    <label htmlFor="exampleInputPassword1" className="form-label">كلمة المرور الجديدة</label>
-                                    <input type="password" className="form-control" onChange={(e)=> setPassword(e.target.value)} id="exampleInputPassword1" />
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
-                                    <label htmlFor="exampleInputResetPassword1" className="form-label">تأكيد كلمة المرور</label>
-                                    <input type="password" className="form-control" onChange={(e)=> setResetPassword(e.target.value)} id="exampleInputResetPassword1" />
+                                    <input type="tel" className="form-control" onChange={handleChange} id="exampleInputPhoneNumber" aria-describedby="phoneNumberHelp" dir='rtl' defaultValue={employee.phoneNumber} />
                                 </div>
                             </div>
                         </div>

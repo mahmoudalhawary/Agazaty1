@@ -1,26 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import '../CSS/LeaveBalance.css';
 
 function LeaveBalance(){
 
-        
-    const [leaveBalances, setLeaveBalances] = useState({
-        normal: {
-            type: 'اعتيادي',
-            totalBalance: 42,
-            takenBalance: 31,
-        },
-        casual: {
-            type: 'عارضة',
-            totalBalance: 7,
-            takenBalance: 2,
-        },
-        sick: {
-            type: 'مرضي',
-            totalBalance: '',
-            takenBalance: 2,
-        },
-    });
+    const [leaveBalances, setLeaveBalances] = useState([]);
+    useEffect(() => {
+        fetch(`http://localhost:9000/employees/1`)
+        .then((res)=> (res.json()))
+        .then((data)=> (setLeaveBalances(data.leaves)))
+    }, []);
 
     return(
         <div>

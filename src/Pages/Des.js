@@ -2,23 +2,23 @@ import React, { useEffect, useState } from "react";
 import BtnLink from "../components/BtnLink";
 import Search from "../components/Search";
 
-function LeaveRecord(){
-    const [leavesWaiting, setLeavesWaiting] = useState([]);
+function Des(){
+    const [requestStatus, setRequestStatus] = useState('');
+    const [requests, setRequests] = useState([]);
 
-    // لو هنعمل عرض الاجازات كلها بنفس الطريق دي يبقى اعمل props وخد منه الApi بتاع كل واحدة منهم بدل ما تعمل صفحة لكل واحدة لا خليها component
-    useEffect(() => {
+    useEffect(()=>{
         fetch(`http://localhost:9000/requests`)
-        .then((res) => res.json())
-        .then((data) => setLeavesWaiting(data))
+        .then((res)=> res.json())
+        .then((data)=> setRequests(data))
     }, [])
 
-    console.log(leavesWaiting)
+    console.log(requests)
 
     return(
         <div>
             <div className="d-flex mb-4 justify-content-between">
                 <div className="zzz d-inline-block p-3 ps-5">
-                    <h2 className="m-0">طلبات الاجازات</h2>
+                    <h2 className="m-0">سجل الاجازات</h2>
                 </div>
                 <div className="p-3">
                     <div className="d-flex">
@@ -37,18 +37,27 @@ function LeaveRecord(){
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>رقم الهاتف</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>نوع الاجازة</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ البداية</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ النهاية</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>حالة الطلب</th>
+                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>
+                                    حالة الطلب
+                                    {/* <FontAwesomeIcon icon={faSortDown} className="me-1" /> */}
+                                    <select onChange={(e)=> setRequestStatus(e.target.value)} className="form-select w-75" aria-label="Default select example">
+                                        <option value="الكل">الكل</option>
+                                        <option value="أعتيادية">أعتيادية</option>
+                                        <option value="عارضة">عارضة</option>
+                                        <option value="مرضية">مرضية</option>
+                                        <option value="تصريح">تصريح</option>
+                                    </select>
+                                </th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>الأرشيف</th>
                             </tr>
                         </thead>
                         <tbody>
 
-                            {leavesWaiting.map((leave, index)=>{
+                            {requests.map((request, index)=>{
                                 return(
                                     <tr key={index}>
                                         {
-                                            leave.employee.map((item, index)=>{
+                                            request.employee.map((item, index)=>{
                                                 return(
                                                     <React.Fragment key={index}>
                                                         <th>{item.firstName} {item.secondName} {item.thirdName}</th>
@@ -58,14 +67,13 @@ function LeaveRecord(){
                                                 )
                                             })
                                         }
-                                        <th>{leave.type}</th>
-                                        <th>{leave.startDate}</th>
-                                        <th>{leave.endDate}</th>
-                                        { leave.status === 'معلقة' ? <th className="text-success">{leave.status}</th>
-                                        : <th className="text-primary">{leave.status}</th>
+                                        <th>{request.type}</th>
+                                        <th>{request.startDate}</th>
+                                        { request.status === 'معلقة' ? <th className="text-success">{request.status}</th>
+                                        : <th className="text-primary">{request.status}</th>
                                         }
                                         <th>
-                                            <BtnLink id={leave.id} name='عرض الاجازة' link='/leave-requests' class="btn btn-outline-primary" />
+                                            <BtnLink id={request.id} name='عرض الاجازة' link='/leave-requests' class="btn btn-outline-primary" />
                                         </th>
                                     </tr>
                                 )})}
@@ -77,4 +85,4 @@ function LeaveRecord(){
     )
 }
 
-export default LeaveRecord;
+export default Des;

@@ -1,10 +1,21 @@
 import time from '../Images/time.png';
 import '../CSS/Hint.css';
 import BtnLink from './BtnLink';
+import { useEffect, useState } from 'react';
 
 function Hint() {
     const userType = 'المدير المباشر';
     const leaveID = '#24345';
+
+    const [employee, setEmployee] = useState([]);
+
+    useEffect(()=>{
+        fetch(`http://localhost:9000/employees/1`)
+        .then((res)=> res.json())
+        .then((data)=> setEmployee(data))
+    }, [])
+
+    console.log(employee)
 
     return (
         <div to={'/agazaty'} className='text-decoration-none'>
