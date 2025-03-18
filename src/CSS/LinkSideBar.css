@@ -1,0 +1,34 @@
+.link-SideBar{
+    text-decoration: none;
+}
+
+.link-SideBar li{
+    display: flex;
+    margin: 10px;
+    align-items: center;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+.link-SideBar li:hover{
+    background-color: #0b5ed7;
+    color: white;
+}
+
+.link-SideBar li span{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.hover-danger li:hover{
+    background-color: red;
+    color: #ffffff !important;
+}
+.active-link {
+    background-color: #0b5ed7 !important;
+    color: white;
+}
+
+.tran{
+    transition: .5s;
+}
