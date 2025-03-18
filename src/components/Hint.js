@@ -9,10 +9,11 @@ function Hint() {
 
     const [employee, setEmployee] = useState([]);
 
-    useEffect(()=>{
-        fetch(`http://localhost:9000/employees/1`)
-        .then((res)=> res.json())
-        .then((data)=> setEmployee(data))
+    useEffect(() => {
+        // fetch(`http://localhost:9000/employees/1`)
+        fetch(`http://localhost:7234/employees/1`)
+            .then((res) => res.json())
+            .then((data) => setEmployee(data))
     }, [])
 
     console.log(employee)

@@ -1,27 +1,82 @@
 import Door from '../Images/Door.jpg';
 import '../CSS/login.css';
-import { Link, Outlet} from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import LogoUniversity from '../Images/LogoUniversity.jpg';
-function Login(){
+import { useState } from 'react';
+import axios from 'axios';
+import BASE_API_URL from '../server/serves';
+function Login() {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate()
 
-    return(
+    const handleLogin = async (email, password) => {
+        setLoading(true);
+        setError(null);
+
+        try {
+            const response = await axios.post(`${BASE_API_URL}api/Account/UserLogin`, {
+                // const response = await axios.post(`http://agazatyapi.runasp.net/api/Account/UserLogin`, {
+                userName: email,
+                password: password,
+            });
+            console.log('تم تسجيل الدخول بنجاح:', response.data);
+            navigate('/')
+            //set user name and token to local storage
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('userID', response.data.id);
+            //print userid form local storage
+            console.log('userid from local storage:', localStorage.getItem('userID'));
+        } catch (err) {
+            console.error('حدث خطأ أثناء تسجيل الدخول:', err);
+            setError('اسم المستخدم أو كلمة المرور غير صحيحة.');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handlePassword = async (emailForget) => {
+        setLoading(true);
+        setError(null);
+        console.log('e', emailForget);
+
+        try {
+            const response = await axios.post(`${BASE_API_URL}api/Account/Send-OTP`, {
+                email: emailForget,
+            });
+            if (response.data.message === "account not found.") {
+                setError('البريد الالكتروني غير موجود');
+            } else {
+                console.log('تم ارسال رمز التاكيد بنجاح:', response.data);
+                navigate('/login/otpcode');
+            }
+        } catch (err) {
+            console.error('حدث خطأ أثناء ارسال رمز التاكيد:', err);
+            setError('البريد الالكتروني غير صحيح');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
+
+    return (
         <div className="container login">
             <div className="row">
                 <div className="col-12 col-md-4 xxxx">
                     <div className='container-1'>
-                        <form>
-                            <div className="d-flex headForm text-primary">
-                                <h4>اجازاتي</h4>
-                                <p></p>
-                                <h6>جامعة جنوب الوادي</h6>
-                                <img src={LogoUniversity} alt="LogoUniversity" />
-                            </div>
-                            <Outlet/>
-                            <div className="wordBottom">
-                                <Link to={'./'} id="emailHelp" className="form-text text-color">سياسة الخصوصية. </Link>
-                                <Link to={'./'} id="emailHelp" className="form-text text-color">الدليل الشامل للأسئلة الشائعة</Link>
-                            </div>
-                        </form>
+                        <div className="d-flex headForm text-primary">
+                            <h4>اجازاتي</h4>
+                            <p></p>
+                            <h6>جامعة جنوب الوادي</h6>
+                            <img src={LogoUniversity} alt="LogoUniversity" />
+                        </div>
+                        {/* تمرير props إلى LoginCom */}
+                        <Outlet context={{ handleLogin, handlePassword, loading, error }} />
+                        <div className="wordBottom">
+                            <Link to={'./'} id="emailHelp" className="form-text text-color">سياسة الخصوصية. </Link>
+                            <Link to={'./'} id="emailHelp" className="form-text text-color">الدليل الشامل للأسئلة الشائعة</Link>
+                        </div>
                     </div>
                 </div>
                 <div className="col d-none d-md-block">
@@ -29,10 +84,72 @@ function Login(){
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Login;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import Door from '../Images/Door.jpg';
+// import '../CSS/login.css';
+// import { Link, Outlet } from 'react-router-dom';
+// import LogoUniversity from '../Images/LogoUniversity.jpg';
+// import LoginCom from '../components/LoginCom';
+// function Login() {
+
+//     return (
+//         <div className="container login">
+//             <div className="row">
+//                 <div className="col-12 col-md-4 xxxx">
+//                     <div className='container-1'>
+//                         <form>
+//                             <div className="d-flex headForm text-primary">
+//                                 <h4>اجازاتي</h4>
+//                                 <p></p>
+//                                 <h6>جامعة جنوب الوادي</h6>
+//                                 <img src={LogoUniversity} alt="LogoUniversity" />
+//                             </div>
+//                             <LoginCom />
+//                             <div className="wordBottom">
+//                                 <Link to={'./'} id="emailHelp" className="form-text text-color">سياسة الخصوصية. </Link>
+//                                 <Link to={'./'} id="emailHelp" className="form-text text-color">الدليل الشامل للأسئلة الشائعة</Link>
+//                             </div>
+//                         </form>
+//                     </div>
+//                 </div>
+//                 <div className="col d-none d-md-block">
+//                     <img className="rounded img-fluid" src={Door} alt="Door" />
+//                 </div>
+//             </div>
+//         </div>
+//     )
+// }
+
+// export default Login;
 
 
 
@@ -102,24 +219,24 @@ export default Login;
 
 //                             <div className="mb-3">
 //                                 <label htmlFor="text" className="form-label">البريد الإلكتروني</label>
-//                                 <input 
-//                                     type="text" 
-//                                     className="form-control" 
-//                                     id="text" 
-//                                     value={UserName} 
-//                                     onChange={(e) => setUserName(e.target.value)} 
+//                                 <input
+//                                     type="text"
+//                                     className="form-control"
+//                                     id="text"
+//                                     value={UserName}
+//                                     onChange={(e) => setUserName(e.target.value)}
 //                                     required
 //                                 />
 //                             </div>
 
 //                             <div className="mb-3">
 //                                 <label htmlFor="password" className="form-label">كلمة المرور</label>
-//                                 <input 
-//                                     type="password" 
-//                                     className="form-control" 
-//                                     id="password" 
-//                                     value={Password} 
-//                                     onChange={(e) => setPassword(e.target.value)} 
+//                                 <input
+//                                     type="password"
+//                                     className="form-control"
+//                                     id="password"
+//                                     value={Password}
+//                                     onChange={(e) => setPassword(e.target.value)}
 //                                     required
 //                                 />
 //                             </div>

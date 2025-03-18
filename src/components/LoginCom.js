@@ -1,33 +1,56 @@
-import '../CSS/login.css';
-import { Link } from 'react-router-dom';
-import BtnLink from "./BtnLink";
 import { useState } from 'react';
+import { Link, useOutletContext } from 'react-router-dom';
 
-function LoginCom(){
+function LoginCom() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { handleLogin, loading, error } = useOutletContext(); // استلام props من Login
 
-    return(
+    const onSubmit = (e) => {
+        e.preventDefault();
+        handleLogin(email, password);
+    };
+
+
+    return (
         <>
-            <form>
+            <form onSubmit={onSubmit}>
                 <div className='wordLogin'>
                     <h4 className="text-center text-head">تسجيل الدخول</h4>
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">البريد الإلكتروني</label>
-                    <input type="email"  onChange={(e)=> setEmail(e.target.value)} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder='yahyasaad2024@gmail.com' />
+                    <input
+                        type="text"
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="form-control"
+                        id="exampleInputEmail1"
+                        aria-describedby="emailHelp"
+                        placeholder='yahyasaad2024@gmail.com'
+                        required
+                    />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">كلمة المرور</label>
-                    <input type="password"  onChange={(e)=> setPassword(e.target.value)} className="form-control" id="exampleInputPassword1" placeholder='********' />
-                    <Link to={'/login/forgetpassword'} id="emailHelp" className="form-text text-primary forgetPassword">هل نسيت كلمة المرور؟</Link>
+                    <input
+                        type="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="form-control"
+                        id="exampleInputPassword1"
+                        placeholder='********'
+                        required
+                    />
                 </div>
-                <div className="d-flex justify-content-cente">
-                    <BtnLink name='تسجيل الدخول' link='/' class='btn-primary w-100' />
-                </div>
+
+                <Link to={'/login/forgetpassword'} id="emailHelp" className="form-text text-primary forgetPassword">هل نسيت كلمة المرور؟</Link>
+
+                {error && <div className="alert alert-danger">{error}</div>}
+                <button type="submit" className={`btn btn-primary w-100 ${loading ? 'disabled' : ''}`}>
+                    {loading ? 'جاري تسجيل الدخول...' : 'تسجيل الدخول'}
+                </button>
             </form>
         </>
-    )
+    );
 }
 
 export default LoginCom;
