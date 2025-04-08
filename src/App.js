@@ -18,21 +18,57 @@ import AddDepartment from './Pages/AddDepartment';
 import Departments from './Pages/Departments';
 import Employees from './Pages/Employees';
 import AddEmployee from './Pages/AddEmployee';
-import LeaveRequests from './Pages/LeaveRequests';
-import AddLeave from './Pages/AddLeave';
-import React from 'react';
 import LeaveRecord from './Pages/LeaveRecord';
-import Leaves from './Pages/Leaves';
-import EditEmployee from './Pages/EditEmployee';
 import EditDepartment from './Pages/EditDepartment';
-import Leavee from './components/leavee';
 import Inquiries from './Pages/Inquiries';
 import Des from './Pages/Des';
-import Test from './Pages/Test';
+import NormalLeave from './components/NormalLeave';
+import SickLeave from './components/SickLeave';
+import CasualLeave from './components/CasualLeave';
+import NormalLeaveRequest from './Pages/NormalLeaveRequest';
+import SickLeaveRequest from './components/SickLeaveRequest';
+import EditPassword from './components/EditPassword';
+import Archives from './Pages/Archives';
+import CasualLeaveRequestManger from './Pages/NormalLeaveRequestManager';
+import NormalLeaveRequestManager from './Pages/NormalLeaveRequestManager';
+import NormalRequestManager from './Pages/NormalLeaveRequestGeneralManager';
+import GeneralManagerLeave from './Pages/GeneralManagerLeave';
+import Parameter from './Pages/Parameter';
+import UpdateNormalLeave from './Pages/UpdateNormalLeave';
+import TrackLeave from './Pages/Leaves';
+import EditEmployeeForHR from './Pages/EditEmployee';
+import ExceptionalLeave from './Pages/ExceptionalLeave';
+import SickLeavesRecord from './Pages/SickLeavesRecord';
+import SickLeavesRecord2 from './Pages/SickLeavesRecord2';
+import UpdateSickLeave from './components/UpdateSickLeave';
+import UpdateSickLeave2 from './components/UpdateSickLeave2';
+import DesNormal from './Pages/DesNormal';
+import DesCasual from './Pages/DesCasual';
+import DesSick from './Pages/DesSick';
+import OldSideBar from './components/OldSideBar';
+import { useEffect, useState } from 'react';
+
 
 function App() {
-  const userRole = 'hr';
 
+  // const userID = "d717923f-9ef0-4ccf-9eb9-75983c582165" // عماد
+  // const userID = "39331229-7e67-4e62-b560-fa9be8927f52"; // همام
+  // const userID = "ec12a929-46ea-4c7e-8b69-bef0f9886386"; // يحيى
+  // const userID = "5daf7dbb-369e-44a8-9565-02e93d75b3a6"; // سارة
+  // const userID = "122e0eb2-ad19-411b-a3dd-1e96df18cc63"; // أمال
+  const userID = "98954801-d453-40ff-940e-41e0ce88808f"; // مجدي
+  localStorage.setItem("userID", userID);
+
+
+  const [Role, setRole] = useState();
+  useEffect(()=>{
+    fetch(`http://agazatyapi.runasp.net/api/Account/GetRoleOfUser/${userID}`)
+    .then((res)=> res.json())
+    .then((data)=> setRole(data.role))
+  }, [])
+
+  
+  const userRole = Role;
   return (
     <div className="App" dir="rtl">
       <Routes>
@@ -47,41 +83,72 @@ function App() {
           path="/"
           element={
             <div className="row d-flex" style={{ height: "100vh" }}>
-              <div className="col-2 sidebar p-0" style={{height: "100%", overflowY: "auto"}}>
+              <div className="col-2 col-xl-1 col-xxl-2 sidebar p-0" style={{height: "100%", overflowY: "auto"}}>
                 <SideBar userRole={userRole} />
-              </div>        
+              </div>  
+
+              {/* <div className="col-2 col-xl-1 col-xxl-2 sidebar p-0" style={{height: "100%", overflowY: "auto"}}>
+                <OldSideBar userRole={userRole} />
+              </div>*/}
 
               <div className="col p-0" style={{height: "100%", overflowY: "auto"}}>
-                <React.Fragment style={{position:'fixed'}}>
-                  <NavBar userRole={userRole} />
-                  <Outlet />
-                </React.Fragment>
+                <NavBar userRole={userRole} />
+                <Outlet />
               </div>
             </div>
           }
         >
+          {/* خلصان */}
           <Route index element={<Home userRole={userRole} />} />
-          {/* <Route path="leave-request" element={<LeaveRequest />} /> */}
-          <Route path="leave-request" element={<Leavee />} />
+          <Route path="normal-leave" element={<NormalLeave />} />
+          <Route path="casual-leave" element={<CasualLeave />} />
+          <Route path="sick-leave" element={<SickLeave />} />
+          <Route path="parameter" element={<Parameter />} />
           <Route path="messages" element={<Messages />} />
           <Route path="about" element={<About />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="editprofile" element={<EditProfile />} />
-          <Route path="sitting" element={<Sitting />} />
           <Route path="agazaty" element={<Agazaty />} />
+          <Route path="sitting" element={<Sitting />} />
+          <Route path="normal-leave-request/:id" element={<NormalLeaveRequest />} />
+          <Route path="casual-leave-request/:id" element={<CasualLeaveRequestManger />} />
+          <Route path="sick-leave-request/:leaveID" element={<SickLeaveRequest />} />
+          <Route path="update-sick-leave/:leaveID" element={<UpdateSickLeave />} />
+          <Route path="update-sick-leave2/:leaveID" element={<UpdateSickLeave2 />} />
+          <Route path="inquiries" element={<Inquiries />} />
+          <Route path="editprofile" element={<EditProfile />} />
           <Route path="departments" element={<Departments />} />
           <Route path="add-department" element={<AddDepartment />} />
           <Route path="department/:id/edit" element={<EditDepartment />} />
-          <Route path="employees" element={<Employees />} />
+          <Route path="employees/active" element={<Employees userRole={userRole} />} />
+          <Route path="employees/inactive" element={<Archives />} />
+          {/* <Route path="archives" element={<Archives />} /> */}
           <Route path="add-Employee" element={<AddEmployee />} />
-          <Route path="employee/:id/edit" element={<EditEmployee />} />
+          <Route path="update-normal-leave/:leaveID" element={<UpdateNormalLeave />} />
+
+          {/* عرض الاجازة بشكل منفصل */}
+          <Route path="direct-manager/normal-leave-request/:id" element={<NormalLeaveRequestManager />} />
+          <Route path="general-manager/normal-leave-request/:id" element={<NormalRequestManager />} />
+
+          {/* سجل الاجازات الشامل */}
+          <Route path="employee/:userId" element={<EditEmployeeForHR />} />
+          <Route path="des-requests/normal" element={<DesNormal />} />
+          <Route path="des-requests/casual" element={<DesCasual />} />
+          <Route path="des-requests/sick" element={<DesSick />} />
+
+          
+          {/* محمود الهواري */}
+          <Route path="edit-password" element={<EditPassword />} />
+
+
+          {/* طلبات الاجازات عن المديرين */}
           <Route path="leave-record" element={<LeaveRecord />} />
-          <Route path="des-requests" element={<Des />} />
-          <Route path="leave-requests/:id" element={<LeaveRequests />} />
-          <Route path="add-leave" element={<AddLeave />} />
-          <Route path="leaves/:id" element={<Leaves />} />
-          <Route path="inquiries" element={<Inquiries />} />
-          <Route path="test" element={<Test />} />
+          <Route path="general/leave-record" element={<GeneralManagerLeave />} />
+          <Route path="exceptional-leave" element={<ExceptionalLeave />} />
+          <Route path="sick-leaves-record" element={<SickLeavesRecord />} />
+          <Route path="sick-leaves-record2" element={<SickLeavesRecord2 />} />
+
+          {/* تتبع امازون */}
+          <Route path="track-leave/:id" element={<TrackLeave />} />
         </Route>
       </Routes>
     </div>
@@ -89,3 +156,4 @@ function App() {
 }
 
 export default App;
+

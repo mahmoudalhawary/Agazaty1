@@ -1,8 +1,8 @@
 import BtnLink from "./BtnLink";
 
-function SittingCom() {
+function SittingCom(){
 
-    return (
+    return(
         <div className="row">
             <div>
                 <div className="box d-flex justify-content-between mt-3 col-sm-12 col-md-10 col-lg-8">

@@ -1,18 +1,3 @@
-// function Search(){
-//     return(
-//         <div>
-//             <form className="d-flex" role="search" style={{height:'45px'}}>
-//                 <input className="form-control me-2" type="search" placeholder="بحث" aria-label="Search" />
-//                 {/* <button className="btn btn-outline-success" type="submit">بحث</button> */}
-//             </form>
-//         </div>
-//     )
-// }
-
-// export default Search;
-
-
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

@@ -5,63 +5,70 @@ import { faCalendarDays, faPenToSquare, faTrash } from "@fortawesome/free-solid-
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
-function Employees() {
-    const [employees, setEmployees] = useState([]);
-
+function Employees({userRole}) {
+    const [users, setUsers] = useState([]);
     useEffect(() => {
         fetchEmployees();
     }, []);
 
     const fetchEmployees = () => {
-        fetch('http://localhost:9000/employees')
+        fetch(`http://agazatyapi.runasp.net/api/Account/GetAllActiveUsers`)
             .then((res) => res.json())
-            .then((data) => setEmployees(data));
+            .then((data) => {setUsers(Array.isArray(data) ? data : []);
+            })
+            .catch(error => {setUsers([]);}
+        );
     };
-
-    const handleDelete = (id) => {
+    const softDeleteUser = (userId) => {
         Swal.fire({
             title: "هل أنت متأكد؟",
-            text: "لن تتمكن من استعادة بيانات هذا الموظف!",
+            text: "سيتم أرشفة الموظف ولن يكون مرئيًا في القائمة!",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#d33",
             cancelButtonColor: "#3085d6",
-            confirmButtonText: "نعم، احذفه!",
-            cancelButtonText: "إلغاء",
+            confirmButtonText: "نعم، أرشفة!",
+            cancelButtonText: "إلغاء"
         }).then((result) => {
             if (result.isConfirmed) {
-                fetch(`http://localhost:9000/employees/${id}`, {
-                    method: "DELETE",
-                }).then(() => {
-                    setEmployees(employees.filter((employee) => employee.id !== id));
-
-                    Swal.fire({
-                        title: "تم الحذف!",
-                        text: "تم حذف الموظف بنجاح.",
-                        icon: "success",
-                        confirmButtonText: "موافق",
-                    });
-                }).catch((error) => {
-                    Swal.fire({
-                        title: "خطأ!",
-                        text: "حدث خطأ أثناء حذف الموظف.",
-                        icon: "error",
-                        confirmButtonText: "حسناً",
-                    });
+                fetch(`http://agazatyapi.runasp.net/api/Account/SoftDeleteUser/${userId}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            throw new Error(`خطأ في الحذف: ${text || response.status}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(() => {
+                    Swal.fire("تم الأرشفة!", "تم أرشفة الموظف بنجاح.", "success");
+                    fetchEmployees();
+                })
+                .catch(error => {
+                    console.error("Error soft deleting user:", error);
+                    Swal.fire("خطأ!", `حدث خطأ أثناء أرشفة الموظف: ${error.message}`, "error");
                 });
             }
         });
     };
+    
+    
+    console.log(userRole)
 
     return (
         <div>
             <div className="d-flex mb-4 justify-content-between">
                 <div className="zzz d-inline-block p-3 ps-5">
-                    <h2 className="m-0">الموظفين</h2>
+                    <h2 className="m-0">الموظفيين</h2>
                 </div>
-                <div className="p-3">
+                { userRole === "مدير الموارد البشرية"  &&<div className="p-3">
                     <BtnLink name='إضافة موظف' link='/add-employee' class="btn btn-primary m-0"/>
                 </div>
+
+                }
             </div>
             <div className="row">
                 <div>
@@ -69,6 +76,7 @@ function Employees() {
                         <thead>
                             <tr>
                                 <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>الاسم</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>المسمى الوظيفي</th>
                                 <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>القسم</th>
                                 <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>تاريخ التعيين</th>
                                 <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>رقم الهاتف</th>
@@ -76,29 +84,33 @@ function Employees() {
                             </tr>
                         </thead>
                         <tbody>
-                            {employees.map((employee) => (
-                                <tr key={employee.id}>
-                                    <td style={{ height: '50px' }}>{employee.firstName} {employee.secondName}</td>
-                                    <td style={{ height: '50px' }}>{employee.department}</td>
-                                    <td style={{ height: '50px' }}>{employee.dateAppointment}</td>
-                                    <td style={{ height: '50px' }}>{employee.phoneNumber}</td>
-                                    <td style={{ height: '50px' }}>
-                                        <Link to={`/employee/${employee.id}/edit`}>
-                                            <FontAwesomeIcon icon={faPenToSquare} color="blue" className="fontt" />
-                                        </Link>
-                                        <FontAwesomeIcon 
-                                            icon={faTrash} 
-                                            color="red" 
-                                            className="fontt" 
-                                            style={{ cursor: "pointer", marginLeft: "10px" }} 
-                                            onClick={() => handleDelete(employee.id)} 
-                                        />
-                                        <Link to={`/employees`}>
-                                            <FontAwesomeIcon icon={faCalendarDays} color="green" className="fontt" />
-                                        </Link>
-                                    </td>
-                                </tr>  
-                            ))}
+                            {users.length > 0 ? (
+                                users.map((user) => (
+                                    <tr key={user.id}>
+                                        <td style={{ height: '50px' }}>{user.fullName}</td>
+                                        <td style={{ height: '50px' }}>{"المسمى الوظيفي"}</td>
+                                        <td style={{ height: '50px' }}>{user.departmentName}</td>
+                                        <td style={{ height: '50px' }}>{user.hireDate}</td>
+                                        <td style={{ height: '50px' }}>{user.phoneNumber}</td>
+                                        <td style={{ height: '50px' }}>
+                                            <Link to={`/employee/${user.id}`}>
+                                                <FontAwesomeIcon icon={faPenToSquare} color="blue" className="fontt" />
+                                            </Link>
+                                            <FontAwesomeIcon 
+                                                icon={faTrash} 
+                                                onClick={() => softDeleteUser(user.id)}
+                                                color="red" 
+                                                className="fontt" 
+                                                style={{ cursor: "pointer", marginLeft: "10px" }} 
+                                            />
+                                        </td>
+                                    </tr>  
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="6" className="text-center text-danger p-3">لا يوجد موظفون نشيطين</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
