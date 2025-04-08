@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import API from "../Data" ;
 
 function Message() {
     const userID = localStorage.getItem("userID");
@@ -24,7 +25,7 @@ function Message() {
                 return res.json();
             })
             .then(() => {
-                setLeaveWating(leaveWating.filter(leave => leave.id !== leaveID));
+                window.location.reload();
             })
             .catch((err) => console.error("Error updating decision:", err));
     };
@@ -36,7 +37,7 @@ function Message() {
                     <h2 className="m-0">القائم بالعمل</h2>
                 </div>
             </div>
-            {Array.isArray(leaveWating) && leaveWating.length > 0 ? ( // ✅ التأكد من أن leaveWating مصفوفة قبل استخدام map
+            {Array.isArray(leaveWating) && leaveWating.length > 0 ? (
                 leaveWating.map((leave, index) => (
                     <div className="mt-3" key={index}>
                         <div className="box mt-3 col-sm-12 col-md-10 col-lg-8">
@@ -50,7 +51,7 @@ function Message() {
                     </div>
                 ))
             ) : (
-                <p className="text-center mt-4">لا توجد طلبات اجازة في الوقت الحالي.</p> // ✅ رسالة بديلة عند عدم وجود بيانات
+                <p className="text-center text-danger mt-4">لا توجد طلبات اجازة في الوقت الحالي.</p> // ✅ رسالة بديلة عند عدم وجود بيانات
             )}
         </div>
     );

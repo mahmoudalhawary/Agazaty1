@@ -1,4 +1,4 @@
-import YahyaSaad from '../Images/YahyaSaad.jpg';
+import Image from '../Images/download.jpeg';
 import '../CSS/User.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faChevronDown } from '@fortawesome/free-solid-svg-icons';
@@ -8,8 +8,8 @@ import { useEffect, useState } from 'react';
 function Search({userRole}){
     const userID = localStorage.getItem("userID");
     const [user, setUser] = useState([]);
-    const [UserRole, setUserRole] = useState("")
-    
+    const [UserRole, setUserRole] = useState("");
+
     useEffect(()=>{
         fetch(`http://agazatyapi.runasp.net/api/Account/GetUserById/${userID}`)
         .then((res) => res.json())
@@ -34,8 +34,8 @@ function Search({userRole}){
                 <h6 className='m-0'>{user.firstName} {user.secondName}</h6>
                 <p className='m-0'>{UserRole}</p>
             </div>
-            <Link to={`/profile`}>
-                <img src={YahyaSaad} className="hoverOpacity rounded-circle profilePicture" alt="profilePicture" />
+            <Link to={`/profile`} className='rounded-circle4'>
+                <img src={Image} className="hoverOpacity rounded-circle profilePicture" alt="profilePicture" />
             </Link>
         </div>
     )

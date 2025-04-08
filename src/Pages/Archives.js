@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import BtnLink from "../components/BtnLink";
 import { faCalendarDays, faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import API from "../Data" ;
 
 function Archives() {
     const [users, setUsers] = useState([]);
@@ -12,10 +14,9 @@ function Archives() {
     }, []);
 
     const fetchEmployees = () => {
-        fetch('http://agazatyapi.runasp.net/api/Account/GetAllNonActiveUsers')
+        fetch(`http://agazatyapi.runasp.net/api/Account/GetAllNonActiveUsers`)
             .then((res) => res.json())
             .then((data) => {
-                console.log("Fetched data:", data);
                 setUsers(Array.isArray(data) ? data : []);
             })
             .catch(error => {
@@ -24,14 +25,51 @@ function Archives() {
             });
     };
 
+    const ReActiveUser = (userId) => {
+        Swal.fire({
+            title: "هل أنت متأكد؟",
+            text: "سيتم إلغاء أرشفة الموظف وسيكون مرئيًا في القائمة!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "نعم، إلغاء الأرشفة!",
+            cancelButtonText: "إلغاء"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`http://agazatyapi.runasp.net/api/Account/ReActiveUser/${userId}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            throw new Error(`خطأ في إلغاء الأرشفة: ${text || response.status}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(() => {
+                    Swal.fire("تم إلغاء الأرشفة!", "تم إلغاء أرشفة الموظف بنجاح.", "success");
+                    fetchEmployees();
+                })
+                .catch(error => {
+                    console.error("Error reactivating user:", error);
+                    Swal.fire("خطأ!", `حدث خطأ أثناء إلغاء أرشفة الموظف: ${error.message}`, "error");
+                });
+            }
+        });
+    };
+    
+
     return (
         <div>
             <div className="d-flex mb-4 justify-content-between">
                 <div className="zzz d-inline-block p-3 ps-5">
-                    <h2 className="m-0">موظفين غير نشيطين</h2>
+                    <h2 className="m-0">الموظفين الغير نشيطين</h2>
                 </div>
                 <div className="p-3">
-                    <BtnLink name='الموظفين النشيطين' link='/employees' class="btn btn-primary m-0"/>
+                    <BtnLink name='الموظفين النشيطين' link='/employees/active' class="btn btn-primary m-0"/>
                 </div>
             </div>
             <div className="row">
@@ -60,13 +98,11 @@ function Archives() {
                                             </Link>
                                             <FontAwesomeIcon 
                                                 icon={faTrash} 
-                                                color="red" 
+                                                color="red"
+                                                onClick={() => ReActiveUser(user.id)}
                                                 className="fontt" 
                                                 style={{ cursor: "pointer", marginLeft: "10px" }} 
                                             />
-                                            <Link to={`/employees`}>
-                                                <FontAwesomeIcon icon={faCalendarDays} color="green" className="fontt" />
-                                            </Link>
                                         </td>
                                     </tr>  
                                 ))

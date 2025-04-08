@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useParams, useNavigate } from "react-router-dom";
+import API from "../Data" ;
 
 function EditDepartment() {
     const { id } = useParams();
@@ -29,6 +30,7 @@ function EditDepartment() {
             .then((res) => res.json())
             .then((data) => {
                 setDepartment(data);
+                setManagerId(data.managerId);
             })
             .catch((error) => console.error("حدث خطأ أثناء جلب البيانات:", error));
     }, [id]);
@@ -39,7 +41,13 @@ function EditDepartment() {
 
     const updateDepartment = async (e) => {
         e.preventDefault();
-
+    
+        // إنشاء نسخة من بيانات القسم مع تضمين رئيس القسم الجديد
+        const updatedData = {
+            ...department,
+            managerId: managerId || department.managerId,  // إذا لم يتم تغييره، حافظ على القيمة القديمة
+        };
+    
         Swal.fire({
             title: `<span style='color:#0d6efd;'>هل أنت متأكد من تحديث بيانات قسم ${department.name} ؟</span>`,
             icon: "warning",
@@ -56,9 +64,9 @@ function EditDepartment() {
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify(department),
+                        body: JSON.stringify(updatedData),  // إرسال البيانات المحدثة مع رئيس القسم
                     });
-
+    
                     if (response.ok) {
                         Swal.fire({
                             title: `<span style='color:#0d6efd;'>تم تحديث بيانات القسم بنجاح.</span>`,
@@ -86,7 +94,9 @@ function EditDepartment() {
             }
         });
     };
+    
 
+    
     return (
         <form className="p-3">
             <div className="row">
@@ -108,7 +118,7 @@ function EditDepartment() {
 
                 <div className="col-sm-12 col-md-6 mt-3">
                         <label htmlFor="manager" className="form-label">رئيس القسم</label>
-                        <select className="form-select" id="manager" onChange={(e) => setManagerId(e.target.value)} required>
+                        <select className="form-select" id="manager" value={managerId} onChange={(e) => setManagerId(e.target.value)} required>
                             <option value="">أختر رئيس القسم</option>
                             {users.map((user, index) => (
                                 <option key={index} value={user.id}>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import '../CSS/LeaveBalance.css';
+import API from "../Data" ;
 
 function LeaveBalance(){
     const userID = localStorage.getItem("userID");
@@ -11,6 +12,7 @@ function LeaveBalance(){
         .then((res) => res.json())
         .then((data) => setLeaveTypes(data))
     }, [])
+
 
     useEffect(()=>{
         fetch(`http://agazatyapi.runasp.net/api/Account/GetUserById/${userID}`)
@@ -27,7 +29,7 @@ function LeaveBalance(){
 
                 {leaveTypes.map((leaveType, index)=>{
                     return(
-                        <div className="box LeaveBalance col-sm-12 col-md-5 col-lg rounded-3 p-3" key={index}>
+                        <div className="box LeaveBalance col-sm-12 col-md rounded-3 p-3" key={index}>
                             {leaveType === "اعتيادية" ?
                                 <div>
                                     <div>
@@ -55,7 +57,7 @@ function LeaveBalance(){
                             :leaveType === "مرضية" ?
                                 <div>
                                     <div>
-                                        <h3>{user.sickLeavesCount}</h3>
+                                        <h3>{user.nonChronicSickLeavesCount}</h3>
                                     </div>
                                     <div>
                                         <h5>{leaveType}</h5>

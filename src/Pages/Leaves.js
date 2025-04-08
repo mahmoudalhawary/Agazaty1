@@ -1,31 +1,9 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import '../CSS/Leaves.css';
 
-function Leaves(){
+function TrackLeave(){
     const params = useParams();
-    const [leave, setLeave] = useState('');
-    const NumberOfLeave = 1;
-    const [codeColor1, setCodeColor1] = useState('#cfcfcf');
-    const [codeColor2, setCodeColor2] = useState('');
-    const [codeColor3, setCodeColor3] = useState('#0d6efd');
-
-
-    // useEffect(()=>{
-    //     fetch(`................/leave/${NumberOfLeave}`)
-    //     .then((res)=> res.json())
-    //     .then((data)=> setLeave(data))
-    // }, []);
-
     const leaveTest = { type: 'اعتيادي', date: '16/9/2024', time: '22:52:12', procedure:{friend: true, manager1: true, manager2: false}, nots: 'هناك لجنة جودة' };
-
-        // if(leaveTest.procedure.friend){
-        //     setCodeColor2('#0d6efd')
-        // }
-
-        setCodeColor1('#eeee')
-        console.log(codeColor1);
-
 
     return(
         <div className="p-3">
@@ -35,11 +13,11 @@ function Leaves(){
                         
                         { leaveTest.procedure.friend === true ?
                             <div className="space">
-                                <div className="d-flex justify-content-center align-items-center rounded-circle xxx" style={{backgroundColor:`${codeColor1}`}}>
+                                <div className="d-flex justify-content-center align-items-center rounded-circle xxx" style={{backgroundColor:'#cfcfcf'}}>
                                 1
                                 </div>
                                 
-                                <div className="d-flex justify-content-center align-items-center line" style={{backgroundColor:`${codeColor1}`}}>
+                                <div className="d-flex justify-content-center align-items-center line" style={{backgroundColor:'#cfcfcf'}}>
                                     <span className="bbb"></span>
                                 </div>
                             </div>
@@ -148,4 +126,4 @@ function Leaves(){
     )
 }
 
-export default Leaves;
+export default TrackLeave;

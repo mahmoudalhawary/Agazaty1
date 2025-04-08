@@ -1,73 +1,33 @@
 import '../CSS/login.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import BtnLink from "./BtnLink";
 import { useState } from 'react';
 
-function LoginCom() {
-    const [UserName, setUserName] = useState('');
-    const [Password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const navigate = useNavigate();
+function LoginCom(){
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const handleSubmit = async (e) => {
-        e.preventDefault(); // منع إعادة تحميل الصفحة
-        setError('');
-
-        const loginData = {
-            UserName: UserName,
-            Password: Password
-        };
-
-        try {
-            const response = await fetch('http://agazatyapi.runasp.net/api/Account/UserLogin', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(loginData)
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || 'فشل تسجيل الدخول');
-            }
-            
-            console.log('تم تسجيل الدخول بنجاح:', data);
-            console.log('تسجيل ناجح');
-            localStorage.setItem('userToken', data.token);
-            
-            setTimeout(() => {
-                navigate('/');
-            }, 500);
-        } catch (err) {
-            setError(err.message);
-            console.error('Error:', err);
-        }
-    };
-
-    return (
+    return(
         <>
-            <form onSubmit={handleSubmit}>
+            <form>
                 <div className='wordLogin'>
                     <h4 className="text-center text-head">تسجيل الدخول</h4>
                 </div>
-                {error && <p className="text-danger text-center">{error}</p>}
                 <div className="mb-3">
-                    <label htmlFor="exampleInputText" className="form-label">البريد الإلكتروني</label>
-                    <input type="text" value={UserName} onChange={(e) => setUserName(e.target.value)} className="form-control" id="exampleInputText" placeholder='example@gmail.com' required />
+                    <label htmlFor="exampleInputEmail1" className="form-label">البريد الإلكتروني</label>
+                    <input type="email"  onChange={(e)=> setEmail(e.target.value)} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder='yahyasaad2024@gmail.com' />
                 </div>
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">كلمة المرور</label>
-                    <input type="password" value={Password} onChange={(e) => setPassword(e.target.value)} className="form-control" id="exampleInputPassword1" placeholder='********' required />
-                    <Link to={'/login/forgetpassword'} className="form-text text-primary forgetPassword">هل نسيت كلمة المرور؟</Link>
+                    <input type="password"  onChange={(e)=> setPassword(e.target.value)} className="form-control" id="exampleInputPassword1" placeholder='********' />
+                    <Link to={'/login/forgetpassword'} id="emailHelp" className="form-text text-primary forgetPassword">هل نسيت كلمة المرور؟</Link>
                 </div>
-                <div className="d-flex justify-content-center">
-                    <button type="submit" className='btn btn-primary w-100'>تسجيل الدخول</button>
+                <div className="d-flex justify-content-cente">
+                    <BtnLink name='تسجيل الدخول' link='/' class='btn-primary w-100' />
                 </div>
             </form>
         </>
-    );
+    )
 }
 
 export default LoginCom;

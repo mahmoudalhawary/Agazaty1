@@ -4,8 +4,9 @@ import '../CSS/PreviousRequests.css';
 import { faPlus, faCalendarDays } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import BtnLink from './BtnLink';
+import API from "../Data" ;
 
-function PreviousRequests() {
+function PreviousRequests({leaves}) {
     const userID = localStorage.getItem("userID");
     const [LeaveTypes, setLeaveTypes] = useState([]);
     const [NormalLeaves, setNormalLeaves] = useState([]);
@@ -26,7 +27,7 @@ function PreviousRequests() {
     return (
         <div>
             <div className='d-flex justify-content-between'>
-                <h4>الطلبات السابقة</h4>
+                <h4>اجازاتك السابقة</h4>
                 <div className='d-flex'>
                     <div className='d-flex btn btn-primary align-items-center me-2'>
                         <FontAwesomeIcon icon={faCalendarDays} className="pl-3" />
@@ -63,25 +64,24 @@ function PreviousRequests() {
                         </tr>
                     </thead>
                     <tbody>
-                        {NormalLeaves
-                        .map((leave, index) => (
-                            <tr key={index}>
-                                <th>اعتيادية</th>
-                                <th>{new Date(leave.startDate).toLocaleDateString()}</th>
-                                <th> {leave.days} أيام</th>
-                                <th>{leave.coworkerName}</th>
-                                <th>{leave.notesFromEmployee}</th>
-                                <th>
-                                    {leave.holder === 0 ? <span className='text-primary cursor-pointer' title={leave.coworkerName}>القائم بالعمل</span>
-                                    : leave.holder === 1 ? <span className='text-primary cursor-pointer' title={leave.directManagerName}>المدير المباشر</span>
-                                    : leave.holder === 2 ? <span className='text-primary cursor-pointer' title={leave.generalManagerName}>المدير المختص</span>
-                                    : <span title={"تمت"} className='text-primary cursor-pointer'>مقبولة</span>}
-                                </th>
-                                <td>
-                                    <BtnLink id={leave.id} name='عرض الاجازة' link={`/normal-leave-request`} class="btn btn-outline-primary" />
-                                </td>
-                            </tr>
-                        ))}
+                        {NormalLeaves.map((leave, index) => (
+                                <tr key={index}>
+                                    <th>اعتيادية</th>
+                                    <th>{new Date(leave.startDate).toLocaleDateString()}</th>
+                                    <th> {leave.days} أيام</th>
+                                    <th>{leave.coworkerName}</th>
+                                    <th>{leave.notesFromEmployee}</th>
+                                    <th>
+                                        {leave.holder === 0 ? <span className='text-primary cursor-pointer' title={leave.coworkerName}>القائم بالعمل</span>
+                                        : leave.holder === 1 ? <span className='text-primary cursor-pointer' title={leave.directManagerName}>المدير المباشر</span>
+                                        : leave.holder === 2 ? <span className='text-primary cursor-pointer' title={leave.generalManagerName}>المدير المختص</span>
+                                        : <span title={"تمت"} className='text-primary cursor-pointer'>مقبولة</span>}
+                                    </th>
+                                    <td>
+                                        <BtnLink id={leave.id} name='عرض الاجازة' link={`/normal-leave-request`} class="btn btn-outline-primary" />
+                                    </td>
+                                </tr>
+                            ))}
                     </tbody>
                 </table>
             </div>

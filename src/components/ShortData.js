@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import '../CSS/LeaveBalance.css';
+import API from "../Data" ;
 
 function ShortData() {
     const [department, setDepartments] = useState([]);
@@ -10,31 +11,31 @@ function ShortData() {
     const [leaves, setLeaves] = useState({});
 
     useEffect(() => {
-        fetch("http://agazatyapi.runasp.net/api/Department/GetAllDepartments")
+        fetch(`http://agazatyapi.runasp.net/api/Department/GetAllDepartments`)
             .then((res) => res.json())
             .then((data) => setDepartments(data));
     }, []);
 
     useEffect(() => {
-        fetch("http://agazatyapi.runasp.net/api/NormalLeave/GetAllAcceptedNormalLeaves")
+        fetch(`http://agazatyapi.runasp.net/api/NormalLeave/GetAllAcceptedNormalLeaves`)
             .then((res) => res.json())
             .then((data) => setAcceptedLeaves(data));
     }, []);
 
     useEffect(() => {
-        fetch("http://agazatyapi.runasp.net/api/NormalLeave/GetAllRejectedNormalLeaves")
+        fetch(`http://agazatyapi.runasp.net/api/NormalLeave/GetAllRejectedNormalLeaves`)
             .then((res) => res.json())
             .then((data) => setRejectedLeaves(data));
     }, []);
 
     useEffect(() => {
-        fetch("http://agazatyapi.runasp.net/api/NormalLeave/GetAllWaitingNormalLeaves")
+        fetch(`http://agazatyapi.runasp.net/api/NormalLeave/GetAllWaitingNormalLeaves`)
             .then((res) => res.json())
             .then((data) => setWaitingLeaves(data));
     }, []);
 
     useEffect(() => {
-        fetch("http://agazatyapi.runasp.net/api/Account/GetAllActiveUsers")
+        fetch(`http://agazatyapi.runasp.net/api/Account/GetAllActiveUsers`)
             .then((res) => res.json())
             .then((data) => setUsers(data));
     }, []);

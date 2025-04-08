@@ -1,11 +1,11 @@
-import YahyaSaad from '../Images/YahyaSaad.jpg';
+import Image from '../Images/download.jpeg';
 import '../CSS/ProfileCom.css';
 
 function ProfileCom({user}){
     return(
         <div className="rounded profileCom">
             <div className='profileComTop p-3 justify-content-center text-center'>
-                    <img src={YahyaSaad} className="rounded-circle" alt="profilePicture" />
+                    <img src={Image} className="rounded-circle4" alt="profilePicture" />
                     <h5 className='mt-2'>{user.firstName} {user.secondName}</h5>
                     <p className='m-0'>{user.jobTitle}</p>
             </div>

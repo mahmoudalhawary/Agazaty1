@@ -4,7 +4,7 @@ import API from "../Data" ;
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 
-function Des() {
+function DesNormal() {
     const [leaves, setLeaves] = useState([]);
 
     useEffect(()=>{
@@ -19,12 +19,7 @@ function Des() {
         <div>
             <div className="d-flex mb-4 justify-content-between">
                 <div className="zzz d-inline-block p-3 ps-5">
-                    <h2 className="m-0">سجل الاجازات</h2>
-                </div>
-                <div className="p-3">
-                    <div className="d-flex">
-                        <BtnLink name='إضافة إجازة' link='/add-leave' class="btn btn-primary m-0 me-2" />
-                    </div>
+                    <h2 className="m-0">سجل الاجازات الاعتيادية</h2>
                 </div>
             </div>
             <div className="row">
@@ -32,7 +27,7 @@ function Des() {
                     <table className="m-0 table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>نوع الاجازة</th>
+                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>الاسم</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ البدء</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ الانتهاء</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>عدد الأيام</th>
@@ -47,7 +42,7 @@ function Des() {
                             {leaves.length > 0 ? (
                                 leaves.map((leave, index) => (
                                     <tr key={index}>
-                                        <th>اعتيادية</th>
+                                        <th>{leave.userName}</th>
                                         <th>{new Date(leave.startDate).toLocaleDateString()}</th>
                                         <th>{new Date(leave.endDate).toLocaleDateString()}</th>
                                         <th>{leave.days} أيام</th>
@@ -64,7 +59,7 @@ function Des() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="7" className="text-center text-danger p-3">لا يوجد اجازات حتى الآن</td>
+                                    <td colSpan="9" className="text-center text-danger p-3">لا يوجد اجازات حتى الآن</td>
                                 </tr>
                             )}
                         </tbody>
@@ -75,4 +70,4 @@ function Des() {
     );
 }
 
-export default Des;
+export default DesNormal;

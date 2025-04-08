@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import API from "../Data" ;
 
 function ProfileDescription({user}){
     const hireDate = user.hireDate;
@@ -27,7 +28,7 @@ function ProfileDescription({user}){
                     </tr>
                     <tr>
                         <th>المسمى الوظيفي</th>
-                        <th className="text-start">{UserRole}</th>
+                        <th className="text-start">{UserRole || "جارِِ التحميل..."}</th>
                     </tr>
                     <tr>
                         <th>القسم</th>

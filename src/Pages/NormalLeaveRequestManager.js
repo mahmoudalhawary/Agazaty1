@@ -3,15 +3,17 @@ import '../CSS/LeaveRequests.css';
 import { useEffect, useState } from 'react';
 import BtnLink from '../components/BtnLink';
 import Btn from '../components/Btn';
-
-function SickLeaveRequest() {
-    const { id } = useParams();
-    const LeaveID = Number(id);
+import API from "../Data" ;
+function NormalLeaveRequestManager() {
+    const [leaveWating, setLeaveWating] = useState([]);
+    const LeaveID = useParams().id;
     const [leave, setLeave] = useState(null);
     const [user, setUser] = useState(null);
 
+console.log(leave)
+
     useEffect(() => {
-        fetch(`http://agazatyapi.runasp.net/api/SickLeave/GetSickLeaveById/${LeaveID}`)
+        fetch(`http://agazatyapi.runasp.net/api/NormalLeave/GetNormalLeaveById/${LeaveID}`)
             .then((res) => res.json())
             .then((data) => {
                 setLeave(data);
@@ -22,11 +24,11 @@ function SickLeaveRequest() {
     useEffect(() => {
         if (leave && leave.userID) { 
             fetch(`http://agazatyapi.runasp.net/api/Account/GetUserById/${leave.userID}`)
-            .then((res) => res.json())
-            .then((data) => {
-                setUser(data);
-            })
-            .catch((err) => console.error("Error fetching user data:", err));
+                .then((res) => res.json())
+                .then((data) => {
+                    setUser(data);
+                })
+                .catch((err) => console.error("Error fetching user data:", err));
         }
     }, [leave]);
 
@@ -36,6 +38,35 @@ function SickLeaveRequest() {
             window.location.reload();
         }, 100);
     };
+
+
+    const updateDecision = (leaveID, DirectManager) => {
+        const body = {
+            directManagerDecision: DirectManager,
+            disapproveReason: DirectManager ? "" : "السبب المطلوب هنا" // عند الرفض، يجب إضافة السبب
+        };
+    
+        fetch(`http://agazatyapi.runasp.net/api/NormalLeave/UpdateDirectManagerDecision/${leaveID}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(body)
+        })
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error("Failed to update decision");
+            }
+            return res.json();
+        })
+        .then(() => {
+            setLeaveWating(leaveWating.filter(leave => leave.id !== leaveID));
+        })
+        .catch((err) => console.error("Error updating decision:", err));
+    };
+    
+
+
 
     return (
         <div>
@@ -70,11 +101,7 @@ function SickLeaveRequest() {
                             </tr>
                             <tr>
                                 <th scope="col">نوع الاجازة</th>
-                                <th scope="col" className="text-start">مرضية</th>
-                            </tr>
-                            <tr>
-                                <th scope="col">ملاحظات المرض</th>
-                                <th scope="col" className="text-start">{leave ? leave.disease : "جاري التحميل..."}</th>
+                                <th scope="col" className="text-start">اعتيادية</th>
                             </tr>
                             <tr>
                                 <th scope="col">رقم الهاتف</th>
@@ -85,16 +112,24 @@ function SickLeaveRequest() {
                                 <th scope="col" className="text-start">{user ? user.departmentName : "جاري التحميل..."}</th>
                             </tr>
                             <tr>
+                                <th scope="col">القائم بالعمل</th>
+                                <th scope="col" className="text-start">{leave ? leave.coworkerName : "جاري التحميل..."}</th>
+                            </tr>
+                            <tr>
                                 <th scope="col">تاريخ بداية الاجازة</th>
-                                <th scope="col" className="text-start">{leave ? new Date(leave.startDate).toLocaleDateString() : "---"}</th>
+                                <th scope="col" className="text-start">{leave ? new Date(leave.startDate).toLocaleDateString() : "جاري التحميل..."}</th>
                             </tr>
                             <tr>
                                 <th scope="col">تاريخ نهاية الاجازة</th>
-                                <th scope="col" className="text-start">{leave ? new Date(leave.endDate).toLocaleDateString() : "---"}</th>
+                                <th scope="col" className="text-start">{leave ? new Date(leave.endDate).toLocaleDateString() : "جاري التحميل..."}</th>
                             </tr>
                             <tr>
                                 <th scope="col">عدد أيام الاجازات</th>
-                                <th scope="col" className="text-start">{leave ? leave.days : "--"}</th>
+                                <th scope="col" className="text-start">{leave ? leave.days : "جاري التحميل..."}</th>
+                            </tr>
+                            <tr>
+                                <th scope="col">الملحوظات</th>
+                                <th scope="col" className="text-start">{leave ? leave.notesFromEmployee : "جاري التحميل..."}</th>
                             </tr>
                             <tr>
                                 <th scope="col">المرجع</th>
@@ -108,4 +143,5 @@ function SickLeaveRequest() {
     );
 }
 
-export default SickLeaveRequest;
+export default NormalLeaveRequestManager;
+

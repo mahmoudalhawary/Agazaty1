@@ -3,6 +3,7 @@ import '../CSS/LeaveRequests.css';
 import { useEffect, useState } from 'react';
 import BtnLink from '../components/BtnLink';
 import Btn from '../components/Btn';
+import API from "../Data" ;
 
 function NormalLeaveRequest() {
     
@@ -45,7 +46,6 @@ function NormalLeaveRequest() {
                     <h2 className="m-0">{`الاجازة رقم #${LeaveID}`}</h2>
                 </div>
                 <div className="p-3">
-                    <BtnLink name='إضافة اجازة' link='/add-leave' class="btn btn-primary m-0 ms-2 mb-2"/>
                     <BtnLink name='سجل الاجازات' link='/leave-record' class="btn btn-primary m-0 ms-2 mb-2"/>
                 </div>
             </div>
@@ -57,10 +57,10 @@ function NormalLeaveRequest() {
                                 <th scope="col" className="pb-3" style={{backgroundColor:'#F5F9FF'}}>حالة الطلب</th>
                                 <th scope="col" className="text-start" style={{backgroundColor:'#F5F9FF'}}>
                                     {leave ? (
-                                        leave.holder === 1 ? <Btn name="المدير المباشر" class="btn-warning text-start"/>
-                                        : leave.holder === 2 ? <Btn name="المدير المختص" class="btn-warning text-start"/>
-                                        : leave.holder === 3 ? <Btn name="مقبولة" class="btn-warning text-start"/>
-                                        : <Btn name="معلقة" class="btn-warning text-start"/>
+                                        leave.holder === 1 ? <Btn name="المدير المباشر" class="btn-danger text-start"/>
+                                        : leave.holder === 2 ? <Btn name="المدير المختص" class="btn-danger text-start"/>
+                                        : leave.holder === 3 ? <Btn name="مقبولة" class="btn-danger text-start"/>
+                                        : <Btn name="معلقة" class="btn-danger text-start"/>
                                     ) : "جاري التحميل..."}
                                 </th>
                             </tr>
@@ -108,12 +108,6 @@ function NormalLeaveRequest() {
                             </tr>
                         </tbody>
                     </table>
-                    <div className="d-flex justify-content-center mt-4">
-                        {LeaveID > 1 && (
-                            <BtnLink onClick={() => handleClick(`/normal-leave-request/${LeaveID - 1}`)} id={LeaveID-1} link='/casual-leave-request' name='السابق' class='btn-outline-primary w-50 ms-2' />
-                        )}
-                        <BtnLink onClick={() => handleClick(`/normal-leave-request/${LeaveID + 1}`)} id={LeaveID+1} link='/casual-leave-request' name='التالي' class='btn-outline-primary w-50 ms-2' />
-                    </div>
                 </div>
             </div>
         </div>

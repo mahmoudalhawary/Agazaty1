@@ -2,7 +2,7 @@ import ProfileCom from "../components/ProfileCom";
 import ProfileDescription from "../components/ProfileDescription";
 import BtnLink from "../components/BtnLink";
 import { useEffect, useState } from "react";
-
+import API from "../Data" ;
 function Profile(){
     const userID = localStorage.getItem("userID");
     const [user, setUser] = useState([]);
@@ -11,7 +11,7 @@ function Profile(){
         fetch(`http://agazatyapi.runasp.net/api/Account/GetUserById/${userID}`)
         .then((res)=> res.json())
         .then((data)=> setUser(data))
-    }, [])
+    }, [userID])
 
     return(
         <div>

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import API from "../Data" ;
 
 function SickLeave() {
-    const ID = localStorage.getItem("userID");
+    const userID = localStorage.getItem("userID");
     const [disease, setDisease] = useState("");
     const [state, setState] = useState("");
     const [street, setStreet] = useState("");
     const [governorate, setGovernorate] = useState("");
-    const [userID, setUserID] = useState(ID);
 
     const handleData = async (e) => {
         e.preventDefault();
@@ -29,7 +29,7 @@ function SickLeave() {
 
         try {
             const response = await fetch(
-                "http://agazatyapi.runasp.net/api/SickLeave/CreateSickLeave",
+                `http://agazatyapi.runasp.net/api/SickLeave/CreateSickLeave`,
                 {
                     method: "POST",
                     headers: {
@@ -79,7 +79,7 @@ function SickLeave() {
 
                         <div className="col-sm-12 col-md-6 mt-3">
                             <label htmlFor="notes" className="form-label">
-                                المرض
+                                سبب البلاغ
                             </label>
                             <input
                                 type="text"
@@ -88,7 +88,7 @@ function SickLeave() {
                                 onChange={(e) => setDisease(e.target.value)}
                                 id="notes"
                                 rows="1"
-                                placeholder="أكتب المرض"
+                                placeholder="مثال: صداع"
                             />
                         </div>
 

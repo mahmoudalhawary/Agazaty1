@@ -1,24 +1,26 @@
 import { useNavigate } from 'react-router-dom';
 import Btn from '../components/Btn';
-import '../CSS/EditProfile.css';
 import { useEffect, useState } from 'react';
 import YahyaSaad from '../Images/YahyaSaad.jpg';
 import Swal from 'sweetalert2';
+import API from "../Data" ;
 
 function EditPassword(){
+    const userID = localStorage.getItem("userID");
     const navigate = useNavigate();
-    const [jobTitle, setJobTitle]= useState('موظف');
     const [updatedFields, setUpdatedFields] = useState({});
+    const [UserRole, setUserRole] = useState("");
+
+    useEffect(()=>{
+        fetch(`http://agazatyapi.runasp.net/api/Account/GetRoleOfUser/${userID}`)
+        .then((res)=> res.json())
+        .then((data)=> setUserRole(data.role))
+    }, [userID])
+
 
     // const [currentPassword, SetCurrentPassword] = useState('');
     // const [newPassword, SetNewPassword] = useState('');
     // const [confirmNewPassword, SetConfirmNewPassword] = useState('');
-
-    useEffect(()=>{
-        fetch(`http://agazatyapi.runasp.net/api/NormalLeave/GetAllNormalLeaves`)
-        .then((res)=> res.json())
-        .then((data)=> console.log(data))
-    }, [])
 
 
     const handleChange = (e) => {
@@ -50,7 +52,7 @@ function EditPassword(){
                             </div>
                             <div className='d-flex justify-content-center'>
                                 <div className='bg-info p-2 d-inline-block rounded-3'>
-                                    <h5 className='m-0 ps-5 pe-5 text-light'>{jobTitle}</h5>
+                                    <h5 className='m-0 ps-5 pe-5 text-light'>{UserRole}</h5>
                                 </div>
                             </div>
                         </div>
