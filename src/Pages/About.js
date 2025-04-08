@@ -22,6 +22,7 @@ function About(){
 
     const thanks = [
         { id: 1, image: user, type: 'مدير المواد البشرية', department: 'مواد بشرية', firstName: 'مجدي', secondName: '...', thirdName: '...', fourthName:'...', socialMedia: {linkedIn: 'magdy', gitHub: 'magdy', whatsapp: '010027471188', email: 'magdy@gmail.com'} },
+        { id: 1, image: user, type: 'الدكتور المشرف', department: 'علوم الحاسب', firstName: 'ساره', secondName: 'احمد', thirdName: '...', fourthName:'...', socialMedia: {linkedIn: 'magdy', gitHub: 'magdy', whatsapp: '010027471188', email: 'magdy@gmail.com'} },
     ];
 
     return(
@@ -62,6 +63,10 @@ function About(){
                                     </div> 
 
                                     <div className='mb-4 d-flex justify-content-center gap-1'>
+                                        {/* <Link className='p-1 bg-dark text-warning box text-center pt-2 hover-type' style={{textDecoration:'none'}} to={`https://github.com/${member.socialMedia.gitHib}`} type="submit">
+                                            {member.type}
+                                        </Link> */}
+
                                         <Link className='p-1 bg-dark text-warning box text-center pt-2 hover-type' style={{textDecoration:'none'}} to={`https://github.com/${member.socialMedia.gitHib}`} type="submit">
                                             {member.type}
                                         </Link>

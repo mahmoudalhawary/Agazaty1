@@ -1,42 +1,55 @@
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useParams, useNavigate } from "react-router-dom";
+import API from "../Data" ;
 
 function EditDepartment() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [originalDepartment, setOriginalDepartment] = useState({});
-    const [updatedFields, setUpdatedFields] = useState({});
+    const [department, setDepartment] = useState({ name: "", code: "" });
+
+    const [users, setUsers] = useState([]);
+    const [managerId, setManagerId] = useState('');
+    useEffect(()=>{
+        fetch(`http://agazatyapi.runasp.net/api/Account/GetAllActiveUsers`)
+        .then((res)=> res.json())
+        .then((data)=> setUsers(data))
+    }, [])
+
 
     useEffect(() => {
-        fetch(`http://localhost:9000/departments/${id}`)
+        fetch(`http://agazatyapi.runasp.net/api/Department/GetDepartmentById/${id}`)
+            .then((res) => res.json())
+            .then((data) => console.log(data))
+    }, []);
+
+
+    useEffect(() => {
+        fetch(`http://agazatyapi.runasp.net/api/Department/GetDepartmentById/${id}`)
             .then((res) => res.json())
             .then((data) => {
-                setOriginalDepartment(data);
+                setDepartment(data);
+                setManagerId(data.managerId);
             })
             .catch((error) => console.error("حدث خطأ أثناء جلب البيانات:", error));
     }, [id]);
 
     const handleChange = (e) => {
-        setUpdatedFields({ ...updatedFields, [e.target.name]: e.target.value });
+        setDepartment({ ...department, [e.target.name]: e.target.value });
     };
 
     const updateDepartment = async (e) => {
         e.preventDefault();
-
-        if (Object.keys(updatedFields).length === 0) {
-            Swal.fire({
-                title: "لم تقم بتعديل أي بيانات!",
-                icon: "info",
-                confirmButtonText: "حسنًا",
-                confirmButtonColor: "#0d6efd",
-            });
-            return;
-        }
-
+    
+        // إنشاء نسخة من بيانات القسم مع تضمين رئيس القسم الجديد
+        const updatedData = {
+            ...department,
+            managerId: managerId || department.managerId,  // إذا لم يتم تغييره، حافظ على القيمة القديمة
+        };
+    
         Swal.fire({
-            title: `<span style='color:#0d6efd;'>هل أنت متأكد من تحديث بيانات قسم ${originalDepartment.departmentName} ؟</span>`,
+            title: `<span style='color:#0d6efd;'>هل أنت متأكد من تحديث بيانات قسم ${department.name} ؟</span>`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "نعم، تحديث",
@@ -46,14 +59,14 @@ function EditDepartment() {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:9000/departments/${id}`, {
-                        method: "PATCH",
+                    const response = await fetch(`http://agazatyapi.runasp.net/api/Department/UpdateDepartment/${id}`, {
+                        method: "PUT",
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify(updatedFields),
+                        body: JSON.stringify(updatedData),  // إرسال البيانات المحدثة مع رئيس القسم
                     });
-
+    
                     if (response.ok) {
                         Swal.fire({
                             title: `<span style='color:#0d6efd;'>تم تحديث بيانات القسم بنجاح.</span>`,
@@ -81,7 +94,9 @@ function EditDepartment() {
             }
         });
     };
+    
 
+    
     return (
         <form className="p-3">
             <div className="row">
@@ -90,30 +105,38 @@ function EditDepartment() {
                 </div>
 
                 <div className="col-sm-12 col-md-6 mt-3">
-                    <label htmlFor="departmentName" className="form-label">
-                        اسم القسم
-                    </label>
+                    <label htmlFor="name" className="form-label">اسم القسم</label>
                     <input
                         className="form-control"
                         type="text"
-                        id="departmentName"
-                        name="departmentName"
-                        defaultValue={originalDepartment.departmentName || ""}
+                        id="name"
+                        name="name"
+                        value={department.name}
                         onChange={handleChange}
-                        aria-label="default input example"
                     />
                 </div>
 
                 <div className="col-sm-12 col-md-6 mt-3">
-                    <label htmlFor="departmentCode" className="form-label">كود القسم</label>
+                        <label htmlFor="manager" className="form-label">رئيس القسم</label>
+                        <select className="form-select" id="manager" value={managerId} onChange={(e) => setManagerId(e.target.value)} required>
+                            <option value="">أختر رئيس القسم</option>
+                            {users.map((user, index) => (
+                                <option key={index} value={user.id}>
+                                    {user.fullName} ({user.departmentName})
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                <div className="col-sm-12 col-md-6 mt-3">
+                    <label htmlFor="code" className="form-label">كود القسم</label>
                     <input
                         className="form-control"
                         type="text"
-                        id="departmentCode"
-                        name="departmentCode"
-                        defaultValue={originalDepartment.departmentCode || ""}
+                        id="code"
+                        name="code"
+                        value={department.code}
                         onChange={handleChange}
-                        aria-label="default input example"
                     />
                 </div>                                              
             </div>

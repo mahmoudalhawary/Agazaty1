@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from "react";
 import BtnLink from "../components/BtnLink";
-import Search from "../components/Search";
+import API from "../Data" ;
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPrint } from "@fortawesome/free-solid-svg-icons";
 
-function Des(){
-    const [requestStatus, setRequestStatus] = useState('');
-    const [requests, setRequests] = useState([]);
+function Des() {
+    const [leaves, setLeaves] = useState([]);
 
     useEffect(()=>{
-        fetch(`http://localhost:9000/requests`)
+        fetch(`http://agazatyapi.runasp.net/api/NormalLeave/GetAllNormalLeaves`)
         .then((res)=> res.json())
-        .then((data)=> setRequests(data))
+        .then((data)=> setLeaves(data))
     }, [])
 
-    console.log(requests)
+    console.log(leaves)
 
-    return(
+    return (
         <div>
             <div className="d-flex mb-4 justify-content-between">
                 <div className="zzz d-inline-block p-3 ps-5">
@@ -22,8 +23,7 @@ function Des(){
                 </div>
                 <div className="p-3">
                     <div className="d-flex">
-                        <Search />
-                        <BtnLink name='إضافة اجازة' link='/add-leave' class="btn btn-primary m-0 me-2"/>
+                        <BtnLink name='إضافة إجازة' link='/add-leave' class="btn btn-primary m-0 me-2" />
                     </div>
                 </div>
             </div>
@@ -32,57 +32,47 @@ function Des(){
                     <table className="m-0 table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>الاسم</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>القسم</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>رقم الهاتف</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>نوع الاجازة</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ البداية</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>
-                                    حالة الطلب
-                                    {/* <FontAwesomeIcon icon={faSortDown} className="me-1" /> */}
-                                    <select onChange={(e)=> setRequestStatus(e.target.value)} className="form-select w-75" aria-label="Default select example">
-                                        <option value="الكل">الكل</option>
-                                        <option value="أعتيادية">أعتيادية</option>
-                                        <option value="عارضة">عارضة</option>
-                                        <option value="مرضية">مرضية</option>
-                                        <option value="تصريح">تصريح</option>
-                                    </select>
-                                </th>
+                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ البدء</th>
+                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ الانتهاء</th>
+                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>عدد الأيام</th>
+                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>القائم بالعمل</th>
+                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>ملحوظات</th>
+                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>حالة الطلب</th>
+                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>طباعة</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>الأرشيف</th>
                             </tr>
                         </thead>
                         <tbody>
-
-                            {requests.map((request, index)=>{
-                                return(
+                            {leaves.length > 0 ? (
+                                leaves.map((leave, index) => (
                                     <tr key={index}>
-                                        {
-                                            request.employee.map((item, index)=>{
-                                                return(
-                                                    <React.Fragment key={index}>
-                                                        <th>{item.firstName} {item.secondName} {item.thirdName}</th>
-                                                        <th>{item.department}</th>
-                                                        <th>{item.phoneNumber}</th>
-                                                    </React.Fragment>
-                                                )
-                                            })
-                                        }
-                                        <th>{request.type}</th>
-                                        <th>{request.startDate}</th>
-                                        { request.status === 'معلقة' ? <th className="text-success">{request.status}</th>
-                                        : <th className="text-primary">{request.status}</th>
-                                        }
+                                        <th>اعتيادية</th>
+                                        <th>{new Date(leave.startDate).toLocaleDateString()}</th>
+                                        <th>{new Date(leave.endDate).toLocaleDateString()}</th>
+                                        <th>{leave.days} أيام</th>
+                                        <th>{leave.coworkerName}</th>
+                                        <th>{leave.notesFromEmployee}</th>
+                                        <th>{leave.leaveStatus === 0 ? "معلقة" : leave.leaveStatus === 1 ? "مقبولة" : "مرفوضة"}</th>
                                         <th>
-                                            <BtnLink id={request.id} name='عرض الاجازة' link='/leave-requests' class="btn btn-outline-primary" />
+                                            <FontAwesomeIcon icon={faPrint} fontSize={'26px'} color="blue" className="printer" />
+                                        </th>
+                                        <th>
+                                            <BtnLink id={leave.id} name='عرض الاجازة' link='/normal-leave-request' class="btn btn-outline-primary" />
                                         </th>
                                     </tr>
-                                )})}
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="7" className="text-center text-danger p-3">لا يوجد اجازات حتى الآن</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Des;

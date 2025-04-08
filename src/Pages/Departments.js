@@ -1,53 +1,53 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import BtnLink from "../components/BtnLink";
-import { faCalendarDays, faPenToSquare, faTrash, faUpDown } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
+import API from "../Data" ;
 
 function Departments(){
-        const [departments, setDepartments] = useState([])
+    const [departments, setDepartments] = useState([])
 
-        useEffect(() => {
-            fetch(`http://localhost:9000/departments`)
-            .then((res)=> (res.json()))
-            .then((data)=> (setDepartments(data)))
-        }, []);
+    useEffect(()=>{
+        fetch(`http://agazatyapi.runasp.net/api/Department/GetAllDepartments`)
+        .then((res)=> res.json())
+        .then((data)=> setDepartments(data))
+    }, [])
 
-        const handleDelete = (id) => {
-                Swal.fire({
-                    title: "هل أنت متأكد؟",
-                    text: "لن تتمكن من استعادة بيانات هذا القسم!",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    cancelButtonColor: "#3085d6",
-                    confirmButtonText: "نعم، احذفه!",
-                    cancelButtonText: "إلغاء",
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        fetch(`http://localhost:9000/departments/${id}`, {
-                            method: "DELETE",
-                        }).then(() => {
-                            setDepartments(departments.filter((department) => department.id !== id));
-        
-                            Swal.fire({
-                                title: "تم الحذف!",
-                                text: "تم حذف القسم بنجاح.",
-                                icon: "success",
-                                confirmButtonText: "موافق",
-                            });
-                        }).catch((error) => {
-                            Swal.fire({
-                                title: "خطأ!",
-                                text: "حدث خطأ أثناء حذف الموظف.",
-                                icon: "error",
-                                confirmButtonText: "حسناً",
-                            });
-                        });
-                    }
+    const handleDelete = (id) => {
+        Swal.fire({
+            title: "هل أنت متأكد؟",
+            text: "لن تتمكن من استعادة بيانات هذا القسم!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "نعم، احذفه!",
+            cancelButtonText: "إلغاء",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch(`http://agazatyapi.runasp.net/api/Department/UpdateDepartment/${id}`, {
+                    method: "DELETE",
+                }).then(() => {
+                    setDepartments(departments.filter((department) => department.id !== id));
+                    Swal.fire({
+                        title: "تم الحذف!",
+                        text: "تم حذف القسم بنجاح.",
+                        icon: "success",
+                        confirmButtonText: "موافق",
+                    });
+                }).catch((error) => {
+                    Swal.fire({
+                        title: "خطأ!",
+                        text: "حدث خطأ أثناء حذف الموظف.",
+                        icon: "error",
+                        confirmButtonText: "حسناً",
+                    });
                 });
-            };
+            }
+        });
+    };
 
     return(
         <div>
@@ -75,12 +75,13 @@ function Departments(){
                             </tr>
                         </thead>
                         <tbody>
-                            {departments.map((department ,index)=>(
-                                <tr key={index}>
-                                    <th style={{height:'50px'}}>{department.departmentName}</th>
-                                    <th style={{height:'50px'}}>{department.departmentCode}</th>
-                                    <th style={{height:'50px'}}>{department.dateCreation}</th>
-                                    <th style={{height:'50px'}}>{department.departmentManager}</th>
+                            {departments.length > 0 ? (
+                                departments.map((department ,index)=>(
+                                    <tr key={index}>
+                                    <th style={{height:'50px'}}>{department.name}</th>
+                                    <th style={{height:'50px'}}>{department.code}</th>
+                                    <th style={{height:'50px'}}>{department.createDate}</th>
+                                    <th style={{height:'50px'}}>{department.managerName}</th>
                                     <th style={{height:'50px'}}>
                                         <Link to={`/department/${department.id}/edit`}>
                                             <FontAwesomeIcon icon={faPenToSquare} color="blue" className="fontt" />
@@ -93,13 +94,14 @@ function Departments(){
                                             style={{ cursor: "pointer", marginLeft: "10px" }} 
                                             onClick={() => handleDelete(department.id)} 
                                         />
-
-                                        <Link to={`/departmens`}>
-                                            <FontAwesomeIcon icon={faCalendarDays} color="green" className="fontt" />
-                                        </Link>
                                     </th>
                                 </tr>  
-                            ))}
+                                )
+                            ))
+                            :   <tr>
+                                    <td colSpan="5" className="text-center text-danger p-3">لا يوجد أقسام حتى الآن</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>

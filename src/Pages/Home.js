@@ -5,16 +5,31 @@ import PreviousRequests from "../components/PreviousRequests";
 import Calendar from "../components/Calendar";
 import BtnLink from "../components/BtnLink";
 import ShortData from "../components/ShortData";
+import { useEffect, useState } from "react";
+import API from "../Data" ;
 
 function Home({userRole}){
+    const userID = localStorage.getItem("userID");
+    const [NormalLeaves, setNormalLeaves] = useState([]);
+    const [leavesWating, setLeavesWating] = useState([]);
 
-    const hintShow = true;
+    useEffect(()=>{
+        fetch(`http://agazatyapi.runasp.net/api/NormalLeave/AllNormalLeavesByUserId/${userID}`)
+        .then((res)=> res.json())
+        .then((data)=> setNormalLeaves(data))
+    }, [userID])
+
+    useEffect(() => {
+        fetch(`http://agazatyapi.runasp.net/api/NormalLeave/WaitingByUserID/${userID}`)
+            .then((res) => res.json())
+            .then((data) => setLeavesWating(data))
+    }, [userID]);
 
     return(
         <div>
             <div className="d-flex">
                 <div className="col-xxl-9 col-xl-8 col-sm-12 p-3 custom-scroll">
-                    { hintShow && <div className="box"><Hint /></div> }
+                    {leavesWating.length > 0 && <Hint leavesWating={leavesWating}/> }
                     <div className="gap-3">
                         <div className="mt-4">
                             { userRole === 'manager' ? <ShortData />
@@ -24,7 +39,7 @@ function Home({userRole}){
                             <LeaveBalance />
                         </div>
                         <div className="mt-4">
-                            <PreviousRequests />
+                            {NormalLeaves.length > 0 && <PreviousRequests leaves={NormalLeaves} />}
                         </div>
                     </div>
                 </div>
@@ -40,7 +55,7 @@ function Home({userRole}){
                     <div className="box mt-2">
                         <h5>سياسات الاجازات</h5>
                         <p>تعرف على قوانين وإجراءات طلب الإجازات لضمان تجربة سلسة ومريحة</p>
-                        <BtnLink name="الأطلاع الآن" link="/" class='btn-primary' />
+                        <BtnLink name="الأطلاع الآن" link="/inquiries" class='btn-primary' />
                     </div>
                 </div>
             </div>

@@ -1,14 +1,17 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import API from "../Data" ;
 
-function ProfileDescription(){
-    const [employee, setEmployee] = useState([]);
+function ProfileDescription({user}){
+    const hireDate = user.hireDate;
+    const hireYear = new Date(hireDate).getFullYear();
+    const date = new Date().getFullYear();
+    const [UserRole, setUserRole] = useState("");
 
     useEffect(()=>{
-        fetch(`http://localhost:9000/employees/1`)
+        fetch(`http://agazatyapi.runasp.net/api/Account/GetRoleOfUser/${user.id}`)
         .then((res)=> res.json())
-        .then((data)=> setEmployee(data))
-    }, [])
+        .then((data)=> setUserRole(data.role))
+    }, [user.id])
 
     return(
         <div>
@@ -21,21 +24,24 @@ function ProfileDescription(){
                 <tbody>
                     <tr>
                         <th>الاسم</th>
-                        <th className="text-start">{employee.firstName} {employee.secondName}</th>
+                        <th className="text-start">{user.fullName}</th>
                     </tr>
                     <tr>
                         <th>المسمى الوظيفي</th>
-                        <th className="text-start">{employee.jobTitle}</th>
+                        <th className="text-start">{UserRole || "جارِِ التحميل..."}</th>
                     </tr>
                     <tr>
                         <th>القسم</th>
-                        <th className="text-start">{employee.department}</th>
+                        <th className="text-start">{user.departmentName}</th>
                     </tr>
                     <tr>
                         <th>تاريخ التعيين</th>
-                        <th className="text-start">{employee.dateAppointment}</th>
+                        <th className="text-start">{new Date(user.hireDate).toLocaleDateString()}</th>
                     </tr>
-                    
+                    <tr>
+                        <th>البريد الإلكتروني</th>
+                        <th className="text-start">{user.email}</th>
+                    </tr>
                 </tbody>
             </table>
 
@@ -47,17 +53,27 @@ function ProfileDescription(){
                 </thead>
                 <tbody>
                     <tr>
-                        <th>عدد الاجازات المتبقية هذه السنه</th>
-                        <th className="text-start">{42 - 9}</th>
+                        <th>رصيد الاجازات الاعتيادية السنوية</th>
+                        <th className="text-start">{user.normalLeavesCount}</th>
+                    </tr>
+                    {hireYear <= 2015 &&
+                        <tr>
+                            <th>رصيد اجازات ما قبل سنة 2015</th>
+                            <th className="text-start">{user.normalLeavesCount_47}</th>
+                        </tr>}
+                    <tr>
+                        <th>رصيد الاجازات الاعتيادية سنة {date - 1}</th>
+                        <th className="text-start">{user.normalLeavesCount_81Before1Years}</th>
                     </tr>
                     <tr>
-                        <th>اجازات معتمدة هذا الشهر</th>
-                        <th className="text-start">3</th>
+                        <th>رصيد الاجازات الاعتيادية سنة {date - 2}</th>
+                        <th className="text-start">{user.normalLeavesCount_81Before2Years}</th>
                     </tr>
                     <tr>
-                        <th>اجازات قيد المراجعة</th>
-                        <th className="text-start">1</th>
+                        <th>رصيد الاجازات الاعتيادية سنة {date - 3}</th>
+                        <th className="text-start">{user.normalLeavesCount_81Before3Years}</th>
                     </tr>
+                    
                 </tbody>
             </table>
         </div>

@@ -1,11 +1,7 @@
 function Btn(props){
-    const onClick = (e)=>{
-        console.log(props.name)
-    }
-
     return(
         <>
-            <button type="submit" onClick={onClick} className={`btn ${props.class}`}>{props.name}</button>
+            <button type="submit" className={`btn ${props.class}`}>{props.name}</button>
         </>
     )
 }

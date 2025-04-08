@@ -1,68 +1,151 @@
-import { useState } from "react";
-import Btn from "./Btn";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import API from "../Data" ;
 
-function SickLeave(){
-    const [startDate, setStartDate] = useState('لم يتم التحديد');
-    const [notes, setNotes] = useState('لا يوجد');
-    const [files, setFiles] = useState('');
+function SickLeave() {
+    const userID = localStorage.getItem("userID");
+    const [disease, setDisease] = useState("");
+    const [state, setState] = useState("");
+    const [street, setStreet] = useState("");
+    const [governorate, setGovernorate] = useState("");
 
-    const swal = () => {
-        Swal.fire({
-            title:`<span style='color:#0d6efd;'>هل أنت متأكد من إرسال الطلب ؟</span>`,
-            html: `
-                <p dir='rtl'><span style='font-weight: bold;'>نوع الاجازة:</span> <span style='color:#0d6efd;'>مرضية</span></p>
-                <p dir='rtl'><span style='font-weight: bold;'>تاريخ إرسال الطلب:</span> <span style='color:#0d6efd;'>${startDate}</span></p>
-                <p dir='rtl'><span style='font-weight: bold;'>ملحوظاتك:</span> <span style='color:#0d6efd;'>${notes}</span></p>
-            `,
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "نعم",
-            cancelButtonText: "لا",
-            confirmButtonColor: "#0d6efd",
-            cancelButtonColor: "#d33",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire({
-                title:`<span style='color:#0d6efd;' dir="rtl">تم إرسال الطلب بنجاح.</span>`,
-                text: "سيتم الرد عليك قريبا",
-                icon: "success",
-                confirmButtonText: "تتبع الاجازات",
-                confirmButtonColor: "#0d6efd",
-                });
-            }
-            });
+    const handleData = async (e) => {
+        e.preventDefault();
+
+        if ( !disease || !street || !governorate || !governorate || !state || !userID ) {
+            Swal.fire("خطأ!", "يرجى ملء جميع الحقول المطلوبة", "error");
+            return;
         }
-    
-    return(
-        <>
-            <div className="row">
-                <div className="col-sm-12 col-md-6 mt-3">
-                    <label htmlFor="exampleInputDate1" className="form-label">تاريخ بداية الاجازة</label>
-                    <input type="date" onChange={(e)=>setStartDate(e.target.value)} className="form-control" id="exampleInputDate1" min={new Date(new Date().setDate(new Date().getDate())).toISOString().split("T")[0]} />
-                </div>
+        const leaveData = {
+            disease: disease,
+            street: street,
+            governorate: governorate,
+            state: state,
+            userID: userID,
+        };
+        
 
-                <div className="col-sm-12 col-md-6 mt-3">
-                    <label htmlFor="exampleFormControlTextarea1" className="form-label">عنوان الإقامة</label>
-                    <textarea className="form-control" onChange={(e)=> setNotes(e.target.value)} id="exampleFormControlTextarea1" rows="1" placeholder="أكتب عنوان الإقامة تفصيليًا"></textarea>
-                </div>
+        console.log("Sending data:", leaveData);
 
-                <div className="col-sm-12 col-md-6 mt-3">
-                    <label htmlFor="formFile" className="form-label">المرفقات</label>
-                    <input className="form-control" type="file" onChange={(e)=>setFiles(e.target.value)} id="formFile"/>
-                </div>
+        try {
+            const response = await fetch(
+                `http://agazatyapi.runasp.net/api/SickLeave/CreateSickLeave`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json",
+                    },
+                    body: JSON.stringify(leaveData),
+                }
+            );
 
-                <div className="col-sm-12 col-md-6 mt-3">
-                    <label htmlFor="exampleFormControlTextarea1" className="form-label">الملاحظات</label>
-                    <textarea className="form-control" onChange={(e)=> setNotes(e.target.value)} id="exampleFormControlTextarea1" rows="1" placeholder="أكتب ملاحظاتك"></textarea>
-                </div>
+            if (!response.ok) {
+                const errorData = await response.json();
+                console.error("API Error:", errorData);
+                Swal.fire("خطأ!", `فشل إرسال الطلب: ${errorData.message || "يرجى المحاولة لاحقًا"}`, "error");
+                return;
+            }else {
+                const errorData = await response.json();
+                Swal.fire("نجحت!", `تم إرسال الطلب: ${errorData.message || "يرجى انتظار الموافقة"}`, "success");
+            }
+        } catch (error) {
+            Swal.fire("خطأ!", "حدث خطأ أثناء إرسال الطلب", "error");
+            console.error("Error:", error);
+        }
+    };
+
+    return (
+        <div>
+            <div className="zzz d-inline-block p-3 ps-5">
+                <h2 className="m-0">طلب اجازة مرضية</h2>
             </div>
 
-            <div onClick={swal} className="d-flex justify-content-center mt-3">
-                <Btn name='إرسال الطلب' class='btn-primary w-50' />
-            </div>
-        </>
-    )
+            <form onSubmit={handleData}>
+                    <div className="row">
+                        {/* <div className="col-sm-12 col-md-6 mt-3">
+                            <label htmlFor="notes" className="form-label">
+                                المرض
+                            </label>
+                            <textarea
+                                className="form-control"
+                                value={disease}
+                                onChange={(e) => setDisease(e.target.value)}
+                                id="notes"
+                                rows="1"
+                                placeholder="أكتب المرض"
+                            ></textarea>
+                        </div> */}
+
+                        <div className="col-sm-12 col-md-6 mt-3">
+                            <label htmlFor="notes" className="form-label">
+                                سبب البلاغ
+                            </label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={disease}
+                                onChange={(e) => setDisease(e.target.value)}
+                                id="notes"
+                                rows="1"
+                                placeholder="مثال: صداع"
+                            />
+                        </div>
+
+                        <div className="col-sm-12 col-md-6 mt-3">
+                            <label htmlFor="notes" className="form-label">
+                                المحافظة
+                            </label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={governorate}
+                                onChange={(e) => setGovernorate(e.target.value)}
+                                id="notes"
+                                rows="1"
+                                placeholder="قنا"
+                            />
+                        </div>
+
+                        <div className="col-sm-12 col-md-6 mt-3">
+                            <label htmlFor="notes" className="form-label">
+                                المركز / المدينة
+                            </label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={state}
+                                onChange={(e) => setState(e.target.value)}
+                                id="notes"
+                                rows="1"
+                                placeholder="قوص"
+                            />
+                        </div>
+
+                        <div className="col-sm-12 col-md-6 mt-3">
+                            <label htmlFor="notes" className="form-label">
+                                القرية / الشارع
+                            </label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                value={street}
+                                onChange={(e) => setStreet(e.target.value)}
+                                id="notes"
+                                rows="1"
+                                placeholder="طريق الشوادر بجوار قاعة شهرزاد"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="d-flex justify-content-center mt-3">
+                        <button type="submit" className="btn btn-primary w-50">
+                            إرسال الطلب
+                        </button>
+                    </div>
+            </form>
+        </div>
+    );
 }
 
 export default SickLeave;

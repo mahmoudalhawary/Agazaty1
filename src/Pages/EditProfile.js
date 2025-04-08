@@ -1,43 +1,54 @@
 import { useNavigate } from 'react-router-dom';
 import Btn from '../components/Btn';
-import '../CSS/EditProfile.css';
 import { useEffect, useState } from 'react';
 import YahyaSaad from '../Images/YahyaSaad.jpg';
 import Swal from 'sweetalert2';
+import API from "../Data" ;
 
 function EditProfile(){
+    const userID = localStorage.getItem("userID");
     const navigate = useNavigate();
-
-    const [employee, setEmployee]= useState('1');
-    const [id, setId]= useState('1');
-    const [userName, setUserName]= useState('yahyasaad');
-    const [email, setEmail]= useState('yahyasaad2024@gmail.com');
-    const [password, setPassword]= useState('YS1188');
-    const [resetpassword, setResetPassword]= useState('YS1188');
-    const [nationalID, setNationalID]= useState('30304218800000');
-    const [phoneNumber, setPhoneNumber]= useState('01127471188');
-    const [firstName, setFirsName]= useState('يحيى');
-    const [secondNAme, setSecondName]= useState('سعد');
-    const [jobTitle, setJobTitle]= useState('موظف');
-    const [department, setDepartment]= useState('علوم الحاسب');
-    const [dateAppointment, setDateAppointment]= useState('19/9/2024');
-    const [address, setAddress]= useState('قنا');
     const [updatedFields, setUpdatedFields] = useState({});
-
+    const [user, setUser] = useState([]);
+    const [UserRole, setUserRole] = useState("");
+    
     useEffect(()=>{
-        fetch(`http://localhost:9000/employees/${id}`)
+        fetch(`http://agazatyapi.runasp.net/api/Account/GetRoleOfUser/${userID}`)
         .then((res)=> res.json())
-        .then((data)=> setEmployee(data))
-    }, [])
+        .then((data)=> setUserRole(data.role))
+    }, [userID])
+    
+    useEffect(() => {
+        if (userID) {
+            fetch(`http://agazatyapi.runasp.net/api/Account/GetUserById/${userID}`)
+                .then((res) => res.json())
+                .then((data) => setUser(data))
+                .catch((err) => console.error("Error fetching user data:", err));
+        }
+    }, [userID]);
+
 
     const handleChange = (e) => {
-        setUpdatedFields({ ...updatedFields, [e.target.name]: e.target.value });
+        setUpdatedFields((prev) => ({
+            ...prev,
+            [e.target.name]: e.target.value || user[e.target.name], // إذا لم يتم تغيير القيمة، استخدم القيمة القديمة
+        }));
     };
+    
 
-    const updateDepartment = async (e) => {
+    const updateUser = async (e) => {
         e.preventDefault();
-
-        if (Object.keys(updatedFields).length === 0) {
+    
+        // التأكد من أن البيانات تحتوي على القيم القديمة إذا لم يتم تغييرها
+        const finalData = {
+            email: updatedFields.email || user.email,
+            phoneNumber: updatedFields.phoneNumber || user.phoneNumber,
+            governorate: updatedFields.governorate || user.governorate,
+            state: updatedFields.state || user.state,
+            street: updatedFields.street || user.street,
+        };
+    
+        if (finalData.email === user.email && finalData.phoneNumber === user.phoneNumber && finalData.governorate === user.governorate && finalData.state === user.state && finalData.street === user.street) {
             Swal.fire({
                 title: "لم تقم بتعديل أي بيانات!",
                 icon: "info",
@@ -46,9 +57,9 @@ function EditProfile(){
             });
             return;
         }
-
+    
         Swal.fire({
-            title: `<span style='color:#0d6efd;'>هل أنت متأكد من تحديث بيانات قسم  ؟</span>`,
+            title: `<span style='color:#0d6efd;'>هل أنت متأكد من تحديث بياناتك؟</span>`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "نعم، تحديث",
@@ -58,22 +69,22 @@ function EditProfile(){
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:9000/departments/${id}`, {
-                        method: "PATCH",
+                    const response = await fetch(`http://agazatyapi.runasp.net/api/Account/UdpateUserForUser/${userID}`, {
+                        method: "PUT",
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify(updatedFields),
+                        body: JSON.stringify(finalData),
                     });
-
+    
                     if (response.ok) {
                         Swal.fire({
-                            title: `<span style='color:#0d6efd;'>تم تحديث بيانات القسم بنجاح.</span>`,
+                            title: `<span style='color:#0d6efd;'>تم تحديث بياناتك بنجاح.</span>`,
                             icon: "success",
-                            confirmButtonText: "مشاهدة الأقسام",
+                            confirmButtonText: "حسنًا",
                             confirmButtonColor: "#0d6efd",
                         }).then(() => {
-                            navigate("/departments");
+                            navigate("/profile");
                         });
                     } else {
                         Swal.fire({
@@ -93,15 +104,15 @@ function EditProfile(){
             }
         });
     };
+    
+
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     console.log('Form submitted');
+    //     navigate('/');
+    // };
 
 
-
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Form submitted');
-        navigate('/');
-    };
 
     return(
         <div>
@@ -111,7 +122,7 @@ function EditProfile(){
                 </div>
             </div>
             <div>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={updateUser}>
                     <div className='d-flex row align-items-center'>
                         <div className='col-sm-12 col-md-12 col-lg-5 col-xl-4 col-xxl-3 mt-4'>
                             <div className='p-3 justify-content-center text-center'>
@@ -119,32 +130,42 @@ function EditProfile(){
                             </div>
                             <div className='d-flex justify-content-center'>
                                 <div className='bg-info p-2 d-inline-block rounded-3'>
-                                    <h5 className='m-0 ps-5 pe-5 text-light'>{jobTitle}</h5>
+                                    <h5 className='m-0 ps-5 pe-5 text-light'>{UserRole}</h5>
                                 </div>
                             </div>
                         </div>
                         <div className='col-sm-12 col-md-12 col-lg-7 col-xl-8 col-xxl-9 mt-4'>
                             <div className='row'>
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
-                                    <label htmlFor="exampleInputUserName" className="form-label">اسم المستخدم</label>
-                                    <input type="text" className="form-control" onChange={handleChange} id="exampleInputUserName" aria-describedby="userNameHelp" defaultValue={employee.firstName} />
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
                                     <label htmlFor="exampleInputEmail1" className="form-label">البريد الإلكتروني</label>
-                                    <input type="email" className="form-control" onChange={handleChange} id="exampleInputEmail1" aria-describedby="emailHelp" defaultValue={employee.email} />
-                                </div>
-                                <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
-                                    <label htmlFor="exampleInputAddress" className="form-label">العنوان</label>
-                                    <input type="text" className="form-control" onChange={handleChange} id="exampleInputAddress" aria-describedby="addressHelp" defaultValue={employee.address} />
-                                </div>
+                                    <input type="email" className="form-control" name="email" onChange={handleChange} id="exampleInputEmail1" value={updatedFields.email ?? user.email} />
+                                    </div>
+
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
                                     <label htmlFor="exampleInputPhoneNumber" className="form-label">رقم الهاتف</label>
-                                    <input type="tel" className="form-control" onChange={handleChange} id="exampleInputPhoneNumber" aria-describedby="phoneNumberHelp" dir='rtl' defaultValue={employee.phoneNumber} />
+                                    <input type="tel" className="form-control" name="phoneNumber" onChange={handleChange} id="exampleInputPhoneNumber" value={updatedFields.phoneNumber ?? user.phoneNumber} />
                                 </div>
+
+                                <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
+                                    <label htmlFor="exampleInputGovernorate" className="form-label">المحافظة</label>
+                                    <input type="text" className="form-control" name="governorate" onChange={handleChange} id="exampleInputPhoneNumber" value={updatedFields.governorate ?? user.governorate} />
+                                </div>
+
+                                <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
+                                    <label htmlFor="exampleInputState" className="form-label">المركز / المدينة</label>
+                                    <input type="text" className="form-control" name="state" onChange={handleChange} id="exampleInputPhoneNumber" value={updatedFields.state ?? user.state} />
+                                </div>
+
+                                <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
+                                    <label htmlFor="exampleInputStreet" className="form-label">القرية / الشارع</label>
+                                    <input type="text" className="form-control" name="street" onChange={handleChange} id="exampleInputPhoneNumber" value={updatedFields.street ?? user.street} />
+                                </div>
+
                             </div>
                         </div>
                         <div className="d-flex justify-content-center mt-3">
-                            <Btn name='تحديث البيانات' class='btn-primary w-50' />
+                        <Btn name='تحديث البيانات' class='btn-primary w-50' onClick={updateUser} />
+
                         </div>
                     </div>
                 </form>
