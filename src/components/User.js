@@ -5,23 +5,15 @@ import { faBell, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-function Search({userRole}){
+function Search(){
     const userID = localStorage.getItem("userID");
     const [user, setUser] = useState([]);
-    const [UserRole, setUserRole] = useState("");
 
     useEffect(()=>{
         fetch(`http://agazatyapi.runasp.net/api/Account/GetUserById/${userID}`)
         .then((res) => res.json())
         .then((data) => setUser(data))
     }, [])
-
-
-    useEffect(()=>{
-        fetch(`http://agazatyapi.runasp.net/api/Account/GetRoleOfUser/${userID}`)
-        .then((res)=> res.json())
-        .then((data)=> setUserRole(data.role))
-    }, [userID])
 
 
     return(
@@ -32,7 +24,7 @@ function Search({userRole}){
 
             <div>
                 <h6 className='m-0'>{user.firstName} {user.secondName}</h6>
-                <p className='m-0'>{UserRole}</p>
+                <p className='m-0'>{user.roleName}</p>
             </div>
             <Link to={`/profile`} className='rounded-circle4'>
                 <img src={Image} className="hoverOpacity rounded-circle profilePicture" alt="profilePicture" />

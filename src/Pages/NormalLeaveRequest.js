@@ -32,13 +32,6 @@ function NormalLeaveRequest() {
         }
     }, [leave]);
 
-    const handleClick = (link) => {
-        window.location.href = link;
-        setTimeout(() => {
-            window.location.reload();
-        }, 100);
-    };
-
     return (
         <div>
             <div className="d-flex mb-4 justify-content-between">
@@ -46,7 +39,7 @@ function NormalLeaveRequest() {
                     <h2 className="m-0">{`الاجازة رقم #${LeaveID}`}</h2>
                 </div>
                 <div className="p-3">
-                    <BtnLink name='سجل الاجازات' link='/leave-record' class="btn btn-primary m-0 ms-2 mb-2"/>
+                    <BtnLink name='سجل الاجازات الاعتيادية' link='/des-requests/normal' class="btn btn-primary m-0 ms-2 mb-2"/>
                 </div>
             </div>
             <div className="row mt-5 d-flex justify-content-center">

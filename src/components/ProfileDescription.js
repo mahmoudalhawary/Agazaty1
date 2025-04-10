@@ -1,17 +1,9 @@
-import { useEffect, useState } from "react";
 import API from "../Data" ;
 
 function ProfileDescription({user}){
     const hireDate = user.hireDate;
     const hireYear = new Date(hireDate).getFullYear();
     const date = new Date().getFullYear();
-    const [UserRole, setUserRole] = useState("");
-
-    useEffect(()=>{
-        fetch(`http://agazatyapi.runasp.net/api/Account/GetRoleOfUser/${user.id}`)
-        .then((res)=> res.json())
-        .then((data)=> setUserRole(data.role))
-    }, [user.id])
 
     return(
         <div>
@@ -28,7 +20,7 @@ function ProfileDescription({user}){
                     </tr>
                     <tr>
                         <th>المسمى الوظيفي</th>
-                        <th className="text-start">{UserRole || "جارِِ التحميل..."}</th>
+                        <th className="text-start">{user.roleName}</th>
                     </tr>
                     <tr>
                         <th>القسم</th>

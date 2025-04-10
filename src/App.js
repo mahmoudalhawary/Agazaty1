@@ -21,7 +21,6 @@ import AddEmployee from './Pages/AddEmployee';
 import LeaveRecord from './Pages/LeaveRecord';
 import EditDepartment from './Pages/EditDepartment';
 import Inquiries from './Pages/Inquiries';
-import Des from './Pages/Des';
 import NormalLeave from './components/NormalLeave';
 import SickLeave from './components/SickLeave';
 import CasualLeave from './components/CasualLeave';
@@ -33,7 +32,6 @@ import CasualLeaveRequestManger from './Pages/NormalLeaveRequestManager';
 import NormalLeaveRequestManager from './Pages/NormalLeaveRequestManager';
 import NormalRequestManager from './Pages/NormalLeaveRequestGeneralManager';
 import GeneralManagerLeave from './Pages/GeneralManagerLeave';
-import Parameter from './Pages/Parameter';
 import UpdateNormalLeave from './Pages/UpdateNormalLeave';
 import TrackLeave from './Pages/Leaves';
 import EditEmployeeForHR from './Pages/EditEmployee';
@@ -47,6 +45,10 @@ import DesCasual from './Pages/DesCasual';
 import DesSick from './Pages/DesSick';
 import OldSideBar from './components/OldSideBar';
 import { useEffect, useState } from 'react';
+import DesPermit from './Pages/DesParameter';
+import Permit from './Pages/Permit';
+import PermitLeave from './Pages/PermitLeave';
+import ProfileForHR from './Pages/ProfileForHR';
 
 
 function App() {
@@ -85,11 +87,11 @@ function App() {
             <div className="row d-flex" style={{ height: "100vh" }}>
               <div className="col-2 col-xl-1 col-xxl-2 sidebar p-0" style={{height: "100%", overflowY: "auto"}}>
                 <SideBar userRole={userRole} />
-              </div>  
+              </div>
 
               {/* <div className="col-2 col-xl-1 col-xxl-2 sidebar p-0" style={{height: "100%", overflowY: "auto"}}>
                 <OldSideBar userRole={userRole} />
-              </div>*/}
+              </div> */}
 
               <div className="col p-0" style={{height: "100%", overflowY: "auto"}}>
                 <NavBar userRole={userRole} />
@@ -103,7 +105,7 @@ function App() {
           <Route path="normal-leave" element={<NormalLeave />} />
           <Route path="casual-leave" element={<CasualLeave />} />
           <Route path="sick-leave" element={<SickLeave />} />
-          <Route path="parameter" element={<Parameter />} />
+          <Route path="Permit" element={<Permit />} />
           <Route path="messages" element={<Messages />} />
           <Route path="about" element={<About />} />
           <Route path="profile" element={<Profile />} />
@@ -114,6 +116,7 @@ function App() {
           <Route path="sick-leave-request/:leaveID" element={<SickLeaveRequest />} />
           <Route path="update-sick-leave/:leaveID" element={<UpdateSickLeave />} />
           <Route path="update-sick-leave2/:leaveID" element={<UpdateSickLeave2 />} />
+          <Route path="permit-leave/:permitID" element={<PermitLeave />} />
           <Route path="inquiries" element={<Inquiries />} />
           <Route path="editprofile" element={<EditProfile />} />
           <Route path="departments" element={<Departments />} />
@@ -134,11 +137,10 @@ function App() {
           <Route path="des-requests/normal" element={<DesNormal />} />
           <Route path="des-requests/casual" element={<DesCasual />} />
           <Route path="des-requests/sick" element={<DesSick />} />
+          <Route path="des-requests/permit" element={<DesPermit />} />
 
-          
           {/* محمود الهواري */}
           <Route path="edit-password" element={<EditPassword />} />
-
 
           {/* طلبات الاجازات عن المديرين */}
           <Route path="leave-record" element={<LeaveRecord />} />
@@ -149,6 +151,13 @@ function App() {
 
           {/* تتبع امازون */}
           <Route path="track-leave/:id" element={<TrackLeave />} />
+
+
+
+
+
+          <Route path="Profile/user/:userID" element={<ProfileForHR />} />
+
         </Route>
       </Routes>
     </div>

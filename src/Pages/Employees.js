@@ -103,6 +103,9 @@ function Employees({userRole}) {
                                                 className="fontt" 
                                                 style={{ cursor: "pointer", marginLeft: "10px" }} 
                                             />
+                                            <Link to={`/Profile/user/${user.id}`}>
+                                                <FontAwesomeIcon icon={faCalendarDays} color="green" className="fontt" />
+                                            </Link>
                                         </td>
                                     </tr>  
                                 ))

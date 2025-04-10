@@ -64,6 +64,117 @@ function SideBar({ userRole }) {
         );
     };
 
+
+
+    const userID = localStorage.getItem("userID");
+    const [leavesWatingCoworker, setLeavesWatingCoworker] = useState([]);
+    const [leavesWatingForDirect, setLeavesWatingForDirect] = useState([]);
+    const [leavesWatingForGeneral, setLeavesWatingForGeneral] = useState([]);
+    const [waitingSickLeaves, setWaitingSickLeaves] = useState([]);
+    const [waitingCertifiedSickLeaves, setWaitingCertifiedSickLeaves] = useState([]);
+
+    console.log()
+
+    useEffect(() => {
+        fetch(`http://agazatyapi.runasp.net/api/NormalLeave/WaitingByCoWorkerID/${userID}`)
+            .then((res) => res.json())
+            .then((data) => setLeavesWatingCoworker(data))
+    }, [userID]);
+
+    useEffect(() => {
+        fetch(`http://agazatyapi.runasp.net/api/NormalLeave/WaitingByDirect_ManagerID/${userID}`)
+            .then((res) => res.json())
+            .then((data) => {setLeavesWatingForDirect(data)})
+    }, [userID]);
+
+    useEffect(() => {
+        fetch(`http://agazatyapi.runasp.net/api/NormalLeave/WaitingByGeneral_ManagerID/${userID}`)
+            .then((res) => res.json())
+            .then((data) => {setLeavesWatingForGeneral(data)})
+    }, []);
+
+    useEffect(() => {
+        fetch(`http://agazatyapi.runasp.net/api/SickLeave/GetAllWaitingSickLeaves`)
+            .then((res) => res.json())
+            .then((data) => {setWaitingSickLeaves(data)})
+    }, []);
+
+    useEffect(() => {
+        fetch(`http://agazatyapi.runasp.net/api/SickLeave/GetAllWaitingCertifiedSickLeaves`)
+            .then((res) => res.json())
+            .then((data) => {setWaitingCertifiedSickLeaves(data)})
+    }, []);
+
+
+
+
+    const renderLinkHint = (hint, title, icon, link, roles, extraClass = "") => {
+        const rolesArray = roles.split(',').map(role => role.trim());
+        if (!rolesArray.includes(userRole)) return null;
+
+        return (
+            <Link to={link} className={`link-SideBar ${extraClass}`} key={link}>
+                <li className={`link-SideBar ${extraClass} ${location.pathname === link ? 'active-link' : ''} tran`}>
+                <FontAwesomeIcon icon={icon} className="col-sm-12 col-xxl-2 pl-5" style={{ fontSize: '1.6em' }} />
+                <span className="col-xl-8 d-none d-xxl-block">{title}</span>
+                {(hint && waitingSickLeaves && (waitingSickLeaves.length > 0)) || (waitingCertifiedSickLeaves && waitingCertifiedSickLeaves.length > 0) ? (
+                        <span className="d-none d-xl-flex justify-content-center align-items-center text-light rounded-2 bg-danger hintSideBar" style={{ fontSize: '12px' }}>
+                            {waitingSickLeaves.length + waitingCertifiedSickLeaves.length}
+                        </span>
+                    ) : null
+                    }
+                </li>
+            </Link>
+        );
+    };
+
+    const renderLinkHintCoworker = (hint, title, icon, link, roles, extraClass = "") => {
+        const rolesArray = roles.split(',').map(role => role.trim());
+        if (!rolesArray.includes(userRole)) return null;
+
+        return (
+            <Link to={link} className={`link-SideBar ${extraClass}`} key={link}>
+                <li className={`link-SideBar ${extraClass} ${location.pathname === link ? 'active-link' : ''} tran`}>
+                <FontAwesomeIcon icon={icon} className="col-sm-12 col-xxl-2 pl-5" style={{ fontSize: '1.6em' }} />
+                <span className="col-xl-8 d-none d-xxl-block">{title}</span>
+                {hint && leavesWatingCoworker.length > 0 ? (
+                        <span className="d-none d-xxl-flex justify-content-center align-items-center text-light rounded-2 bg-danger hintSideBar" style={{ fontSize: '12px' }}>
+                            {leavesWatingCoworker.length}
+                        </span>
+                    ) : null
+                    }
+                </li>
+            </Link>
+        );
+    };
+
+
+
+
+    const renderLinkHintManager = (hint, title, icon, link, roles, extraClass = "") => {
+        const rolesArray = roles.split(',').map(role => role.trim());
+        if (!rolesArray.includes(userRole)) return null;
+
+        return (
+            <Link to={link} className={`link-SideBar ${extraClass}`} key={link}>
+                <li className={`link-SideBar ${extraClass} ${location.pathname === link ? 'active-link' : ''} tran`}>
+                <FontAwesomeIcon icon={icon} className="col-sm-12 col-xxl-2 pl-5" style={{ fontSize: '1.6em' }} />
+                <span className="col-xl-8 d-none d-xxl-block">{title}</span>
+                {hint && leavesWatingForDirect.length > 0 ? (
+                        <span className="d-none d-xxl-flex justify-content-center align-items-center text-light rounded-2 bg-danger hintSideBar" style={{ fontSize: '12px' }}>
+                            {leavesWatingForDirect.length}
+                        </span>
+                    ) : leavesWatingForGeneral.length > 0 ? (
+                        <span className="d-none d-xxl-flex justify-content-center align-items-center text-light rounded-2 bg-danger hintSideBar" style={{ fontSize: '12px' }}>
+                            {leavesWatingForGeneral.length}
+                        </span>
+                    ) : null
+                    }
+                </li>
+            </Link>
+        );
+    };
+
     return (
         <div className="pt-3 SideBar">
             <div>
@@ -88,11 +199,11 @@ function SideBar({ userRole }) {
                         </ul>
                     )}
 
-                    {renderLink('القائم بالعمل', faEnvelope, '/messages', 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف')}
+                    {renderLinkHintCoworker('hint', 'القائم بالعمل', faEnvelope, '/messages', 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف')}
                     {renderLink('اجازاتي', faCalendarDays, '/agazaty', 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف')}
-                    
 
-{/* 
+
+                {/* 
                     <Link className="link-SideBar">
                         <li className="link-SideBar" onClick={toggleLeaveOptions} style={{ cursor: 'pointer' }}>
                             <FontAwesomeIcon icon={faCalendarPlus} className="col-sm-12 col-xxl-2 pl-5" style={{ fontSize: '1.6em' }} />
@@ -109,9 +220,8 @@ function SideBar({ userRole }) {
 
 
 
-                    
-                    {renderLink('الأقسام', faSquarePlus, '/departments', 'عميد الكلية, مدير الموارد البشرية')}
 
+                    {renderLink('الأقسام', faSquarePlus, '/departments', 'عميد الكلية, مدير الموارد البشرية')}
                     {/* الموظفين مع قائمة فرعية */}
                     { (userRole === "عميد الكلية" || userRole === "مدير الموارد البشرية")   &&
                         <Link className="link-SideBar">
@@ -142,18 +252,19 @@ function SideBar({ userRole }) {
                             {renderLink3('اعتيادية', '/des-requests/normal', 'مدير الموارد البشرية, عميد الكلية')}
                             {renderLink3('عارضة', '/des-requests/casual', 'مدير الموارد البشرية, عميد الكلية')}
                             {renderLink3('مرضية', '/des-requests/sick', 'مدير الموارد البشرية, عميد الكلية')}
+                            {renderLink3('تصاريح', '/des-requests/permit', 'مدير الموارد البشرية')}
                         </ul>
                     )}
 
                     {/* {renderLink('اجازة استثنائية', faNotesMedical, '/exceptional-leave', 'عميد الكلية, مدير الموارد البشرية')} */}
                     {/* {renderLink('سجل الاجازات', faFolderOpen, '/des-requests', 'عميد الكلية, مدير الموارد البشرية')} */}
-                    {renderLink('طلبات الاجازات', faFolderOpen, '/leave-record', 'عميد الكلية')}
+                    {renderLinkHintManager('hint', 'طلبات الاجازات', faFolderOpen, '/leave-record', 'عميد الكلية')}
                     {renderLink('الاستفسارات', faCircleQuestion, '/inquiries', 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف')}
                     {renderLink('الاعدادات', faGear, '/sitting', 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف')}
-                    {renderLink('التصريحات', faGear, '/parameter', 'مدير الموارد البشرية')}
+                    {renderLink('التصريحات', faGear, '/Permit', 'مدير الموارد البشرية')}
                     {renderLink('معلومات عامة', faCircleExclamation, '/about', 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف')}
                     {renderLink('سجل الاجازات المرضية', faCircleExclamation, '/sick-leaves-record', 'مدير الموارد البشرية')}
-                    {renderLink('تحديث الاجازة المرضية', faCircleExclamation, '/sick-leaves-record2', 'مدير الموارد البشرية')}
+                    {renderLinkHint('hint' ,'تحديث الاجازة المرضية', faCircleExclamation, '/sick-leaves-record2', 'مدير الموارد البشرية')}
                     {/* {renderLink('الأرشيف', faCircleExclamation, '/archives', 'مدير الموارد البشرية')} */}
                     {renderLink('الخروج', faRightFromBracket, '/login', 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف', 'text-danger hover-danger')}
                 </ul>

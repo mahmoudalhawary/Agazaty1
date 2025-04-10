@@ -3,16 +3,15 @@ import Swal from "sweetalert2";
 import API from "../Data" ;
 
 function NormalLeave() {
-    const ID = localStorage.getItem("userID");
+    const userID = localStorage.getItem("userID");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [notesFromEmployee, setNotesFromEmployee] = useState("");
-    const [userID, setUserID] = useState(ID);
     const [coworker_ID, setCoworker_ID] = useState("");
     const [coworkers, setCoworkers] = useState([]);
 
     useEffect(()=>{
-        fetch(`http://agazatyapi.runasp.net/api/Account/GetAllAvailabelCoworkers/5daf7dbb-369e-44a8-9565-02e93d75b3a6`)
+        fetch(`http://agazatyapi.runasp.net/api/Account/GetAllAvailabelCoworkers/${userID}`)
         .then((res)=> res.json())
         .then((data)=> setCoworkers(data))
     }, [])
