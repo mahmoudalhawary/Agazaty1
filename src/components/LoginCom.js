@@ -1,33 +1,116 @@
 import '../CSS/login.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import BtnLink from "./BtnLink";
 import { useState } from 'react';
-
-function LoginCom(){
+import axios from 'axios';
+import BASE_API_URL from '../server/serves';
+function LoginCom() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const [res, SetRes] = useState([]);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
 
-    return(
+        try {
+            const response = await axios.post(
+                `http://agazatyapi.runasp.net/api/Account/UserLogin`,
+                {
+                    userName: email,  // Assuming email is used as username
+                    password: password
+                },
+                {
+                    headers: {
+                        'accept': '*/*',
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            SetRes(response.data);
+            // Handle successful login
+            console.log('Login successful:', response.data);
+            // You might want to store token or user data here
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('userId', response.data.id);
+            localStorage.setItem('UserData', JSON.stringify(response.data));
+
+            // Redirect to home page
+            navigate('/');
+
+        } catch (err) {
+            // Handle error          
+            console.log('Login successful:', res);
+
+            setError(err.response?.data?.message || 'فشل تسجيل الدخول، حاول مرة أخرى');
+            console.error('Login error:', err);
+        } finally {
+            console.log('Login successful:', res);
+
+            setLoading(false);
+        }
+        console.log('Login successful:', res);
+
+    };
+
+    return (
         <>
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div className='wordLogin'>
                     <h4 className="text-center text-head">تسجيل الدخول</h4>
                 </div>
+
+                {error && (
+                    <div className="alert alert-danger" role="alert">
+                        {error}
+                    </div>
+                )}
+
                 <div className="mb-3">
                     <label htmlFor="exampleInputEmail1" className="form-label">البريد الإلكتروني</label>
-                    <input type="email"  onChange={(e)=> setEmail(e.target.value)} className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder='yahyasaad2024@gmail.com' />
+                    <input
+                        type="text"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="form-control"
+                        id="exampleInputEmail1"
+                        aria-describedby="emailHelp"
+                        placeholder='yahyasaad2024@gmail.com'
+                        required
+                    />
                 </div>
+
                 <div className="mb-3">
                     <label htmlFor="exampleInputPassword1" className="form-label">كلمة المرور</label>
-                    <input type="password"  onChange={(e)=> setPassword(e.target.value)} className="form-control" id="exampleInputPassword1" placeholder='********' />
-                    <Link to={'/login/forgetpassword'} id="emailHelp" className="form-text text-primary forgetPassword">هل نسيت كلمة المرور؟</Link>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="form-control"
+                        id="exampleInputPassword1"
+                        placeholder='********'
+                        required
+                    />
+                    <Link to={'/login/forgetpassword'} id="emailHelp" className="form-text text-primary forgetPassword">
+                        هل نسيت كلمة المرور؟
+                    </Link>
                 </div>
-                <div className="d-flex justify-content-cente">
-                    <BtnLink name='تسجيل الدخول' link='/' class='btn-primary w-100' />
+
+                <div className="d-flex justify-content-center">
+                    <button
+                        type="submit"
+                        className="btn btn-primary w-100"
+                        disabled={loading}
+                    >
+                        {loading ? 'جاري التحميل...' : 'تسجيل الدخول'}
+                    </button>
                 </div>
             </form>
         </>
-    )
+    );
 }
 
 export default LoginCom;

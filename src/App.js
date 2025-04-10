@@ -54,26 +54,32 @@ function App() {
   // const userID = "d717923f-9ef0-4ccf-9eb9-75983c582165" // عماد
   // const userID = "39331229-7e67-4e62-b560-fa9be8927f52"; // همام
   // const userID = "ec12a929-46ea-4c7e-8b69-bef0f9886386"; // يحيى
-  // const userID = "5daf7dbb-369e-44a8-9565-02e93d75b3a6"; // سارة
   // const userID = "122e0eb2-ad19-411b-a3dd-1e96df18cc63"; // أمال
   const userID = "98954801-d453-40ff-940e-41e0ce88808f"; // مجدي
+  // const userID = "5daf7dbb-369e-44a8-9565-02e93d75b3a6"; // سارة
+
+
+  // const userData = JSON.parse(localStorage.getItem('UserData') || '{}');
+  // const userID = userData.id;
+
   localStorage.setItem("userID", userID);
 
 
   const [Role, setRole] = useState();
-  useEffect(()=>{
+  useEffect(() => {
     fetch(`http://agazatyapi.runasp.net/api/Account/GetRoleOfUser/${userID}`)
-    .then((res)=> res.json())
-    .then((data)=> setRole(data.role))
+      .then((res) => res.json())
+      .then((data) => setRole(data.role))
   }, [])
 
-  
+
   const userRole = Role;
   return (
     <div className="App" dir="rtl">
       <Routes>
         <Route path="/login" element={<Login />}>
           <Route index element={<LoginCom />} />
+          {/* <Route path='login' element={<LoginCom />} /> */}
           <Route path="forgetpassword" element={<ForgetPassword />} />
           <Route path="otpcode" element={<OTPCode />} />
           <Route path="resetpassword" element={<ResetPassword />} />
@@ -83,15 +89,15 @@ function App() {
           path="/"
           element={
             <div className="row d-flex" style={{ height: "100vh" }}>
-              <div className="col-2 col-xl-1 col-xxl-2 sidebar p-0" style={{height: "100%", overflowY: "auto"}}>
+              <div className="col-2 col-xl-1 col-xxl-2 sidebar p-0" style={{ height: "100%", overflowY: "auto" }}>
                 <SideBar userRole={userRole} />
-              </div>  
+              </div>
 
               {/* <div className="col-2 col-xl-1 col-xxl-2 sidebar p-0" style={{height: "100%", overflowY: "auto"}}>
                 <OldSideBar userRole={userRole} />
               </div>*/}
 
-              <div className="col p-0" style={{height: "100%", overflowY: "auto"}}>
+              <div className="col p-0" style={{ height: "100%", overflowY: "auto" }}>
                 <NavBar userRole={userRole} />
                 <Outlet />
               </div>
@@ -135,7 +141,7 @@ function App() {
           <Route path="des-requests/casual" element={<DesCasual />} />
           <Route path="des-requests/sick" element={<DesSick />} />
 
-          
+
           {/* محمود الهواري */}
           <Route path="edit-password" element={<EditPassword />} />
 

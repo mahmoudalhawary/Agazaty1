@@ -1,42 +1,83 @@
 import { useNavigate } from 'react-router-dom';
-import Btn from '../components/Btn';
 import { useEffect, useState } from 'react';
 import YahyaSaad from '../Images/YahyaSaad.jpg';
-import Swal from 'sweetalert2';
-import API from "../Data" ;
+import axios from 'axios';
+import BASE_API_URL from '../server/serves';
 
-function EditPassword(){
-    const userID = localStorage.getItem("userID");
+function EditPassword() {
+    const userData = JSON.parse(localStorage.getItem('UserData') || '{}');
+
+    const userID = userData.id
     const navigate = useNavigate();
-    const [updatedFields, setUpdatedFields] = useState({});
+    const [updatedFields, setUpdatedFields] = useState({
+        currentPassword: '',
+        newPassword: '',
+        confirmNewPassword: ''
+    });
     const [UserRole, setUserRole] = useState("");
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    useEffect(()=>{
-        fetch(`http://agazatyapi.runasp.net/api/Account/GetRoleOfUser/${userID}`)
-        .then((res)=> res.json())
-        .then((data)=> setUserRole(data.role))
-    }, [userID])
-
-
-    // const [currentPassword, SetCurrentPassword] = useState('');
-    // const [newPassword, SetNewPassword] = useState('');
-    // const [confirmNewPassword, SetConfirmNewPassword] = useState('');
-
+    useEffect(() => {
+        if (userID) {
+            fetch(`http://agazatyapi.runasp.net/api/Account/GetRoleOfUser/${userID}`)
+                .then((res) => res.json())
+                .then((data) => setUserRole(data.role))
+                .catch((err) => console.error('Error fetching role:', err));
+        }
+    }, [userID]);
 
     const handleChange = (e) => {
         setUpdatedFields({ ...updatedFields, [e.target.name]: e.target.value });
     };
 
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Form submitted');
-        navigate('/');
+        setLoading(true);
+        setError('');
+
+        // Validation
+        if (!userID) {
+            setError('لم يتم العثور على معرف المستخدم، قم بتسجيل الدخول أولاً');
+            setLoading(false);
+            return;
+        }
+
+        if (updatedFields.newPassword !== updatedFields.confirmNewPassword) {
+            setError('كلمة المرور الجديدة وتأكيدها غير متطابقتين');
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const response = await axios.post(
+                `${BASE_API_URL}api/Account/Change-Password`,
+                {
+                    useId: userID, // "useId" as per API, assuming it's a typo for "userId"
+                    currentPassword: updatedFields.currentPassword,
+                    newPassword: updatedFields.newPassword,
+                    confirmNewPassword: updatedFields.confirmNewPassword
+                },
+                {
+                    headers: {
+                        'accept': '*/*',
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            console.log('Password change successful:', response.data);
+            navigate('/'); // Redirect to home page after success
+
+        } catch (err) {
+            setError(err.response?.data?.message || 'فشل تغيير كلمة المرور، حاول مرة أخرى');
+            console.error('Change Password error:', err);
+        } finally {
+            setLoading(false);
+        }
     };
 
-
-
-    return(
+    return (
         <div>
             <div className="d-flex mb-4">
                 <div className="zzz d-inline-block p-3 ps-5">
@@ -52,35 +93,72 @@ function EditPassword(){
                             </div>
                             <div className='d-flex justify-content-center'>
                                 <div className='bg-info p-2 d-inline-block rounded-3'>
-                                    <h5 className='m-0 ps-5 pe-5 text-light'>{UserRole}</h5>
+                                    <h5 className='m-0 ps-5 pe-5 text-light'>{UserRole || 'جاري التحميل...'}</h5>
                                 </div>
                             </div>
                         </div>
                         <div className='col-sm-12 col-md-12 col-lg-7 col-xl-8 col-xxl-9 mt-4'>
+                            {error && (
+                                <div className="alert alert-danger" role="alert">
+                                    {error}
+                                </div>
+                            )}
                             <div className='row'>
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
                                     <label htmlFor="exampleInputCurrentPassword" className="form-label">كلمة المرور الحالية</label>
-                                    <input type="text" className="form-control" onChange={handleChange} id="exampleInputCurrentPassword" aria-describedby="addressHelp" placeholder='********' />
+                                    <input
+                                        type="password"
+                                        name="currentPassword"
+                                        value={updatedFields.currentPassword}
+                                        onChange={handleChange}
+                                        className="form-control"
+                                        id="exampleInputCurrentPassword"
+                                        placeholder='********'
+                                        required
+                                    />
                                 </div>
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
                                     <label htmlFor="exampleInputNewPassword" className="form-label">كلمة المرور الجديدة</label>
-                                    <input type="text" className="form-control" onChange={handleChange} id="exampleInputNewPassword" aria-describedby="addressHelp" placeholder='********' />
+                                    <input
+                                        type="password"
+                                        name="newPassword"
+                                        value={updatedFields.newPassword}
+                                        onChange={handleChange}
+                                        className="form-control"
+                                        id="exampleInputNewPassword"
+                                        placeholder='********'
+                                        required
+                                    />
                                 </div>
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
                                     <label htmlFor="exampleInputConfirmNewPassword" className="form-label">تأكيد كلمة المرور</label>
-                                    <input type="text" className="form-control" onChange={handleChange} id="exampleInputConfirmNewPassword" aria-describedby="addressHelp" placeholder='********' />
+                                    <input
+                                        type="password"
+                                        name="confirmNewPassword"
+                                        value={updatedFields.confirmNewPassword}
+                                        onChange={handleChange}
+                                        className="form-control"
+                                        id="exampleInputConfirmNewPassword"
+                                        placeholder='********'
+                                        required
+                                    />
                                 </div>
                             </div>
                         </div>
                         <div className="d-flex justify-content-center mt-3">
-                            <Btn name='تحديث البيانات' class='btn-primary w-50' />
+                            <button
+                                type="submit"
+                                className="btn btn-primary w-50"
+                                disabled={loading}
+                            >
+                                {loading ? 'جاري التحديث...' : 'تحديث البيانات'}
+                            </button>
                         </div>
                     </div>
                 </form>
             </div>
-            
         </div>
-    )
+    );
 }
 
 export default EditPassword;
