@@ -53,7 +53,7 @@ function SickLeavesRecord2(){
                                     <BtnLink id={leave.id} name='تفاصيل الاخطار' link='/sick-leave-request' class="btn btn-outline-primary" />
                                 </th>
                                 <th>
-                                    <BtnLink id={leave.id} name='تحديث الاجازة' link='/update-sick-leave' class="btn btn-outline-success" />
+                                    <BtnLink id={leave.id} name='تحديث الاخطار' link='/update-sick-leave' class="btn btn-outline-success" />
                                 </th>
                             </tr>
                         )})
@@ -73,7 +73,7 @@ function SickLeavesRecord2(){
                                     <BtnLink id={leave.id} name='تفاصيل الاخطار' link='/sick-leave-request' class="btn btn-outline-primary" />
                                 </th>
                                 <th>
-                                    <BtnLink id={leave.id} name='تحديث الاجازة' link='/update-sick-leave2' class="btn btn-outline-success" />
+                                    <BtnLink id={leave.id} name='تحديث الاخطار' link='/update-sick-leave2' class="btn btn-outline-success" />
                                 </th>
                             </tr>
                         )})

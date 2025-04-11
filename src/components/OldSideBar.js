@@ -6,14 +6,14 @@ import { faHouse, faUser, faCalendarPlus, faSquarePlus, faUserPlus, faFolderOpen
 function OldSideBar({ userRole }) {
 
     const items = [
-        { title: 'الرئيسية', icon: faHouse, link: '/', status: true, role: 'manager, hr, user, موظف' },
+        { title: 'الرئيسية', icon: faHouse, link: '/', status: true, role: 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف' },
         { title: 'الملف الشخصي', icon: faUser, link: '/profile', status: true, role: 'manager, hr, user, موظف' },
         { title: 'طلب اجازة', icon: faCalendarPlus, link: '/normal-leave', status: true, role: 'hr, manager, user, موظف' },
-        { title: 'القائم بالعمل', icon: faEnvelope, link: '/messages', status: true, UserHint: true, role: 'manager, hr, user, موظف' },
+        { title: 'القائم بالعمل', icon: faEnvelope, link: '/messages', status: true, UserHint: true, role: 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف' },
         { title: 'اجازاتي', icon: faCalendarDays, link: '/agazaty', status: true, role: 'manager, hr, user, موظف' },
         { title: 'الأقسام', icon: faSquarePlus, link: '/departments', status: true, role: 'manager, hr' },
         { title: 'الموظفين', icon: faUsers, link: '/employees', status: true, role: 'manager, hr' },
-        { title: 'اجازة استثنائية', icon: faNotesMedical, link: '/exceptional-leave', status: true, role: 'manager, hr' },
+        { title: 'اجازة استثنائية', icon: faNotesMedical, link: '/exceptional-leave', status: true, role: 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف' },
         { title: 'سجل الاجازات', icon: faFolderOpen, link: '/des-requests', status: true, role: 'manager, hr' },
         { title: 'طلبات الاجازات', icon: faFolderOpen, link: '/leave-record', status: true, ManagerHint: true, role: 'manager' },
         { title: 'الاستفسارات', icon: faCircleQuestion, link: '/inquiries', status: true, role: 'manager, hr, user, موظف' },

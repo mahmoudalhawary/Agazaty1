@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import BtnLink from '../components/BtnLink';
 import Btn from '../components/Btn';
 import API from "../Data" ;
+
 function NormalLeaveRequestManager() {
-    const [leaveWating, setLeaveWating] = useState([]);
     const LeaveID = useParams().id;
     const [leave, setLeave] = useState(null);
     const [user, setUser] = useState(null);
@@ -32,42 +32,6 @@ console.log(leave)
         }
     }, [leave]);
 
-    const handleClick = (link) => {
-        window.location.href = link;
-        setTimeout(() => {
-            window.location.reload();
-        }, 100);
-    };
-
-
-    const updateDecision = (leaveID, DirectManager) => {
-        const body = {
-            directManagerDecision: DirectManager,
-            disapproveReason: DirectManager ? "" : "السبب المطلوب هنا" // عند الرفض، يجب إضافة السبب
-        };
-    
-        fetch(`http://agazatyapi.runasp.net/api/NormalLeave/UpdateDirectManagerDecision/${leaveID}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body)
-        })
-        .then((res) => {
-            if (!res.ok) {
-                throw new Error("Failed to update decision");
-            }
-            return res.json();
-        })
-        .then(() => {
-            setLeaveWating(leaveWating.filter(leave => leave.id !== leaveID));
-        })
-        .catch((err) => console.error("Error updating decision:", err));
-    };
-    
-
-
-
     return (
         <div>
             <div className="d-flex mb-4 justify-content-between">
@@ -75,7 +39,7 @@ console.log(leave)
                     <h2 className="m-0">{`الاجازة رقم #${LeaveID}`}</h2>
                 </div>
                 <div className="p-3">
-                    <BtnLink name='سجل الاجازات' link='/leave-record' class="btn btn-primary m-0 ms-2 mb-2"/>
+                    <BtnLink name='سجل الاجازات العارضة' link='/des-requests/casual' class="btn btn-primary m-0 ms-2 mb-2"/>
                 </div>
             </div>
             <div className="row mt-5 d-flex justify-content-center">

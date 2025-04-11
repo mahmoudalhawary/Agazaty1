@@ -5,10 +5,24 @@ import BtnLink from '../components/BtnLink';
 import Btn from '../components/Btn';
 
 function SickLeaveRequest() {
-    const { id } = useParams();
-    const LeaveID = Number(id);
-    const [leave, setLeave] = useState(null);
-    const [user, setUser] = useState(null);
+    const [respononseDoneForMedicalCommitte, setRespononseDoneForMedicalCommitte] = useState([]);
+
+        useEffect(()=>{
+            fetch(`http://agazatyapi.runasp.net/api/SickLeave/GetSickLeaveById/${LeaveID}`)
+            .then((res)=> res.json())
+            .then((data)=> setRespononseDoneForMedicalCommitte(data.respononseDoneForMedicalCommitte))
+        }, [])
+
+
+        // console.log(sickLeavesWaiting)
+        // console.log(sickLeavesWaiting2)
+
+
+
+    const LeaveID = Number(useParams().leaveID);
+    const [leave, setLeave] = useState([]);
+    const [user, setUser] = useState([]);
+
 
     useEffect(() => {
         fetch(`http://agazatyapi.runasp.net/api/SickLeave/GetSickLeaveById/${LeaveID}`)
@@ -30,13 +44,6 @@ function SickLeaveRequest() {
         }
     }, [leave]);
 
-    const handleClick = (link) => {
-        window.location.href = link;
-        setTimeout(() => {
-            window.location.reload();
-        }, 100);
-    };
-
     return (
         <div>
             <div className="d-flex mb-4 justify-content-between">
@@ -44,7 +51,7 @@ function SickLeaveRequest() {
                     <h2 className="m-0">{`الاجازة رقم #${LeaveID}`}</h2>
                 </div>
                 <div className="p-3">
-                    <BtnLink name='سجل الاجازات' link='/leave-record' class="btn btn-primary m-0 ms-2 mb-2"/>
+                    <BtnLink name='سجل الاجازات المرضية' link='/des-requests/sick' class="btn btn-primary m-0 ms-2 mb-2"/>
                 </div>
             </div>
             <div className="row mt-5 d-flex justify-content-center">
@@ -55,17 +62,15 @@ function SickLeaveRequest() {
                                 <th scope="col" className="pb-3" style={{backgroundColor:'#F5F9FF'}}>حالة الطلب</th>
                                 <th scope="col" className="text-start" style={{backgroundColor:'#F5F9FF'}}>
                                     {leave ? (
-                                        leave.holder === 1 ? <Btn name="المدير المباشر" class="btn-danger text-start"/>
-                                        : leave.holder === 2 ? <Btn name="المدير المختص" class="btn-danger text-start"/>
-                                        : leave.holder === 3 ? <Btn name="مقبولة" class="btn-danger text-start"/>
-                                        : <Btn name="معلقة" class="btn-danger text-start"/>
+                                        respononseDoneForMedicalCommitte === false ? <Btn name="التحديث الأول" class="btn-outline-danger text-start"/>
+                                        : <Btn name="التحديث الثاني" class="btn-outline-danger text-start"/>
                                     ) : "جاري التحميل..."}
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th scope="col">اسم الموظف</th>
+                                <th scope="col">الاسم</th>
                                 <th scope="col" className="text-start">{leave ? leave.userName : "جاري التحميل..."}</th>
                             </tr>
                             <tr>
@@ -84,18 +89,22 @@ function SickLeaveRequest() {
                                 <th scope="col">القسم</th>
                                 <th scope="col" className="text-start">{user ? user.departmentName : "جاري التحميل..."}</th>
                             </tr>
-                            <tr>
-                                <th scope="col">تاريخ بداية الاجازة</th>
-                                <th scope="col" className="text-start">{leave ? new Date(leave.startDate).toLocaleDateString() : "---"}</th>
-                            </tr>
-                            <tr>
-                                <th scope="col">تاريخ نهاية الاجازة</th>
-                                <th scope="col" className="text-start">{leave ? new Date(leave.endDate).toLocaleDateString() : "---"}</th>
-                            </tr>
-                            <tr>
-                                <th scope="col">عدد أيام الاجازات</th>
-                                <th scope="col" className="text-start">{leave ? leave.days : "--"}</th>
-                            </tr>
+
+                            {leave.certified === true ? (
+                                <>
+                                    <tr>
+                                        <th scope="col">تاريخ بداية الاجازة</th>
+                                        <th scope="col" className="text-start">{leave ? new Date(leave.startDate).toLocaleDateString() : "---"}</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">تاريخ نهاية الاجازة</th>
+                                        <th scope="col" className="text-start">{leave ? new Date(leave.endDate).toLocaleDateString() : "---"}</th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">عدد أيام الاجازات</th>
+                                        <th scope="col" className="text-start">{leave ? leave.days : "--"}</th>
+                                    </tr>
+                                </>) : null}
                             <tr>
                                 <th scope="col">المرجع</th>
                                 <th scope="col" className="text-start">#{leave ? leave.id : "جاري التحميل..."}</th>

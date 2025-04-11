@@ -11,32 +11,29 @@ function Agazaty(){
     const [SickLeaves, setSickLeaves] = useState([]);
     const [leaveHolder, setLeaveHolder] = useState('0');
     const [LeaveTypes, setLeaveTypes] = useState([]);
-    const [type, setType] = useState('');
+    const [type, setType] = useState('اعتيادية');
 
     const [acceptedLeaves, setAcceptedLeaves] = useState([]);
     const [rejectedLeaves, setRejectedLeaves] = useState([]);
     const [waitingLeaves, setWaitingLeaves] = useState([]);
 
-
-    console.log(SickLeaves)
-
     useEffect(()=>{
         fetch(`http://agazatyapi.runasp.net/api/CasualLeave/GetAllCasualLeavesByUserId/${userID}`)
         .then((res)=> res.json())
         .then((data)=> setCasualLeaves(data))
-    }, [])
+    }, [userID])
     
     useEffect(()=>{
         fetch(`http://agazatyapi.runasp.net/api/SickLeave/GetAllSickLeavesByUserID/${userID}`)
         .then((res)=> res.json())
         .then((data)=> setSickLeaves(data))
-    }, [])
+    }, [userID])
     
     useEffect(()=>{
         fetch(`http://agazatyapi.runasp.net/api/NormalLeave/GetLeaveTypes`)
         .then((res)=> res.json())
         .then((data)=> setLeaveTypes(data))
-    }, [])
+    }, [userID])
     
     
     const [filteredLeaves, setFilteredLeaves] = useState([]);
@@ -100,7 +97,7 @@ function Agazaty(){
                 </div>
             </div>
 
-            <div>
+            <div className="mb-3">
                 {LeaveTypes.map((LeaveType, index) => {
                     return (
                         <div onClick={() => {console.log(LeaveType);setType(LeaveType);}} key={index} className="btn btn-outline-primary ms-2 me-2">

@@ -1,13 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import YahyaSaad from '../Images/YahyaSaad.jpg';
-import axios from 'axios';
-import BASE_API_URL from '../server/serves';
 
-function EditPassword() {
-    const userData = JSON.parse(localStorage.getItem('UserData') || '{}');
-
-    const userID = userData.id
     const navigate = useNavigate();
     const [updatedFields, setUpdatedFields] = useState({
         currentPassword: '',
@@ -18,13 +12,7 @@ function EditPassword() {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        if (userID) {
-            fetch(`http://agazatyapi.runasp.net/api/Account/GetRoleOfUser/${userID}`)
-                .then((res) => res.json())
-                .then((data) => setUserRole(data.role))
-                .catch((err) => console.error('Error fetching role:', err));
-        }
+
     }, [userID]);
 
     const handleChange = (e) => {
@@ -33,47 +21,7 @@ function EditPassword() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
-        setError('');
 
-        // Validation
-        if (!userID) {
-            setError('لم يتم العثور على معرف المستخدم، قم بتسجيل الدخول أولاً');
-            setLoading(false);
-            return;
-        }
-
-        if (updatedFields.newPassword !== updatedFields.confirmNewPassword) {
-            setError('كلمة المرور الجديدة وتأكيدها غير متطابقتين');
-            setLoading(false);
-            return;
-        }
-
-        try {
-            const response = await axios.post(
-                `${BASE_API_URL}api/Account/Change-Password`,
-                {
-                    useId: userID, // "useId" as per API, assuming it's a typo for "userId"
-                    currentPassword: updatedFields.currentPassword,
-                    newPassword: updatedFields.newPassword,
-                    confirmNewPassword: updatedFields.confirmNewPassword
-                },
-                {
-                    headers: {
-                        'accept': '*/*',
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-
-            console.log('Password change successful:', response.data);
-            navigate('/'); // Redirect to home page after success
-
-        } catch (err) {
-            setError(err.response?.data?.message || 'فشل تغيير كلمة المرور، حاول مرة أخرى');
-            console.error('Change Password error:', err);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -104,47 +52,23 @@ function EditPassword() {
                                 </div>
                             )}
                             <div className='row'>
+                                {/* Current Password */}
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
-                                    <label htmlFor="exampleInputCurrentPassword" className="form-label">كلمة المرور الحالية</label>
-                                    <input
-                                        type="password"
-                                        name="currentPassword"
-                                        value={updatedFields.currentPassword}
-                                        onChange={handleChange}
-                                        className="form-control"
-                                        id="exampleInputCurrentPassword"
-                                        placeholder='********'
-                                        required
-                                    />
+
                                 </div>
+
+                                {/* New Password */}
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
-                                    <label htmlFor="exampleInputNewPassword" className="form-label">كلمة المرور الجديدة</label>
-                                    <input
-                                        type="password"
-                                        name="newPassword"
-                                        value={updatedFields.newPassword}
-                                        onChange={handleChange}
-                                        className="form-control"
-                                        id="exampleInputNewPassword"
-                                        placeholder='********'
-                                        required
-                                    />
+
                                 </div>
+
+                                {/* Confirm Password */}
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
-                                    <label htmlFor="exampleInputConfirmNewPassword" className="form-label">تأكيد كلمة المرور</label>
-                                    <input
-                                        type="password"
-                                        name="confirmNewPassword"
-                                        value={updatedFields.confirmNewPassword}
-                                        onChange={handleChange}
-                                        className="form-control"
-                                        id="exampleInputConfirmNewPassword"
-                                        placeholder='********'
-                                        required
-                                    />
+
                                 </div>
                             </div>
                         </div>
+
                         <div className="d-flex justify-content-center mt-3">
                             <button
                                 type="submit"
