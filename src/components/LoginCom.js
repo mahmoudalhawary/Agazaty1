@@ -5,7 +5,6 @@ import { useState } from 'react';
 import axios from 'axios';
 import BASE_API_URL from '../server/serves';
 function LoginCom() {
-    const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -20,7 +19,7 @@ function LoginCom() {
             const response = await axios.post(
                 `http://agazatyapi.runasp.net/api/Account/UserLogin`,
                 {
-                    userName: userName,  // Assuming email is used as username
+
                     password: password
                 },
                 {
@@ -35,7 +34,6 @@ function LoginCom() {
             console.log('Login successful:', response.data);
             // You might want to store token or user data here
             localStorage.setItem('token', response.data.token);
-            localStorage.setItem('userID', response.data.id);
             localStorage.setItem('UserData', JSON.stringify(response.data));
 
             // Redirect to home page
@@ -70,18 +68,7 @@ function LoginCom() {
                 )}
 
                 <div className="mb-3">
-                    <label htmlFor="exampleInputUserName" className="form-label">الرقم القومي</label>
-                    <input
-                        type="text"
-                        value={userName}
-                        onChange={(e) => setUserName(e.target.value)}
-                        className="form-control"
-                        id="exampleInputUserName"
-                        aria-describedby="emailHelp"
-                        placeholder='30201241234567'
-                        required
-                        maxLength={14}
-                        minLength={14}
+
                     />
                 </div>
 

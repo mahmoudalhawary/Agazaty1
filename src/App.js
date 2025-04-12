@@ -63,14 +63,13 @@ function App() {
   // const userID = "30309092701058"; // يحيى
   // const userID = "30309092701066"; // مجدي
 
-  const userID = localStorage.getItem("userID");
+
 
   const [Role, setRole] = useState();
   useEffect(() => {
     fetch(`http://agazatyapi.runasp.net/api/Account/GetRoleOfUser/${userID}`)
       .then((res) => res.json())
       .then((data) => setRole(data.role))
-  }, [userID])
 
   const userRole = Role;
   return (

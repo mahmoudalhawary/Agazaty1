@@ -13,6 +13,7 @@ function SideBar() {
     const [showLeavesUserOptions, setShowLeavesUserOptions] = useState(false);
     const [showLeavesOptions, setShowLeavesOptions] = useState(false);
     const [leavesWating, setLeavesWating] = useState([]);
+
     const [leavesWatingForDirect, setLeavesWatingForDirect] = useState([]);
     const [leavesWatingForGeneral, setLeavesWatingForGeneral] = useState([]);
     const [waitingSickLeaves, setWaitingSickLeaves] = useState([]);
@@ -132,60 +133,7 @@ function SideBar() {
                     {renderLink('الرئيسية', faHouse, '/', 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف')}
                     {renderLink('الملف الشخصي', faUser, '/profile', 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف')}
 
-                    {/* Leave Request with hover select box on small screens */}
-                    <div className="position-relative">
-                        <Link className="link-SideBar">
-                            <li className="link-SideBar" onClick={toggleLeaveOptions} style={{ cursor: 'pointer' }}>
-                                <FontAwesomeIcon icon={faCalendarPlus} className="col-sm-12 col-xxl-2 pl-5" style={{ fontSize: '1.6em' }} />
-                                <span className="col-xl-8 d-none d-xxl-block">طلب إجازة</span>
-                                <span className="tooltip-text d-block d-xxl-none">طلب إجازة</span>
-                            </li>
-                        </Link>
-                        {/* Select box on hover for small screens */}
-                        <div className="leave-options-hover d-block d-xxl-none">
-                            <ul className="list-unstyled">
-                                {renderLink2('اعتيادية', '/normal-leave', 'مدير الموارد البشرية, عميد الكلية, هيئة تدريس, موظف')}
-                                {renderLink2('عارضة', '/casual-leave', 'مدير الموارد البشرية, عميد الكلية, هيئة تدريس, موظف')}
-                                {renderLink2('مرضية', '/sick-leave', 'مدير الموارد البشرية, عميد الكلية, هيئة تدريس, موظف')}
-                            </ul>
-                        </div>
-                        {/* Normal dropdown for large screens */}
-                        {showLeaveOptions && (
-                            <ul className="list-unstyled pl-4 d-none d-xxl-block">
-                                {renderLink2('اعتيادية', '/normal-leave', 'مدير الموارد البشرية, عميد الكلية, هيئة تدريس, موظف')}
-                                {renderLink2('عارضة', '/casual-leave', 'مدير الموارد البشرية, عميد الكلية, هيئة تدريس, موظف')}
-                                {renderLink2('مرضية', '/sick-leave', 'مدير الموارد البشرية, عميد الكلية, هيئة تدريس, موظف')}
-                            </ul>
-                        )}
-                    </div>
 
-                    {renderLink('القائم بالعمل', faEnvelope, '/messages', 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف', '', true, leavesWating.length)}
-                    {/* {renderLink('اجازاتي', faCalendarDays, '/agazaty', 'مدير الموارد البشرية, هيئة تدريس, موظف')} */}
-                    
-                    
-                    {(userRole !== "عميد الكلية") &&
-                        <Link className="link-SideBar">
-                            <li className="link-SideBar" onClick={toggleLeavesUserOptions} style={{ cursor: 'pointer' }}>
-                                <FontAwesomeIcon icon={faCalendarDays} className="col-sm-12 col-xxl-2 pl-5" style={{ fontSize: '1.6em' }} />
-                                <span className="col-xl-8 d-none d-xxl-block">اجازاتي</span>
-                                <span className="tooltip-text d-block d-xxl-none">اجازاتي</span>
-                            </li>
-                        </Link>
-                    }
-                    {showLeavesUserOptions && (
-                        <ul className="list-unstyled pl-4 d-none d-xxl-block">
-                            {renderLink2('اعتيادية', '/agazaty/normal', 'مدير الموارد البشرية, هيئة تدريس, موظف')}
-                            {renderLink2('عارضة', '/agazaty/casual', 'مدير الموارد البشرية, هيئة تدريس, موظف')}
-                            {renderLink2('مرضية', '/agazaty/sick', 'مدير الموارد البشرية, هيئة تدريس, موظف')}
-                        </ul>
-                    )}
-                    
-                    
-                    
-                    
-                    {renderLink('الأقسام', faSquarePlus, '/departments', 'عميد الكلية, مدير الموارد البشرية')}
-
-                    {(userRole === "عميد الكلية" || userRole === "مدير الموارد البشرية") &&
                         <Link className="link-SideBar">
                             <li className="link-SideBar" onClick={toggleEmployeesOptions} style={{ cursor: 'pointer' }}>
                                 <FontAwesomeIcon icon={faUsers} className="col-sm-12 col-xxl-2 pl-5" style={{ fontSize: '1.6em' }} />
@@ -200,6 +148,7 @@ function SideBar() {
                             {renderLink2('الموظفين غير النشيطين', '/employees/inactive', 'عميد الكلية, مدير الموارد البشرية')}
                         </ul>
                     )}
+
 
                     {(userRole === "عميد الكلية" || userRole === "مدير الموارد البشرية") &&
                         <Link className="link-SideBar">
@@ -219,14 +168,7 @@ function SideBar() {
                         </ul>
                     )}
 
-                    {renderLink('طلبات الاجازات', faFolderOpen, '/leave-record', 'هيئة تدريس', '', true, (leavesWatingForDirect.length))}
-                    {renderLink('طلبات الاجازات', faFolderOpen, '/general/leave-record', 'عميد الكلية', '', true, (leavesWatingForGeneral.length))}
-                    {renderLink('الاستفسارات', faCircleQuestion, '/inquiries', 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف')}
-                    {renderLink('الاعدادات', faGear, '/sitting', 'عميد الكلية, مدير الموارد البشرية, هيئة تدریس, موظف')}
-                    {renderLink('التصريحات', faGear, '/permit', 'مدير الموارد البشرية')}
-                    {renderLink('معلومات عامة', faCircleExclamation, '/about', 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف')}
-                    {renderLink('سجل الاجازات المرضية', faCircleExclamation, '/sick-leaves-record', 'مدير الموارد البشرية')}
-                    {renderLink('تحديث الاجازة المرضية', faCircleExclamation, '/sick-leaves-record2', 'مدير الموارد البشرية', '', true, waitingSickLeaves.length + waitingCertifiedSickLeaves.length)}
+
                     {renderLink('الخروج', faRightFromBracket, '/login', 'عميد الكلية, مدير الموارد البشرية, هيئة تدريس, موظف', 'text-danger hover-danger')}
                 </ul>
             </div>

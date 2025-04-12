@@ -1,31 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import Image from '../Images/download.jpeg';
-import axios from 'axios';
-import BASE_API_URL from '../server/serves';
 
-function EditPassword() {
-    const userID = localStorage.getItem("userID");
-    const [user, setUser] = useState([])
-    
-
-    useEffect(()=>{
-        fetch(`http://agazatyapi.runasp.net/api/Account/GetUserById/${userID}`)
-        .then((res) => res.json())
-        .then((data) => setUser(data));
-    }, [userID])
-
-
-
-
-    const navigate = useNavigate();
-    const [updatedFields, setUpdatedFields] = useState({
-        currentPassword: '',
-        newPassword: '',
-        confirmNewPassword: ''
-    });
-    const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
         setUpdatedFields({ ...updatedFields, [e.target.name]: e.target.value });
@@ -36,43 +11,7 @@ function EditPassword() {
         setLoading(true);
         setError('');
 
-        // Validation
-        if (!userID) {
-            setError('لم يتم العثور على معرف المستخدم، قم بتسجيل الدخول أولاً');
-            setLoading(false);
-            return;
-        }
 
-        if (updatedFields.newPassword !== updatedFields.confirmNewPassword) {
-            setError('كلمة المرور الجديدة وتأكيدها غير متطابقتين');
-            setLoading(false);
-            return;
-        }
-
-        try {
-            const response = await axios.post(
-                `${BASE_API_URL}api/Account/Change-Password`,
-                {
-                    useId: userID, // "useId" as per API, assuming it's a typo for "userId"
-                    currentPassword: updatedFields.currentPassword,
-                    newPassword: updatedFields.newPassword,
-                    confirmNewPassword: updatedFields.confirmNewPassword
-                },
-                {
-                    headers: {
-                        'accept': '*/*',
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-
-            navigate('/'); // Redirect to home page after success
-
-        } catch (err) {
-            setError(err.response?.data?.message || 'فشل تغيير كلمة المرور، حاول مرة أخرى');
-            console.error('Change Password error:', err);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -92,7 +31,7 @@ function EditPassword() {
                             </div>
                             <div className='d-flex justify-content-center'>
                                 <div className='bg-info p-2 d-inline-block rounded-3'>
-                                    <h5 className='m-0 ps-5 pe-5 text-light'>{user.roleName || 'جاري التحميل...'}</h5>
+
                                 </div>
                             </div>
                         </div>
@@ -104,43 +43,13 @@ function EditPassword() {
                             )}
                             <div className='row'>
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
-                                    <label htmlFor="exampleInputCurrentPassword" className="form-label">كلمة المرور الحالية</label>
-                                    <input
-                                        type="password"
-                                        name="currentPassword"
-                                        value={updatedFields.currentPassword}
-                                        onChange={handleChange}
-                                        className="form-control"
-                                        id="exampleInputCurrentPassword"
-                                        placeholder='********'
-                                        required
-                                    />
+
                                 </div>
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
-                                    <label htmlFor="exampleInputNewPassword" className="form-label">كلمة المرور الجديدة</label>
-                                    <input
-                                        type="password"
-                                        name="newPassword"
-                                        value={updatedFields.newPassword}
-                                        onChange={handleChange}
-                                        className="form-control"
-                                        id="exampleInputNewPassword"
-                                        placeholder='********'
-                                        required
-                                    />
+
                                 </div>
                                 <div className="col-sm-12 col-md-6 col-lg-6 mb-3">
-                                    <label htmlFor="exampleInputConfirmNewPassword" className="form-label">تأكيد كلمة المرور</label>
-                                    <input
-                                        type="password"
-                                        name="confirmNewPassword"
-                                        value={updatedFields.confirmNewPassword}
-                                        onChange={handleChange}
-                                        className="form-control"
-                                        id="exampleInputConfirmNewPassword"
-                                        placeholder='********'
-                                        required
-                                    />
+
                                 </div>
                             </div>
                         </div>
