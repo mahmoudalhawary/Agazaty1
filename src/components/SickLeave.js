@@ -23,9 +23,6 @@ function SickLeave() {
             state: state,
             userID: userID,
         };
-        
-
-        console.log("Sending data:", leaveData);
 
         try {
             const response = await fetch(
@@ -73,7 +70,7 @@ function SickLeave() {
                                 onChange={(e) => setDisease(e.target.value)}
                                 id="notes"
                                 rows="1"
-                                placeholder="أكتب المرض"
+                                placeholder="اكتب المرض"
                             ></textarea>
                         </div> */}
 

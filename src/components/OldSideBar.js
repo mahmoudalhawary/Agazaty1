@@ -18,7 +18,7 @@ function OldSideBar({ userRole }) {
         { title: 'طلبات الاجازات', icon: faFolderOpen, link: '/leave-record', status: true, ManagerHint: true, role: 'manager' },
         { title: 'الاستفسارات', icon: faCircleQuestion, link: '/inquiries', status: true, role: 'manager, hr, user, موظف' },
         { title: 'الاعدادات', icon: faGear, link: '/sitting', status: true, role: 'manager, hr, user, موظف' },
-        { title: 'التصريحات', icon: faGear, link: '/parameter', status: true, role: 'hr' },
+        { title: 'التصريحات', icon: faGear, link: '/permit', status: true, role: 'hr' },
         { title: 'معلومات عامة', icon: faCircleExclamation, link: '/about', status: true, role: 'manager, hr, user, موظف' },
         { title: 'الاجازات المرضية', icon: faCircleExclamation, link: '/sick-leaves-record', status: true, role: 'hr' },
         { title: 'تحديث الاجازة المرضية', icon: faCircleExclamation, link: '/sick-leaves-record2', status: true, HRHint: true, role: 'hr' },

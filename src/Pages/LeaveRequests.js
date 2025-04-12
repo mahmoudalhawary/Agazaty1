@@ -8,7 +8,6 @@ function LeaveRequests(){
 
     const employeeID = 1;
     const LeaveID = useParams().id;
-    console.log(LeaveID)
     const [employee, setEmployee] = useState([]);
     const [leave, setLeave] = useState([]);
 

@@ -68,7 +68,7 @@ function UpdateSickLeave() {
                             onChange={(e) => setAddress(e.target.value)}
                             id="address"
                             rows="1"
-                            placeholder="أكتب عنوان القومسيون الطبي"
+                            placeholder="اكتب عنوان القومسيون الطبي"
                         ></textarea>
                     </div>
                 </div>

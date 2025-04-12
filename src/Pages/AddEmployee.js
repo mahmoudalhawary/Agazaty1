@@ -35,7 +35,6 @@ function AddEmployee(){
     const [role, setRole] = useState([]);
     const [disability, setDisability] = useState();
 
-    console.log(disability)
     const calculateYearsOfWork = (hireDate) => {
         if (!hireDate) return 0;
         const today = new Date();
@@ -52,14 +51,6 @@ function AddEmployee(){
     useEffect(() => {
         if (hireDate) calculateYearsOfWork(hireDate);
     }, [hireDate]);
-
-    // useEffect(()=>{
-    //     fetch(`http://agazatyapi.runasp.net/api/Role/GetAllRoles`)
-    //     .then((res)=> res.json())
-    //     .then((data)=> console.log(data))
-    // }, [])
-
-
 
     const getMonths = (hireDate)=> {
         const hireDatee = new Date(hireDate);
@@ -212,6 +203,20 @@ function AddEmployee(){
                     </div>
 
                     <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
+                        <label htmlFor="exampleInputDeputy3" className="form-label">الجنس</label>
+                        <select
+                            className="form-select"
+                            id="exampleInputDeputy3"
+                            aria-label="Default select example"
+                            onChange={(e)=> setGender(e.target.value)}
+                        >
+                                <option value="">اختر الجنس</option>
+                                <option value='ذكر'>ذكر</option>
+                                <option value='أنثى'>أنثى</option>
+                        </select>
+                    </div>
+
+                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
                         <label htmlFor="exampleFormControlText1" className="form-label">الاسم الأول</label>
                         <input className="form-control" type="text" onChange={(e)=> setFirstName(e.target.value)} placeholder="يحيى" id="exampleFormControlText1" aria-label="default input example" />
                     </div>
@@ -244,6 +249,72 @@ function AddEmployee(){
                     <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
                         <label htmlFor="exampleFormControlNumber2" className="form-label">رقم الهاتف</label>
                         <input className="form-control" type="number" onChange={(e)=> setPhoneNumber(e.target.value)} placeholder="01127471188" id="exampleFormControlNumber2" aria-label="default input example" dir="rtl" />
+                    </div>
+
+                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
+                        <label htmlFor="exampleInputDate2" className="form-label">تاريخ التعيين</label>
+                        <input type="date" onChange={(e)=> setHireDate(e.target.value)} className="form-control" id="exampleInputDate2" />
+                    </div>
+
+                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
+                        <label htmlFor="exampleInputDate3" className="form-label">تاريخ الميلاد</label>
+                        <input type="date" onChange={(e)=> setDateOfBirth(e.target.value)} className="form-control" id="exampleInputDate3" />
+                    </div>
+
+                    {/* <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
+                        <label htmlFor="exampleFormControlNumber10" className="form-label">سنوات العمل</label>
+                        <input className="form-control" type="number" onChange={(e)=> SetYearsOfWork(e.target.value)} placeholder="11" id="exampleFormControlNumber10" aria-label="default input example" dir="rtl" />
+                    </div> */}
+
+                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
+                        <label htmlFor="exampleFormControlNumber11" className="form-label">المنصب</label>
+                        <select className="form-select" name="" onChange={(e)=> setPosition(e.target.value)} placeholder="2" id="exampleFormControlNumber11" aria-label="default input example" dir="rtl" >
+                            <option value="">اختر المنصب</option>
+                            <option value={2}>دكتور</option>
+                            <option value={1}>معيد / موظف</option>
+                        </select>
+                    </div>
+
+                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
+                        <label htmlFor="exampleFormControlText5" className="form-label">المحافظة</label>
+                        <input className="form-control" type="text" onChange={(e)=> setGovernorate(e.target.value)} placeholder="قنا" id="exampleFormControlText5" aria-label="default input example" />
+                    </div>
+
+                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
+                        <label htmlFor="exampleFormControlText6" className="form-label">المدينة</label>
+                        <input className="form-control" type="text" onChange={(e)=> setState(e.target.value)} placeholder="قوص" id="exampleFormControlText6" aria-label="default input example" />
+                    </div>
+
+                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
+                        <label htmlFor="exampleFormControlText7" className="form-label">القرية / الشارع</label>
+                        <input className="form-control" type="text" onChange={(e)=> setStreet(e.target.value)} placeholder="طريق الشوادر بجوار قاعة شهرزاد" id="exampleFormControlText7" aria-label="default input example" />
+                    </div>
+
+                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
+                        <label htmlFor="exampleInputEmail1" className="form-label">البريد الإلكتروني</label>
+                        <input className="form-control" type="email" onChange={(e)=> setEmail(e.target.value)} placeholder="yahyasaad2024@gmail.com" id="exampleInputEmail1" aria-describedby="emailHelp" />
+                    </div>
+
+                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
+                        <label htmlFor="exampleInputDeputy1" className="form-label">القسم</label>
+                        <select
+                            className="form-select"
+                            id="exampleInputDeputy1"
+                            aria-label="Default select example"
+                            onChange={(e)=> setDepartement_ID(e.target.value)}
+                        >
+                            <option value="">اختر القسم</option>
+                                {departments.map((department, index) => (
+                                    <option key={index} value={department.id}>
+                                        {department.name}
+                                    </option>
+                                ))}
+                        </select>
+                    </div>
+
+                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
+                        <label htmlFor="exampleInputPassword1" className="form-label">كلمة المرور</label>
+                        <input type="password" className="form-control" onChange={(e)=> setPassword(e.target.value)} placeholder="********" id="exampleInputPassword1" />
                     </div>
 
                     {disability === false && monthsOfWork >= 6 && yearsOfWork < 12 && yearsOfWork < 1 && age <= 50 ?
@@ -307,86 +378,6 @@ function AddEmployee(){
                     <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
                         <label htmlFor="exampleFormControlNumber9" className="form-label">عدد الاجازات المرضية</label>
                         <input className="form-control" type="number" onChange={(e)=> setnonChronicSickLeavesCount(e.target.value)} placeholder="11" id="exampleFormControlNumber9" aria-label="default input example" dir="rtl" />
-                    </div>
-
-                    {/* <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
-                        <label htmlFor="exampleFormControlNumber10" className="form-label">سنوات العمل</label>
-                        <input className="form-control" type="number" onChange={(e)=> SetYearsOfWork(e.target.value)} placeholder="11" id="exampleFormControlNumber10" aria-label="default input example" dir="rtl" />
-                    </div> */}
-
-                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
-                        <label htmlFor="exampleFormControlNumber11" className="form-label">المنصب</label>
-                        <select className="form-select" name="" onChange={(e)=> setPosition(e.target.value)} placeholder="2" id="exampleFormControlNumber11" aria-label="default input example" dir="rtl" >
-                            <option value="">اختر المنصب</option>
-                            <option value={2}>دكتور</option>
-                            <option value={1}>معيد / موظف</option>
-                        </select>
-                    </div>
-
-                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
-                        <label htmlFor="exampleFormControlText5" className="form-label">المحافظة</label>
-                        <input className="form-control" type="text" onChange={(e)=> setGovernorate(e.target.value)} placeholder="قنا" id="exampleFormControlText5" aria-label="default input example" />
-                    </div>
-
-                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
-                        <label htmlFor="exampleFormControlText6" className="form-label">المدينة</label>
-                        <input className="form-control" type="text" onChange={(e)=> setState(e.target.value)} placeholder="قوص" id="exampleFormControlText6" aria-label="default input example" />
-                    </div>
-
-                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
-                        <label htmlFor="exampleFormControlText7" className="form-label">القرية / الشارع</label>
-                        <input className="form-control" type="text" onChange={(e)=> setStreet(e.target.value)} placeholder="طريق الشوادر بجوار قاعة شهرزاد" id="exampleFormControlText7" aria-label="default input example" />
-                    </div>
-
-                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
-                        <label htmlFor="exampleInputEmail1" className="form-label">البريد الإلكتروني</label>
-                        <input className="form-control" type="email" onChange={(e)=> setEmail(e.target.value)} placeholder="yahyasaad2024@gmail.com" id="exampleInputEmail1" aria-describedby="emailHelp" />
-                    </div>
-
-                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
-                        <label htmlFor="exampleInputDate2" className="form-label">تاريخ التعيين</label>
-                        <input type="date" onChange={(e)=> setHireDate(e.target.value)} className="form-control" id="exampleInputDate2" />
-                    </div>
-
-                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
-                        <label htmlFor="exampleInputDate3" className="form-label">تاريخ الميلاد</label>
-                        <input type="date" onChange={(e)=> setDateOfBirth(e.target.value)} className="form-control" id="exampleInputDate3" />
-                    </div>
-
-                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
-                        <label htmlFor="exampleInputDeputy1" className="form-label">القسم</label>
-                        <select
-                            className="form-select"
-                            id="exampleInputDeputy1"
-                            aria-label="Default select example"
-                            onChange={(e)=> setDepartement_ID(e.target.value)}
-                        >
-                            <option value="">اختر القسم</option>
-                                {departments.map((department, index) => (
-                                    <option key={index} value={department.id}>
-                                        {department.name}
-                                    </option>
-                                ))}
-                        </select>
-                    </div>
-
-                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
-                        <label htmlFor="exampleInputDeputy3" className="form-label">الجنس</label>
-                        <select
-                            className="form-select"
-                            id="exampleInputDeputy3"
-                            aria-label="Default select example"
-                            onChange={(e)=> setGender(e.target.value)}
-                        >
-                                <option value="">اختر الجنس</option>
-                                <option value='ذكر'>ذكر</option>
-                                <option value='أنثى'>أنثى</option>
-                        </select>
-                    </div>
-
-                    <div className="col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
-                        <label htmlFor="exampleInputPassword1" className="form-label">كلمة المرور</label>
-                        <input type="password" className="form-control" onChange={(e)=> setPassword(e.target.value)} placeholder="********" id="exampleInputPassword1" />
                     </div>
                 </div>
 

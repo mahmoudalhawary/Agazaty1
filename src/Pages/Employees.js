@@ -54,9 +54,6 @@ function Employees({userRole}) {
             }
         });
     };
-    
-    
-    console.log(userRole)
 
     return (
         <div>
@@ -64,7 +61,9 @@ function Employees({userRole}) {
                 <div className="zzz d-inline-block p-3 ps-5">
                     <h2 className="m-0">الموظفيين</h2>
                 </div>
-                { userRole === "مدير الموارد البشرية"  &&<div className="p-3">
+
+                { userRole === "مدير الموارد البشرية" && 
+                <div className="p-3">
                     <BtnLink name='إضافة موظف' link='/add-employee' class="btn btn-primary m-0"/>
                 </div>
 
@@ -103,7 +102,7 @@ function Employees({userRole}) {
                                                 className="fontt" 
                                                 style={{ cursor: "pointer", marginLeft: "10px" }} 
                                             />
-                                            <Link to={`/Profile/user/${user.id}`}>
+                                            <Link to={`/profile/user/${user.id}`}>
                                                 <FontAwesomeIcon icon={faCalendarDays} color="green" className="fontt" />
                                             </Link>
                                         </td>

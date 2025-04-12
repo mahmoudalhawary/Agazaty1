@@ -29,9 +29,6 @@ function UpdateNormalLeave() {
             notesFromEmployee: notesFromEmployee || "",  // تأكد من أنها ليست `null`
         };
 
-
-        console.log("Sending data:", leaveData);
-
         try {
             const response = await fetch(
                 `http://agazatyapi.runasp.net/api/NormalLeave/UpdateNormalLeave/${leaveID}`,
@@ -93,7 +90,7 @@ function UpdateNormalLeave() {
                             onChange={(e) => setNotesFromEmployee(e.target.value)}
                             id="notes"
                             rows="1"
-                            placeholder="أكتب ملاحظاتك"
+                            placeholder="اكتب ملاحظاتك"
                         ></textarea>
                     </div>
                 </div>

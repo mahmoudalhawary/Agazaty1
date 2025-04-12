@@ -13,8 +13,6 @@ function DesNormal() {
         .then((data)=> setLeaves(data))
     }, [])
 
-    console.log(leaves)
-
     return (
         <div>
             <div className="d-flex mb-4 justify-content-between">

@@ -43,39 +43,42 @@ import UpdateSickLeave2 from './components/UpdateSickLeave2';
 import DesNormal from './Pages/DesNormal';
 import DesCasual from './Pages/DesCasual';
 import DesSick from './Pages/DesSick';
-import OldSideBar from './components/OldSideBar';
 import { useEffect, useState } from 'react';
 import DesPermit from './Pages/DesParameter';
 import Permit from './Pages/Permit';
 import PermitLeave from './Pages/PermitLeave';
 import ProfileForHR from './Pages/ProfileForHR';
-
+import AgazatyNormal from './Pages/AgazatyNormal';
+import AgazatySick from './Pages/AgazatySick';
+import AgazatyCasual from './Pages/AgazatyCasual';
+import UserNormalLeaveRequest from './Pages/UserNormalLeaveRequest';
+import UserCasualLeaveRequest from './Pages/UserCasualLeaveRequest';
+import UserSickLeaveRequest from './Pages/SickLeaveRequest-User';
+import EditProfileForHR from './Pages/EditProfileForHR';
 
 function App() {
+  // const userID = "30309092701099" // عماد
+  // const userID = "30309092701055"; // همام
+  // const userID = "30309092701044"; // سارة
+  // const userID = "30309092701058"; // يحيى
+  // const userID = "30309092701066"; // مجدي
 
-  // const userID = "d717923f-9ef0-4ccf-9eb9-75983c582165" // عماد
-  // const userID = "39331229-7e67-4e62-b560-fa9be8927f52"; // همام
-  // const userID = "ec12a929-46ea-4c7e-8b69-bef0f9886386"; // يحيى
-  // const userID = "5daf7dbb-369e-44a8-9565-02e93d75b3a6"; // سارة
-  // const userID = "122e0eb2-ad19-411b-a3dd-1e96df18cc63"; // أمال
-  const userID = "98954801-d453-40ff-940e-41e0ce88808f"; // مجدي
-  localStorage.setItem("userID", userID);
-
+  const userID = localStorage.getItem("userID");
 
   const [Role, setRole] = useState();
-  useEffect(()=>{
+  useEffect(() => {
     fetch(`http://agazatyapi.runasp.net/api/Account/GetRoleOfUser/${userID}`)
-    .then((res)=> res.json())
-    .then((data)=> setRole(data.role))
-  }, [])
+      .then((res) => res.json())
+      .then((data) => setRole(data.role))
+  }, [userID])
 
-  
   const userRole = Role;
   return (
     <div className="App" dir="rtl">
       <Routes>
         <Route path="/login" element={<Login />}>
           <Route index element={<LoginCom />} />
+          {/* <Route path='login' element={<LoginCom />} /> */}
           <Route path="forgetpassword" element={<ForgetPassword />} />
           <Route path="otpcode" element={<OTPCode />} />
           <Route path="resetpassword" element={<ResetPassword />} />
@@ -85,15 +88,11 @@ function App() {
           path="/"
           element={
             <div className="row d-flex" style={{ height: "100vh" }}>
-              <div className="col-2 col-xl-1 col-xxl-2 sidebar p-0" style={{height: "100%", overflowY: "auto"}}>
+              <div className="col-2 col-xl-1 col-xxl-2 sidebar p-0" style={{ height: "100%", overflowY: "auto" }}>
                 <SideBar userRole={userRole} />
               </div>
 
-              {/* <div className="col-2 col-xl-1 col-xxl-2 sidebar p-0" style={{height: "100%", overflowY: "auto"}}>
-                <OldSideBar userRole={userRole} />
-              </div> */}
-
-              <div className="col p-0" style={{height: "100%", overflowY: "auto"}}>
+              <div className="col p-0" style={{ height: "100%", overflowY: "auto" }}>
                 <NavBar userRole={userRole} />
                 <Outlet />
               </div>
@@ -110,6 +109,9 @@ function App() {
           <Route path="about" element={<About />} />
           <Route path="profile" element={<Profile />} />
           <Route path="agazaty" element={<Agazaty />} />
+          <Route path="agazaty/normal" element={<AgazatyNormal />} />
+          <Route path="agazaty/casual" element={<AgazatyCasual />} />
+          <Route path="agazaty/sick" element={<AgazatySick />} />
           <Route path="sitting" element={<Sitting />} />
           <Route path="normal-leave-request/:id" element={<NormalLeaveRequest />} />
           <Route path="casual-leave-request/:id" element={<CasualLeaveRequestManger />} />
@@ -119,6 +121,7 @@ function App() {
           <Route path="permit-leave/:permitID" element={<PermitLeave />} />
           <Route path="inquiries" element={<Inquiries />} />
           <Route path="editprofile" element={<EditProfile />} />
+          <Route path="hr/editprofile" element={<EditProfileForHR />} />
           <Route path="departments" element={<Departments />} />
           <Route path="add-department" element={<AddDepartment />} />
           <Route path="department/:id/edit" element={<EditDepartment />} />
@@ -145,6 +148,7 @@ function App() {
           {/* طلبات الاجازات عن المديرين */}
           <Route path="leave-record" element={<LeaveRecord />} />
           <Route path="general/leave-record" element={<GeneralManagerLeave />} />
+
           <Route path="exceptional-leave" element={<ExceptionalLeave />} />
           <Route path="sick-leaves-record" element={<SickLeavesRecord />} />
           <Route path="sick-leaves-record2" element={<SickLeavesRecord2 />} />
@@ -156,7 +160,17 @@ function App() {
 
 
 
-          <Route path="Profile/user/:userID" element={<ProfileForHR />} />
+          <Route path="profile/user/:userID" element={<ProfileForHR />} />
+
+
+
+
+
+          <Route path="user/normal-leave-request/:leaveID" element={<UserNormalLeaveRequest />} />
+          <Route path="user/casual-leave-request/:leaveID" element={<UserCasualLeaveRequest />} />
+          <Route path="user/sick-leave-request/:leaveID" element={<UserSickLeaveRequest />} />
+
+
 
         </Route>
       </Routes>

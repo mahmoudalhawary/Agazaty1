@@ -3,15 +3,14 @@ import '../CSS/LeaveRequests.css';
 import { useEffect, useState } from 'react';
 import BtnLink from '../components/BtnLink';
 import Btn from '../components/Btn';
-import API from "../Data" ;
+import Swal from 'sweetalert2';
 
-function NormalRequestManager() {
+function NormalLeaveRequestManager() {
     const [leaveWating, setLeaveWating] = useState([]);
     const LeaveID = useParams().id;
     const [leave, setLeave] = useState(null);
     const [user, setUser] = useState(null);
-
-console.log(leave)
+    const [disapproveReason, setDisapproveReason] = useState("");
 
     useEffect(() => {
         fetch(`http://agazatyapi.runasp.net/api/NormalLeave/GetNormalLeaveById/${LeaveID}`)
@@ -23,7 +22,7 @@ console.log(leave)
     }, [LeaveID]);
 
     useEffect(() => {
-        if (leave && leave.userID) { 
+        if (leave && leave.userID) {
             fetch(`http://agazatyapi.runasp.net/api/Account/GetUserById/${leave.userID}`)
                 .then((res) => res.json())
                 .then((data) => {
@@ -33,20 +32,13 @@ console.log(leave)
         }
     }, [leave]);
 
-    const handleClick = (link) => {
-        window.location.href = link;
-        setTimeout(() => {
-            window.location.reload();
-        }, 100);
-    };
-
-
-    const updateDecision = (leaveID, GeneralManager) => {
+    const updateDecision = (leaveID, isApproved, reason = "") => {
         const body = {
-            generalManagerDecision: GeneralManager,
-            disapproveReason: GeneralManager ? "" : "السبب المطلوب هنا" // عند الرفض، يجب إضافة السبب
+            generalManagerDecision: isApproved,
+            disapproveReason: isApproved ? "" : reason
         };
-    
+
+
         fetch(`http://agazatyapi.runasp.net/api/NormalLeave/UpdateGeneralManagerDecision/${leaveID}`, {
             method: "PUT",
             headers: {
@@ -54,20 +46,29 @@ console.log(leave)
             },
             body: JSON.stringify(body)
         })
-        .then((res) => {
-            if (!res.ok) {
-                throw new Error("Failed to update decision");
-            }
-            return res.json();
-        })
-        .then(() => {
-            setLeaveWating(leaveWating.filter(leave => leave.id !== leaveID));
-        })
-        .catch((err) => console.error("Error updating decision:", err));
+            .then((res) => {
+                if (!res.ok) {
+                    throw new Error("Failed to update decision");
+                }
+                return res.json();
+            })
+            .then(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: isApproved ? 'تمت الموافقة بنجاح' : 'تم الرفض بنجاح',
+                    confirmButtonText: 'حسنًا'
+                });
+            })
+            .catch((err) => {
+                console.error("Error updating decision:", err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'حدث خطأ!',
+                    text: 'حدثت مشكلة أثناء إرسال القرار.',
+                    confirmButtonText: 'حسنًا'
+                });
+            });
     };
-    
-
-
 
     return (
         <div>
@@ -76,21 +77,22 @@ console.log(leave)
                     <h2 className="m-0">{`الاجازة رقم #${LeaveID}`}</h2>
                 </div>
                 <div className="p-3">
-                    <BtnLink name='سجل الاجازات' link='/leave-record' class="btn btn-primary m-0 ms-2 mb-2"/>
+                    <BtnLink name='سجل الاجازات' link='/leave-record' class="btn btn-primary m-0 ms-2 mb-2" />
                 </div>
             </div>
+
             <div className="row mt-5 d-flex justify-content-center">
                 <div className="col-sm-12 col-md-10 col-lg-8 col-xl-6">
                     <table className="m-0 table table-striped box2">
                         <thead>
                             <tr>
-                                <th scope="col" className="pb-3" style={{backgroundColor:'#F5F9FF'}}>حالة الطلب</th>
-                                <th scope="col" className="text-start" style={{backgroundColor:'#F5F9FF'}}>
+                                <th scope="col" className="pb-3" style={{ backgroundColor: '#F5F9FF' }}>حالة الطلب</th>
+                                <th scope="col" className="text-start" style={{ backgroundColor: '#F5F9FF' }}>
                                     {leave ? (
-                                        leave.holder === 1 ? <Btn name="المدير المباشر" class="btn-danger text-start"/>
-                                        : leave.holder === 2 ? <Btn name="المدير المختص" class="btn-danger text-start"/>
-                                        : leave.holder === 3 ? <Btn name="مقبولة" class="btn-danger text-start"/>
-                                        : <Btn name="معلقة" class="btn-danger text-start"/>
+                                        leave.holder === 1 ? <Btn name="المدير المباشر" class="btn-danger text-start" />
+                                            : leave.holder === 2 ? <Btn name="المدير المختص" class="btn-danger text-start" />
+                                                : leave.holder === 3 ? <Btn name="مقبولة" class="btn-danger text-start" />
+                                                    : <Btn name="معلقة" class="btn-danger text-start" />
                                     ) : "جاري التحميل..."}
                                 </th>
                             </tr>
@@ -137,9 +139,50 @@ console.log(leave)
                                 <th scope="col" className="text-start">#{leave ? leave.id : "جاري التحميل..."}</th>
                             </tr>
                             <tr>
-                                <th colSpan={2} className="text-center" style={{backgroundColor:'white'}}>
-                                    <button className='btn btn-success w-50 ms-2' onClick={() => updateDecision(leave.id, true)}>موافقة</button>
-                                    <button className='btn btn-danger w-25' onClick={() => updateDecision(leave.id, false)}>رفض</button>
+                                <th colSpan={2} className="text-center" style={{ backgroundColor: 'white' }}>
+                                    <button
+                                        className='btn btn-success w-50 ms-2'
+                                        onClick={() => {
+                                            Swal.fire({
+                                                title: 'هل أنت متأكد؟',
+                                                text: "هل تريد الموافقة على هذا الطلب؟",
+                                                icon: 'question',
+                                                showCancelButton: true,
+                                                confirmButtonText: 'نعم، موافق',
+                                                cancelButtonText: 'إلغاء'
+                                            }).then((result) => {
+                                                if (result.isConfirmed) {
+                                                    updateDecision(leave.id, true);
+                                                }
+                                            });
+                                        }}
+                                    >
+                                        موافقة
+                                    </button>
+
+                                    <button
+                                        className='btn btn-danger w-25'
+                                        onClick={async () => {
+                                            const { value: reason } = await Swal.fire({
+                                                title: 'رفض الطلب',
+                                                input: 'textarea',
+                                                inputLabel: 'سبب الرفض',
+                                                inputPlaceholder: 'اكتب سبب الرفض هنا...',
+                                                inputAttributes: {
+                                                    'aria-label': 'اكتب سبب الرفض هنا'
+                                                },
+                                                showCancelButton: true,
+                                                confirmButtonText: 'رفض',
+                                                cancelButtonText: 'إلغاء'
+                                            });
+
+                                            if (reason) {
+                                                updateDecision(leave.id, false, reason);
+                                            }
+                                        }}
+                                    >
+                                        رفض
+                                    </button>
                                 </th>
                             </tr>
                         </tbody>
@@ -150,4 +193,4 @@ console.log(leave)
     );
 }
 
-export default NormalRequestManager;
+export default NormalLeaveRequestManager;

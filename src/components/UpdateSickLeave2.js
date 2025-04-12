@@ -136,7 +136,7 @@ function UpdateSickLeave2() {
                             onChange={(e) => setNotesFromHR(e.target.value)}
                             id="notes"
                             rows="1"
-                            placeholder="أكتب ملاحظاتك"
+                            placeholder="اكتب ملاحظاتك"
                         ></textarea>
                     </div> */}
                 </div>

@@ -54,7 +54,7 @@ function Agazaty(){
     }, [leaveHolder, NormalLeaves, waitingLeaves, acceptedLeaves, rejectedLeaves]);
 
 
-        // الكل
+        // كل الاجازات الاعتيادية للموظف
         useEffect(()=>{
             fetch(`http://agazatyapi.runasp.net/api/NormalLeave/AllNormalLeavesByUserId/${userID}`) 
             .then((res)=> res.json())
@@ -92,9 +92,9 @@ function Agazaty(){
                 <div className="zzz d-inline-block p-3 ps-5">
                     <h2 className="m-0">اجازاتي</h2>
                 </div>
-                <div className="d-flex p-3">
-                    <BtnLink name='إضافة اجازة' link='/leave-request' class="btn btn-primary m-0 me-2"/>
-                </div>
+                {/* <div className="d-flex p-3">
+                    <BtnLink name='طلب اجازة' link='/leave-request' class="btn btn-primary m-0 me-2"/>
+                </div> */}
             </div>
 
             <div className="mb-3">

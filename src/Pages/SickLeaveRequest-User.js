@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 import BtnLink from '../components/BtnLink';
 import Btn from '../components/Btn';
 
-function SickLeaveRequest() {
+function UserSickLeaveRequest() {
     const LeaveID = Number(useParams().leaveID);
     const [leave, setLeave] = useState([]);
     const [user, setUser] = useState([]);
     const [respononseDoneForMedicalCommitte, setRespononseDoneForMedicalCommitte] = useState([]);
-
-        useEffect(()=>{
+    
+    useEffect(()=>{
             fetch(`http://agazatyapi.runasp.net/api/SickLeave/GetSickLeaveById/${LeaveID}`)
             .then((res)=> res.json())
             .then((data)=> setRespononseDoneForMedicalCommitte(data.respononseDoneForMedicalCommitte))
@@ -43,7 +43,7 @@ function SickLeaveRequest() {
                     <h2 className="m-0">{`الاجازة رقم #${LeaveID}`}</h2>
                 </div>
                 <div className="p-3">
-                    <BtnLink name='سجل الاجازات المرضية' link='/agazaty/sick' class="btn btn-primary m-0 ms-2 mb-2"/>
+                    <BtnLink name='سجل الاجازات المرضية' link='/des-requests/sick' class="btn btn-primary m-0 ms-2 mb-2"/>
                 </div>
             </div>
             <div className="row mt-5 d-flex justify-content-center">
@@ -110,4 +110,4 @@ function SickLeaveRequest() {
     );
 }
 
-export default SickLeaveRequest;
+export default UserSickLeaveRequest;

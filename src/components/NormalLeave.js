@@ -7,29 +7,29 @@ function NormalLeave() {
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [notesFromEmployee, setNotesFromEmployee] = useState("");
-    const [coworker_ID, setCoworker_ID] = useState("");
+    const [coworkerID, setCoworkerID] = useState("");
     const [coworkers, setCoworkers] = useState([]);
 
     useEffect(()=>{
         fetch(`http://agazatyapi.runasp.net/api/Account/GetAllAvailabelCoworkers/${userID}`)
         .then((res)=> res.json())
         .then((data)=> setCoworkers(data))
-    }, [])
+    }, [userID])
     
 
     const handleData = async (e) => {
         e.preventDefault();
 
-        if (!startDate || !endDate || !notesFromEmployee || !userID || !coworker_ID) {
+        if (!startDate || !endDate || !userID || !coworkerID) {
             Swal.fire("خطأ!", "يرجى ملء جميع الحقول المطلوبة", "error");
             return;
         }
         const leaveData = {
             startDate: startDate.toString(),
             endDate: endDate.toString(),
-            notesFromEmployee: notesFromEmployee || "",  // تأكد من أنها ليست `null`
+            notesFromEmployee: notesFromEmployee || "",
             userID: userID.toString(),
-            coworker_ID: coworker_ID.toString(),
+            coworker_ID: coworkerID.toString(),
         };
         
 
@@ -102,7 +102,7 @@ function NormalLeave() {
 
                     <div className="col-sm-12 col-md-6 mt-3">
                         <label htmlFor="coworker" className="form-label">القائم بالعمل</label>
-                        <select className="form-select" id="coworker" onChange={(e) => setCoworker_ID(e.target.value)} required>
+                        <select className="form-select" id="coworker" onChange={(e) => setCoworkerID(e.target.value)} required>
                             <option value="">اختر القائم بالعمل</option>
                             {coworkers.map((coworker, index) => (
                                 <option key={index} value={coworker.id}>
@@ -122,7 +122,7 @@ function NormalLeave() {
                             onChange={(e) => setNotesFromEmployee(e.target.value)}
                             id="notes"
                             rows="1"
-                            placeholder="أكتب ملاحظاتك"
+                            placeholder="اكتب ملاحظاتك"
                         ></textarea>
                     </div>
                 </div>

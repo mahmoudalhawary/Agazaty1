@@ -4,20 +4,22 @@ import API from "../Data" ;
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 
-function DesSick() {
-    const [leaves, setLeaves] = useState([]);
+function AgazatyCasual() {
+    const userID = localStorage.getItem("userID");
+    const [casualLeaves, setCasualLeaves] = useState({});
 
     useEffect(()=>{
-        fetch(`http://agazatyapi.runasp.net/api/SickLeave/GetAllSickLeave`)
+        fetch(`http://agazatyapi.runasp.net/api/CasualLeave/GetAllCasualLeavesByUserId/${userID}`)
         .then((res)=> res.json())
-        .then((data)=> setLeaves(data))
-    }, [])
+        .then((data)=> setCasualLeaves(data))
+    }, [userID])
+
 
     return (
         <div>
             <div className="d-flex mb-4 justify-content-between">
                 <div className="zzz d-inline-block p-3 ps-5">
-                    <h2 className="m-0">سجل الاجازات المرضية</h2>
+                    <h2 className="m-0">سجل الاجازات العارضة</h2>
                 </div>
             </div>
             <div className="row">
@@ -25,32 +27,29 @@ function DesSick() {
                     <table className="m-0 table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>الاسم</th>
+                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>نوع الاجازة</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ البدء</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ الانتهاء</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>عدد الأيام</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>حالة الطلب</th>
+                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>ملحوظة</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>طباعة</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>الأرشيف</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {leaves.length > 0 ? (
-                                leaves.map((leave, index) => (
+                            {casualLeaves.length > 0 ? (
+                                casualLeaves.map((leave, index) => (
                                     <tr key={index}>
-                                        <th>{leave.userName}</th>
+                                        <th>عارضة</th>
                                         <th>{new Date(leave.startDate).toLocaleDateString()}</th>
                                         <th>{new Date(leave.endDate).toLocaleDateString()}</th>
-                                        <th> {leave.days} أيام</th>
-                                        {leave.respononseDone === true ? <th>مقبولة</th>
-                                        : leave.respononseDone === false ? <th>مرفوضة</th>
-                                        : <th>معلقة</th>
-                                        }
+                                        <th>{leave.days} أيام</th>
+                                        <th>{leave.notes ? leave.notes: 'بدون'}</th>
                                         <th>
                                             <FontAwesomeIcon icon={faPrint} fontSize={'26px'} color="blue" className="printer" />
                                         </th>
                                         <th>
-                                            <BtnLink id={leave.id} name='عرض الاجازة' link='/sick-leave-request' class="btn btn-outline-primary" />
+                                            <BtnLink id={leave.id} name='عرض الاجازة' link='/user/casual-leave-request' class="btn btn-outline-primary" />
                                         </th>
                                     </tr>
                                 ))
@@ -67,4 +66,4 @@ function DesSick() {
     );
 }
 
-export default DesSick;
+export default AgazatyCasual;

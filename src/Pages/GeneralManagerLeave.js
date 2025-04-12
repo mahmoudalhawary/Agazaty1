@@ -1,32 +1,25 @@
 import React, { useEffect, useState } from "react";
 import BtnLink from "../components/BtnLink";
-import Search from "../components/Search";
-import API from "../Data" ;
 
-function GeneralManagerLeave(){
+function LeaveRecord() {
     const userID = localStorage.getItem("userID");
     const [leavesWating, setLeavesWating] = useState([]);
 
-
-
-    
     useEffect(() => {
         fetch(`http://agazatyapi.runasp.net/api/NormalLeave/WaitingByGeneral_ManagerID/${userID}`)
             .then((res) => res.json())
-            .then((data) => setLeavesWating(data))
-    }, []);
+            .then((data) => setLeavesWating(Array.isArray(data) ? data : []))
+            .catch((error) => {
+                console.error("Error fetching leave requests:", error);
+                setLeavesWating([]);
+            });
+    }, [userID]);
 
-    return(
+    return (
         <div>
             <div className="d-flex mb-4 justify-content-between">
                 <div className="zzz d-inline-block p-3 ps-5">
                     <h2 className="m-0">طلبات الاجازات</h2>
-                </div>
-                <div className="p-3">
-                    <div className="d-flex">
-                        <Search />
-                        <BtnLink name='إضافة اجازة' link='/add-leave' class="btn btn-primary m-0 me-2"/>
-                    </div>
                 </div>
             </div>
             <div className="row">
@@ -34,43 +27,49 @@ function GeneralManagerLeave(){
                     <table className="m-0 table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>المرجع</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>الاسم</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>القسم</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>رقم الهاتف</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>نوع الاجازة</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ البداية</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ النهاية</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>عدد الأيام</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>حالة الطلب</th>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>الأرشيف</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>المرجع</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>الاسم</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>القسم</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>رقم الهاتف</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>نوع الإجازة</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>تاريخ البداية</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>تاريخ النهاية</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>عدد الأيام</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>حالة الطلب</th>
+                                <th scope="col" style={{ backgroundColor: '#F5F9FF' }}>الأرشيف</th>
                             </tr>
                         </thead>
                         <tbody>
-
-                            {leavesWating.map((leave, index)=>{
-                                return(
+                            {leavesWating.length > 0 ? (
+                                leavesWating.map((leave, index) => (
                                     <tr key={index}>
-                                        <th>{leave.id}#</th>
-                                        <th>{leave.userName}</th>
-                                        <th>{leave.department}</th>
-                                        <th>{leave.phoneNumber}</th>
-                                        <th>اعتيادية</th>
-                                        <th>{new Date(leave.startDate).toLocaleDateString()}</th>
-                                        <th>{new Date(leave.endDate).toLocaleDateString()}</th>
-                                        <th>{leave.days} أيام</th>
-                                        { leave.leaveStatus === 0 && <th className="text-danger">معلقة</th>}
-                                        <th>
+                                        <td>{leave.id}#</td>
+                                        <td>{leave.userName}</td>
+                                        <td>{leave.departmentName}</td>
+                                        <td>{leave.phoneNumber}</td>
+                                        <td>اعتيادية</td>
+                                        <td>{leave.startDate ? new Date(leave.startDate).toLocaleDateString() : "-"}</td>
+                                        <td>{leave.endDate ? new Date(leave.endDate).toLocaleDateString() : "-"}</td>
+                                        <td>{leave.days} أيام</td>
+                                        <td className={leave.leaveStatus === 0 ? "text-danger" : "text-success"}>
+                                            {leave.leaveStatus === 0 ? "معلقة" : "مقبولة"}
+                                        </td>
+                                        <td>
                                             <BtnLink id={leave.id} name='عرض الاجازة' link='/general-manager/normal-leave-request' class="btn btn-outline-primary" />
-                                        </th>
+                                        </td>
                                     </tr>
-                                )})}
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="10" className="text-center text-danger p-3">لا يوجد طلبات إجازات</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default GeneralManagerLeave;
+export default LeaveRecord;

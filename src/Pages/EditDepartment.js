@@ -17,14 +17,6 @@ function EditDepartment() {
         .then((data)=> setUsers(data))
     }, [])
 
-
-    useEffect(() => {
-        fetch(`http://agazatyapi.runasp.net/api/Department/GetDepartmentById/${id}`)
-            .then((res) => res.json())
-            .then((data) => console.log(data))
-    }, []);
-
-
     useEffect(() => {
         fetch(`http://agazatyapi.runasp.net/api/Department/GetDepartmentById/${id}`)
             .then((res) => res.json())
@@ -98,12 +90,14 @@ function EditDepartment() {
 
     
     return (
-        <form className="p-3">
-            <div className="row">
-                <div className="d-flex mb-4 justify-content-between">
+        <form>
+            <div className="d-flex mb-4 justify-content-between">
+                <div className="zzz d-inline-block p-3 ps-5">
                     <h2 className="m-0">تعديل بيانات القسم</h2>
                 </div>
+            </div>
 
+            <div className="row">
                 <div className="col-sm-12 col-md-6 mt-3">
                     <label htmlFor="name" className="form-label">اسم القسم</label>
                     <input

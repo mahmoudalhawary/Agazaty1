@@ -2,9 +2,7 @@ import ProfileCom from "../components/ProfileCom";
 import ProfileDescription from "../components/ProfileDescription";
 import BtnLink from "../components/BtnLink";
 import { useEffect, useState } from "react";
-import API from "../Data";
 import { useParams } from "react-router-dom";
-import Btn from "../components/Btn";
 import Swal from 'sweetalert2';
 
 function ProfileForHR(){
@@ -85,13 +83,15 @@ function ProfileForHR(){
                     <h2 className="m-0">الملف الشخصي</h2>
                 </div>
                 <div className="d-flex">
-                    <button className="p-3 btn btn-primary" onClick={handleLeaveUpdate}>
-                        تعديل عدد أيام الإجازات
-                    </button>
-
                     <div className="p-3">
-                        <BtnLink name='تعديل المعلومات الشخصية' link='/editprofile' class='btn-primary' />
+                        <button className="btn btn-primary" onClick={handleLeaveUpdate}>
+                            تعديل عدد أيام الإجازات
+                        </button>
                     </div>
+
+                    {/* <div className="p-3">
+                        <BtnLink name='تعديل المعلومات الشخصية للموظف' link='/hr/editprofile' class='btn-primary' />
+                    </div> */}
                 </div>
             </div>
             <div className="row">

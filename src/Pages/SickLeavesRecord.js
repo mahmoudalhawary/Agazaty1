@@ -10,8 +10,6 @@ function SickLeavesRecord(){
         .then((data)=> setSickLeavesWaiting(data))
     }, [])
 
-    console.log(sickLeavesWaiting)
-
     return(
         <div>
             <div className="d-flex mb-4 justify-content-between">
@@ -47,7 +45,7 @@ function SickLeavesRecord(){
                                 <th>{leave.governorate} - {leave.state} - {leave.street}</th>
                                 {leave.certified === true && leave.responseDoneFinal === true ? <th>محتسبة</th>
                                 : leave.certified === false && leave.responseDoneFinal === true ? <th>غير محتسبة</th>
-                                : <th>معلقة</th>
+                                : <th className="text-danger">معلقة</th>
                                 }
                                 {leave.chronic === true && leave.responseDoneFinal === true ? <th>مزمن</th>
                                 : leave.chronic === false && leave.responseDoneFinal === true ? <th>غير مزمن</th>

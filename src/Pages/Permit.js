@@ -9,8 +9,6 @@ function Permit() {
     const [UserId, setUserId] = useState("");
     const [users, setUsers] = useState([]);
 
-    console.log(UserId);
-
     useEffect(() => {
         fetch(`http://agazatyapi.runasp.net/api/Account/GetAllActiveUsers`)
             .then((res) => res.json())
@@ -96,6 +94,7 @@ function Permit() {
                             type="number"
                             value={Hours}
                             onChange={(e) => setHours(e.target.value)}
+                            placeholder="مثال: 3"
                             className="form-control"
                             id="Hours"
                             required

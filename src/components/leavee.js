@@ -122,7 +122,7 @@ function Leavee() {
 
                             <div className="col-sm-12 col-md-6 mt-3">
                                 <label htmlFor="notes" className="form-label">الملاحظات</label>
-                                <textarea className="form-control" onChange={(e) => setNotes(e.target.value)} id="notes" rows="1" placeholder="أكتب ملاحظاتك"></textarea>
+                                <textarea className="form-control" onChange={(e) => setNotes(e.target.value)} id="notes" rows="1" placeholder="اكتب ملاحظاتك"></textarea>
                             </div>
                         </div>
 
@@ -155,7 +155,7 @@ function Leavee() {
 
                             <div className="col-sm-12 col-md-6 mt-3">
                                 <label htmlFor="exampleFormControlTextarea1" className="form-label">الملاحظات</label>
-                                <textarea className="form-control" onChange={(e)=> setNotes(e.target.value)} id="exampleFormControlTextarea1" rows="1" placeholder="أكتب ملاحظاتك"></textarea>
+                                <textarea className="form-control" onChange={(e)=> setNotes(e.target.value)} id="exampleFormControlTextarea1" rows="1" placeholder="اكتب ملاحظاتك"></textarea>
                             </div>
                         </div>
                         <div className="d-flex justify-content-center mt-3">
@@ -172,7 +172,7 @@ function Leavee() {
 
                             <div className="col-sm-12 col-md-6 mt-3">
                                 <label htmlFor="exampleFormControlTextarea1" className="form-label">عنوان الإقامة</label>
-                                <textarea className="form-control" onChange={(e)=> setNotes(e.target.value)} id="exampleFormControlTextarea1" rows="1" placeholder="أكتب عنوان الإقامة تفصيليًا"></textarea>
+                                <textarea className="form-control" onChange={(e)=> setNotes(e.target.value)} id="exampleFormControlTextarea1" rows="1" placeholder="اكتب عنوان الإقامة تفصيليًا"></textarea>
                             </div>
 
                             <div className="col-sm-12 col-md-6 mt-3">
@@ -182,7 +182,7 @@ function Leavee() {
 
                             <div className="col-sm-12 col-md-6 mt-3">
                                 <label htmlFor="exampleFormControlTextarea1" className="form-label">الملاحظات</label>
-                                <textarea className="form-control" onChange={(e)=> setNotes(e.target.value)} id="exampleFormControlTextarea1" rows="1" placeholder="أكتب ملاحظاتك"></textarea>
+                                <textarea className="form-control" onChange={(e)=> setNotes(e.target.value)} id="exampleFormControlTextarea1" rows="1" placeholder="اكتب ملاحظاتك"></textarea>
                             </div>
                         </div>
 

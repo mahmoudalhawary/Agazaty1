@@ -13,8 +13,6 @@ function DesCasual() {
         .then((data)=> setLeaves(data))
     }, [])
 
-    console.log(leaves)
-
     return (
         <div>
             <div className="d-flex mb-4 justify-content-between">
@@ -44,7 +42,7 @@ function DesCasual() {
                                         <th>{new Date(leave.startDate).toLocaleDateString()}</th>
                                         <th>{new Date(leave.endDate).toLocaleDateString()}</th>
                                         <th>{leave.days} أيام</th>
-                                        <th>{leave.notes}</th>
+                                        <th>{leave.notes || "بدون"}</th>
                                         <th>
                                             <FontAwesomeIcon icon={faPrint} fontSize={'26px'} color="blue" className="printer" />
                                         </th>

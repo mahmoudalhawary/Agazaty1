@@ -15,7 +15,7 @@ function LeaveRecord() {
                 console.error("Error fetching leave requests:", error);
                 setLeavesWating([]);
             });
-    }, []);
+    }, [userID]);
 
     return (
         <div>
@@ -47,7 +47,7 @@ function LeaveRecord() {
                                     <tr key={index}>
                                         <td>{leave.id}#</td>
                                         <td>{leave.userName}</td>
-                                        <td>{leave.department}</td>
+                                        <td>{leave.departmentName}</td>
                                         <td>{leave.phoneNumber}</td>
                                         <td>اعتيادية</td>
                                         <td>{leave.startDate ? new Date(leave.startDate).toLocaleDateString() : "-"}</td>

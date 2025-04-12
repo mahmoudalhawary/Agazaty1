@@ -4,14 +4,15 @@ import API from "../Data" ;
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPrint } from "@fortawesome/free-solid-svg-icons";
 
-function DesSick() {
-    const [leaves, setLeaves] = useState([]);
+function AgazatySick() {
+    const userID = localStorage.getItem("userID");
+    const [sickLeaves, setSickLeaves] = useState([]);
 
     useEffect(()=>{
-        fetch(`http://agazatyapi.runasp.net/api/SickLeave/GetAllSickLeave`)
+        fetch(`http://agazatyapi.runasp.net/api/SickLeave/GetAllSickLeavesByUserID/${userID}`)
         .then((res)=> res.json())
-        .then((data)=> setLeaves(data))
-    }, [])
+        .then((data)=> setSickLeaves(data))
+    }, [userID])
 
     return (
         <div>
@@ -25,7 +26,7 @@ function DesSick() {
                     <table className="m-0 table table-striped">
                         <thead>
                             <tr>
-                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>الاسم</th>
+                                <th scope="col" style={{backgroundColor:'#F5F9FF'}}>نوع الاجازة</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ البدء</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>تاريخ الانتهاء</th>
                                 <th scope="col" style={{backgroundColor:'#F5F9FF'}}>عدد الأيام</th>
@@ -35,10 +36,10 @@ function DesSick() {
                             </tr>
                         </thead>
                         <tbody>
-                            {leaves.length > 0 ? (
-                                leaves.map((leave, index) => (
+                            {sickLeaves.length > 0 ? (
+                                sickLeaves.map((leave, index) => (
                                     <tr key={index}>
-                                        <th>{leave.userName}</th>
+                                        <th>مرضية</th>
                                         <th>{new Date(leave.startDate).toLocaleDateString()}</th>
                                         <th>{new Date(leave.endDate).toLocaleDateString()}</th>
                                         <th> {leave.days} أيام</th>
@@ -50,7 +51,7 @@ function DesSick() {
                                             <FontAwesomeIcon icon={faPrint} fontSize={'26px'} color="blue" className="printer" />
                                         </th>
                                         <th>
-                                            <BtnLink id={leave.id} name='عرض الاجازة' link='/sick-leave-request' class="btn btn-outline-primary" />
+                                            <BtnLink id={leave.id} name='عرض الاجازة' link='/user/sick-leave-request' class="btn btn-outline-primary" />
                                         </th>
                                     </tr>
                                 ))
@@ -67,4 +68,4 @@ function DesSick() {
     );
 }
 
-export default DesSick;
+export default AgazatySick;

@@ -13,8 +13,6 @@ function DesPermit() {
         .then((data)=> setPermitLeaves(data))
     }, [])
 
-    console.log( "ffffffffff",permitLeaves)
-
     return (
         <div>
             <div className="d-flex mb-4 justify-content-between">

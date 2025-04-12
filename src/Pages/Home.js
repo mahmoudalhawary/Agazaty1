@@ -32,8 +32,8 @@ function Home({userRole}){
                     {leavesWating.length > 0 && <Hint leavesWating={leavesWating}/> }
                     <div className="gap-3">
                         <div className="mt-4">
-                            { userRole === 'manager' ? <ShortData />
-                            : userRole === 'hr' ? <ShortData />
+                            { userRole === 'عميد الكلية' ? <ShortData />
+                            : userRole === 'مدير الموارد البشرية' ? <ShortData />
                             : null
                             }
                             <LeaveBalance />

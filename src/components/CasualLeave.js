@@ -8,13 +8,6 @@ function CasualLeave() {
     const [endDate, setEndDate] = useState("");
     const [notes, setNotes] = useState("");
 
-
-    useEffect(()=>{
-        fetch(`http://agazatyapi.runasp.net/api/CasualLeave/GetAllCasualLeaves`)
-        .then((res)=> res.json())
-        .then((data)=> console.log(data))
-    }, [])
-
     const handleData = async (e) => {
         e.preventDefault();
 
@@ -28,9 +21,6 @@ function CasualLeave() {
             userID: userID.toString(),
             notes: notes.toString(),
         };
-        
-
-        console.log("Sending data:", leaveData);
 
         try {
             const response = await fetch(
@@ -106,7 +96,7 @@ function CasualLeave() {
                             onChange={(e) => setNotes(e.target.value)}
                             id="notes"
                             rows="1"
-                            placeholder="أكتب ملاحظاتك"
+                            placeholder="اكتب ملاحظاتك"
                         ></textarea>
                     </div>
                 </div>
